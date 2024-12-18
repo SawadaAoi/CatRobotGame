@@ -18,6 +18,7 @@ class ComponentTransform;
 class ComponentGroundRaycast;
 class ComponentRigidbody;
 class ComponentModelAnime;
+class ComponentPlayerController;
 
 // =============== クラス定義 =====================
 class ObjectPlayer :
@@ -33,10 +34,9 @@ public:
 	DEFINE_OBJECT_TYPE(ObjectPlayer)	// オブジェクトの種類ID取得関数
 
 private:
-	ComponentTransform* m_pCompTransform;
 	ComponentGroundRaycast* m_pCompGroundRaycast;
 	ComponentRigidbody* m_pCompRigidbody;
 	ComponentModelAnime* m_pCompModelAnime;
-
+	ComponentPlayerController* m_pCompPlayerController;
 };
 

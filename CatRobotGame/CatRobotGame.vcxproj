@@ -213,6 +213,8 @@
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="ObjectBlock.cpp" />
     <ClCompile Include="ObjectCamera.cpp" />
+    <ClCompile Include="ObjectCameraDebug.cpp" />
+    <ClCompile Include="ObjectCameraPlayer.cpp" />
     <ClCompile Include="ObjectGround.cpp" />
     <ClCompile Include="ObjectLight.cpp" />
     <ClCompile Include="ObjectLightDirectional.cpp" />
@@ -302,6 +304,8 @@
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectBlock.h" />
     <ClInclude Include="ObjectCamera.h" />
+    <ClInclude Include="ObjectCameraDebug.h" />
+    <ClInclude Include="ObjectCameraPlayer.h" />
     <ClInclude Include="ObjectGround.h" />
     <ClInclude Include="ObjectLight.h" />
     <ClInclude Include="ObjectLightDirectional.h" />

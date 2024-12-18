@@ -16,8 +16,8 @@
 #include "ComponentTransform.h"
 
 // =============== 定数定義 =======================
-const std::string DEFAULT_CAMERA_NAME = "DefaultCamera";	// デフォルトカメラ名
-const Vector3<float> FOCUS_OFFSET = Vector3<float>(0.0f, 2.0f, -5.0f);	// フォーカス時のカメラ位置
+const std::string DEFAULT_CAMERA_NAME	= "DefaultCamera";	// デフォルトカメラ名
+const Vector3<float> FOCUS_OFFSET		= Vector3<float>(0.0f, 2.0f, -5.0f);	// フォーカス時のカメラ位置
 
 
 /* ========================================
@@ -62,7 +62,10 @@ void CameraManager::Init(SceneBase* pScene)
 	m_pCameraList.clear();	
 
 	// シーンからカメラリストを取得
-	m_pCameraList = m_pScene->GetSceneObjects<ObjectCamera>();
+	for (ObjectBase* pObj : m_pScene->GetSceneObjectsTag(E_ObjectTag::Camera))
+	{
+		AddCamera(static_cast<ObjectCamera*>(pObj));
+	}
 
 	// カメラが存在する場合
 	if (m_pCameraList.size() > 0)
@@ -72,7 +75,7 @@ void CameraManager::Init(SceneBase* pScene)
 	// カメラが存在しない場合
 	else
 	{
-		m_pScene->AddSceneObject<ObjectCamera>(DEFAULT_CAMERA_NAME);				// カメラ追加
+		m_pScene->AddSceneObject<ObjectCamera>(DEFAULT_CAMERA_NAME);	// カメラ追加
 		SwitchCamera(0);												// アクティブにする
 	}
 }

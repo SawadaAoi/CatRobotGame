@@ -28,12 +28,12 @@
 =========================================== */
 ObjectPlayer::ObjectPlayer(SceneBase* pScene)
 	: ObjectBase(pScene)
-	, m_pCompTransform(nullptr)
 	, m_pCompGroundRaycast(nullptr)
 	, m_pCompRigidbody(nullptr)
 	, m_pCompModelAnime(nullptr)
+	, m_pCompPlayerController(nullptr)
 {
-	
+	SetTag(E_ObjectTag::Player);	// タグの設定
 }
 
 /* ========================================
@@ -55,7 +55,7 @@ void ObjectPlayer::InitLocal()
 	m_pCompRigidbody->SetUseGravity(true);
 	m_pCompRigidbody->SetGroundDrag(0.9f);
 
-	AddComponent<ComponentPlayerController>();
+	m_pCompPlayerController = AddComponent<ComponentPlayerController>();
 
 	m_pCompModelAnime = AddComponent<ComponentModelAnime>();
 }
@@ -67,19 +67,22 @@ void ObjectPlayer::InitLocal()
 ========================================= */
 void ObjectPlayer::UpdateLocal()
 {
-	//m_pLine->UpdateLine(1,m_pTransform->GetWorldPosition(), m_pTransform->GetWorldPosition()+(m_pTransform->GetForwardVector()));
-
 	// 地面に設置している場合　かつ　ジャンプ中でない場合
 	if (m_pCompGroundRaycast->GetHitFlg() && m_pCompRigidbody->GetVelocity().y <=0.0f)
 	{
 		Vector3<float> vPos = m_pCompTransform->GetWorldPosition();
 		vPos.y = m_pCompGroundRaycast->GetHitPos().y + 0.5f;
 		m_pCompTransform->SetLocalPosition(vPos);
+
+		m_pCompPlayerController->SetUseJump(true);
+	}
+	else
+	{
+		m_pCompPlayerController->SetUseJump(false);
 	}
 
 }
 
 void ObjectPlayer::DrawLocal()
 {
-	//m_pLine->Draw();
 }

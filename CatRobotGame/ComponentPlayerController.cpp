@@ -1,5 +1,5 @@
 /* ========================================
-	DX22Base/
+	CatRobotGame/
 	------------------------------------
 	プレイヤー操作コンポーネント用cpp
 	------------------------------------
@@ -8,11 +8,15 @@
 
 // =============== インクルード =====================
 #include "ComponentPlayerController.h"
-#include "ObjectBase.h"	// 所持オブジェクトの取得
+#include "ObjectBase.h"		// 所持オブジェクトの取得
+#include "ObjectCameraPlayer.h"	// 移動方向計算用
+
 #include "ComponentTransform.h"	// トランスフォームコンポーネント
 #include "ComponentRigidbody.h"	// リジッドボディコンポーネント
+
 #include "Input.h"
 #include "unordered_map"
+#include "SceneManager.h"
 
 // =============== 定数定義 =======================
 // ComponentRigidbody::E_ForceModeを省略
@@ -75,7 +79,7 @@ ComponentPlayerController::ComponentPlayerController(ObjectBase* pOwner)
 	, m_fMoveSpeed(DEFAULT_MOVE_SPEED)
 	, m_fRotateSpeed(DEFAULT_ROTATE_SPEED)
 	, m_fJumpPower(DEFAULT_JUMP_POWER)
-	, m_MoveKey{ 'W', 'S', 'A', 'D', VK_SPACE, VK_LEFT, VK_RIGHT }
+	, m_MoveKey{ 'W', 'S', 'A', 'D', VK_SPACE }
 	, m_bIsInputEnable(true)
 {
 }
@@ -89,6 +93,8 @@ void ComponentPlayerController::Init()
 {
 	m_pCompTran = m_pOwnerObj->GetComponent<ComponentTransform>();	// トランスフォームを取得
 	m_pCompRigidbody = m_pOwnerObj->GetComponent<ComponentRigidbody>();	// リジッドボディを取得
+
+	m_pObjCamera = SceneManager::GetScene()->GetSceneObject<ObjectCameraPlayer>("PlayerCamera");	// カメラオブジェクトを取得
 }
 
 /* ========================================
@@ -112,35 +118,165 @@ void ComponentPlayerController::Update()
 	// シフトキーを押している間は移動なし
 	if (Input::IsKeyPress(VK_SHIFT)) return;
 
+	// カメラオブジェクトが取得できていない場合は取得
+	if (!m_pObjCamera)
+	{
+		m_pObjCamera = SceneManager::GetScene()->GetSceneObject<ObjectCameraPlayer>("PlayerCamera");
+		return;
+	}
 
+	Move();		// 移動
+	Jump();		// ジャンプ
+}
+
+
+
+/* ========================================
+	移動関数
+	-------------------------------------
+	内容：移動処理
+========================================== */
+void ComponentPlayerController::Move()
+{
 	Vector3<float> moveDir = Vector3<float>::Zero();	// 移動方向
 
-	// 移動(ワールド方向)
-	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::Forward]))	moveDir += Vector3<float>::Forward();
-	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::Back]))		moveDir += Vector3<float>::Back();
-	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::Left]))		moveDir += Vector3<float>::Left();
-	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::Right]))		moveDir += Vector3<float>::Right();
-
+	// キーボード入力
+	moveDir = MoveKeybord();
+	
 	m_pCompRigidbody->AddForce(moveDir * m_fMoveSpeed);
 
+	RotateToMoveDir(moveDir);	// 移動方向に回転
+}
+
+/* ========================================
+	ジャンプ関数
+	-------------------------------------
+	内容：ジャンプ処理
+========================================== */
+void ComponentPlayerController::Jump()
+{
+	if (!m_bUseJump) return;	// ジャンプ有効フラグが無効なら処理しない
+
 	// ジャンプ
-	if (Input::IsKeyTrigger(m_MoveKey[E_MoveKey::Jump]))
+	if (Input::IsKeyTrigger(m_MoveKey[E_MoveKey::JUMP]))
 	{
 		m_pCompRigidbody->AddForce(Vector3<float>::Up() * m_fJumpPower, E_ForceMode::IMPULSE);
 		m_pCompTran->TranslateY(1.1f);	// 少し浮かせる(地面判定の位置修正を考慮して)
 	}
+}
 
-	// Y軸回転
-	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::RotateLeft]))
+/* ========================================
+	キーボード入力関数
+	-------------------------------------
+	内容：キーボード入力処理
+	-------------------------------------
+	戻値：Vector3<float>		移動方向
+=========================================== */
+Vector3<float> ComponentPlayerController::MoveKeybord()
+{
+	Vector3<float> moveDir = Vector3<float>::Zero();	// 移動方向
+
+	Vector3<float> cameraForward = m_pObjCamera->GetTransform()->GetForwardVector();	// カメラの前方ベクトル
+	Vector3<float> cameraRight = m_pObjCamera->GetTransform()->GetRightVector();	// カメラの右方向ベクトル
+
+	// 上下方向の移動を無効化
+	cameraForward.y = 0.0f;
+	cameraRight.y = 0.0f;
+	// 正規化
+	cameraRight.Normalize();
+	cameraForward.Normalize();
+
+	float stickAngleRadians = 0.0f;	// スティックの角度
+
+	// 移動(ワールド方向)
+	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::FORWARD]))	moveDir += cameraForward;
+	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::BACK]))		moveDir -= cameraForward;
+	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::LEFT]))		moveDir -= cameraRight;
+	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::RIGHT]))		moveDir += cameraRight;
+
+	return moveDir;
+}
+
+/* ========================================
+	コントローラー入力関数
+	-------------------------------------
+	内容：コントローラー入力処理
+	-------------------------------------
+	戻値：Vector3<float>		移動方向
+=========================================== */
+Vector3<float> ComponentPlayerController::MoveController()
+{
+	Vector3<float> moveDir = Vector3<float>::Zero();	// 移動方向
+
+	Vector3<float> cameraForward = m_pObjCamera->GetTransform()->GetForwardVector();	// カメラの前方ベクトル
+	Vector3<float> cameraRight = m_pObjCamera->GetTransform()->GetRightVector();	// カメラの右方向ベクトル
+
+	// 上下方向の移動を無効化
+	cameraForward.y = 0.0f;
+	cameraRight.y = 0.0f;
+	// 正規化
+	cameraRight.Normalize();
+	cameraForward.Normalize();
+
+	float stickAngleRadians = 0.0f;	// スティックの角度
+
+
+	// スティックの角度に基づいて移動方向を計算
+	float moveX = cos(MathUtils::ToRadian(stickAngleRadians)); // スティック角度のX成分
+	float moveZ = sin(MathUtils::ToRadian(stickAngleRadians)); // スティック角度のZ成分
+
+	// カメラの向きに合わせた移動ベクトルを計算
+	moveDir = cameraForward * moveZ + cameraRight * moveX;
+
+	return moveDir;
+}
+
+/* ========================================
+	移動方向回転関数
+	-------------------------------------
+	内容：自身を移動方向に回転する
+	-------------------------------------
+	引数1：Vector3<float>		移動方向
+=========================================== */
+void ComponentPlayerController::RotateToMoveDir(Vector3<float> moveDir)
+{
+	// 移動していない場合は処理しない
+	if (moveDir.LengthSq() <= 0.01f) return;
+
+	moveDir.Normalize();	// 正規化
+
+	float targetRad			= atan2(moveDir.x, moveDir.z);								// 目標角度
+	Quaternion qTargetRot	= Quaternion::FromEulerAngle({ 0.0f, targetRad, 0.0f });	// 目標回転
+	Quaternion qSelfRot		= m_pCompTran->GetLocalRotation();							// 自身回転
+
+	// 回転が遠回りにならないように調整
+	// ※クォータニオン同士の内積が負の場合は最短距離で回転しないため、回転方向を逆にする
+	if (qSelfRot.Dot(qTargetRot) < 0.0f)
 	{
-		m_pCompTran->RotateY(-m_fRotateSpeed * DELTA_TIME);
+		qTargetRot = -qTargetRot;
 	}
-	if (Input::IsKeyPress(m_MoveKey[E_MoveKey::RotateRight]))
-	{
-		m_pCompTran->RotateY(m_fRotateSpeed * DELTA_TIME);
-	}
+
+	Quaternion qRot = Quaternion::Slerp(qSelfRot, qTargetRot, 0.2f);	// スムーズに回転
+
+	m_pCompTran->SetLocalRotation(qRot);	// 回転を設定
 
 }
+
+
+
+/* ========================================
+	ゲッター(ジャンプ有効フラグ)関数
+	-------------------------------------
+	戻値：bool		ジャンプ有効フラグ
+=========================================== */
+void ComponentPlayerController::SetUseJump(bool bUseJump)
+{
+	m_bUseJump = bUseJump;
+
+}
+
+
+
 
 #ifdef _DEBUG
 /* ========================================
@@ -162,13 +298,11 @@ void ComponentPlayerController::Debug(DebugUI::Window& window)
 	pGroupPlayerCtr->AddGroupItem(Item::CreateBind("RotateSpeed",	Item::Kind::Float, &m_fRotateSpeed));	// 回転速度
 	pGroupPlayerCtr->AddGroupItem(Item::CreateBind("JumpPower",		Item::Kind::Float, &m_fJumpPower));		// ジャンプ力
 
-	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Forward",		&m_MoveKey[E_MoveKey::Forward]));
-	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Back",			&m_MoveKey[E_MoveKey::Back]));
-	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Right",		&m_MoveKey[E_MoveKey::Right]));
-	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Left",			&m_MoveKey[E_MoveKey::Left]));
-	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Jump",			&m_MoveKey[E_MoveKey::Jump]));
-	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_RotateLeft",	&m_MoveKey[E_MoveKey::RotateLeft]));
-	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_RotateRight",	&m_MoveKey[E_MoveKey::RotateRight]));
+	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Forward",		&m_MoveKey[E_MoveKey::FORWARD]));
+	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Back",			&m_MoveKey[E_MoveKey::BACK]));
+	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Right",		&m_MoveKey[E_MoveKey::RIGHT]));
+	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Left",			&m_MoveKey[E_MoveKey::LEFT]));
+	pGroupPlayerCtr->AddGroupItem(CreateKeyList("MoveKey_Jump",			&m_MoveKey[E_MoveKey::JUMP]));
 
 	window.AddItem(pGroupPlayerCtr);
 

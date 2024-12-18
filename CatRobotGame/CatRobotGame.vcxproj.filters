@@ -189,6 +189,9 @@
     <Filter Include="リソース ファイル\VertexShader\Shape">
       <UniqueIdentifier>{17398af7-bf63-4ef6-8bee-28972a40a902}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\GameObject\Camera\0_Super">
+      <UniqueIdentifier>{17cb88c7-33b0-47b2-9e66-d50ff343dd9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -419,9 +422,6 @@
     <ClCompile Include="UIComponentText.cpp">
       <Filter>ソース ファイル\App\UI\Component</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectCamera.cpp">
-      <Filter>ソース ファイル\App\GameObject\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="LightManager.cpp">
       <Filter>ソース ファイル\System\Light</Filter>
     </ClCompile>
@@ -442,6 +442,15 @@
     </ClCompile>
     <ClCompile Include="UIObjectText.cpp">
       <Filter>ソース ファイル\App\UI\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectCameraPlayer.cpp">
+      <Filter>ソース ファイル\App\GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectCamera.cpp">
+      <Filter>ソース ファイル\App\GameObject\Camera\0_Super</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectCameraDebug.cpp">
+      <Filter>ソース ファイル\App\GameObject\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -691,9 +700,6 @@
     <ClInclude Include="UIComponentText.h">
       <Filter>ソース ファイル\App\UI\Component</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectCamera.h">
-      <Filter>ソース ファイル\App\GameObject\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="LightManager.h">
       <Filter>ソース ファイル\System\Light</Filter>
     </ClInclude>
@@ -714,6 +720,15 @@
     </ClInclude>
     <ClInclude Include="UIObjectText.h">
       <Filter>ソース ファイル\App\UI\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectCameraPlayer.h">
+      <Filter>ソース ファイル\App\GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectCamera.h">
+      <Filter>ソース ファイル\App\GameObject\Camera\0_Super</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectCameraDebug.h">
+      <Filter>ソース ファイル\App\GameObject\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -642,11 +642,11 @@ void ComponentTransform::SetLocalRotation(const Quaternion& rotation)
 	セッター(回転)関数
 	-------------------------------------
 	引数1：回転軸　 Vector3<float>
-	引数1：回転量(デグリー) float
+	引数1：回転量(ラジアン float
 =========================================== */
-void ComponentTransform::SetLocalRotation(const Vector3<float> axis, float degAngle)
+void ComponentTransform::SetLocalRotation(const Vector3<float> axis, float angle)
 {
-	m_qLocalRotation = Quaternion::FromAxisAngleNormalized(axis, MathUtils::ToRadian(degAngle));
+	m_qLocalRotation = Quaternion::FromAxisAngleNormalized(axis, angle);
 	UpdateWorldTransform();	// ワールド座標の更新
 }
 
@@ -657,14 +657,7 @@ void ComponentTransform::SetLocalRotation(const Vector3<float> axis, float degAn
 =========================================== */
 void ComponentTransform::SetLocalRotationEuler(const Vector3<float>& angles)
 {
-	// デグリー→ラジアンに変換
-	Vector3<float> anglesRad = Vector3<float>(
-		MathUtils::ToRadian(angles.x),
-		MathUtils::ToRadian(angles.y),
-		MathUtils::ToRadian(angles.z)
-	);
-
-	m_qLocalRotation = Quaternion::FromEulerAngle(anglesRad);
+	m_qLocalRotation = Quaternion::FromEulerAngle(angles);
 	UpdateWorldTransform();	// ワールド座標の更新
 }
 

@@ -21,6 +21,8 @@
 
 #include "FileManager.h"
 
+#include "ObjectCameraDebug.h"
+#include "ObjectCameraPlayer.h"
 #include "ObjectBlock.h"
 #include "ObjectLight.h"
 #include "ObjectLightDirectional.h"
@@ -30,9 +32,12 @@
 void SceneGameTest::InitLocal()
 {
 	AddSceneObject<ObjectLightDirectional>("LightDirectional");
-	AddSceneObject<ObjectLightSpot>("ObjectLightSpot");
-
 	m_pPlayer = AddSceneObject<ObjectPlayer>("Player");
+
+	AddSceneObject<ObjectCameraPlayer>("PlayerCamera");
+
+	AddSceneObject<ObjectCameraDebug>("ObjectCameraDebug");
+
 	m_pPlayer->GetComponent<ComponentTransform>()->SetLocalPosition(Vector3(-2.0f, 3.0f, 0.0f));
 
 	m_StaticPlane = AddSceneObject<ObjectGround>("Ground");
