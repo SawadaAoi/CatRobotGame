@@ -1,0 +1,82 @@
+/* ========================================
+	DX22Base/
+	------------------------------------
+	ブロック用cpp
+	------------------------------------
+	ObjectBlock.cpp
+========================================== */
+
+// =============== インクルード ===================
+#include "ObjectBlock.h"
+#include "ComponentGeometry.h"
+#include "ComponentCollisionOBB.h"
+#include "TextureManager.h"
+
+/* ========================================
+	コンストラクタ関数
+	-------------------------------------
+	内容：初期化
+	-------------------------------------
+	引数：所有シーン
+=========================================== */
+ObjectBlock::ObjectBlock(SceneBase* pScene)
+	: ObjectBase(pScene)
+	, m_pCompGeometry(nullptr)
+	, m_pCompColObb(nullptr)
+{
+
+}
+
+/* ========================================
+	初期化関数
+	-------------------------------------
+	内容：初期化を行う
+=========================================== */
+void ObjectBlock::InitLocal()
+{
+	m_pCompGeometry = AddComponent<ComponentGeometry>();
+	m_pCompGeometry->SetShapeType(ComponentGeometry::TYPE_BOX);
+	m_pCompGeometry->SetIsTex(true);
+	m_pCompGeometry->SetTexture(GET_TEXTURE_DATA(TextureManager::E_TEX_KEY::BLOCK_SIMPLE));
+
+	m_pCompColObb = AddComponent<ComponentCollisionOBB>();
+
+}
+
+/* ========================================
+	ローカルデータ出力関数
+	-------------------------------------
+	内容：オブジェクトのローカルデータをファイルに書き込む
+	-------------------------------------
+	引数1：ファイル
+=========================================== */
+void ObjectBlock::OutPutLocalData(std::ofstream& file)
+{
+	S_SaveData data;
+
+	// テクスチャID
+	data.nTextureID = TEXTURE_MNG_INST.GetTextureKey(m_pCompGeometry->GetTexture());
+	// テクスチャ使用フラグ
+	data.bUseTex = m_pCompGeometry->GetIsTex();
+
+	// ファイルに書き込む
+	file.write((char*)&data, sizeof(S_SaveData));
+}
+
+/* ========================================
+	ローカルデータ入力関数
+	-------------------------------------
+	内容：ファイルからオブジェクトのローカルデータを読み込む
+	-------------------------------------
+	引数1：ファイル
+=========================================== */
+void ObjectBlock::InputLocalData(std::ifstream& file)
+{
+	S_SaveData data;
+
+	// ファイルから読み込む
+	file.read((char*)&data, sizeof(S_SaveData));
+
+	// テクスチャ設定
+	m_pCompGeometry->SetTexture(GET_TEXTURE_DATA((TextureManager::E_TEX_KEY)data.nTextureID));
+}

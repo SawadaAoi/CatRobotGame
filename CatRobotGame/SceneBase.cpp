@@ -1,0 +1,870 @@
+/* ========================================
+	DX22Base/
+	------------------------------------
+	シーン用cpp
+	------------------------------------
+	SceneBase.cpp
+========================================== */
+
+// =============== インクルード =====================
+#include "SceneBase.h"
+#include "ObjectBase.h"
+#include "ObjectCamera.h"
+#include "CameraManager.h"
+#include "ComponentCollisionBase.h"
+
+/* ========================================
+	コンストラクタ関数
+	-------------------------------------
+	内容：初期化
+========================================== */
+SceneBase::SceneBase()
+	: m_bIsUpdating(false)	// 更新中フラグを初期化
+	, m_pObjects()			// シーンに所属するオブジェクト一覧
+	, m_pStandbyObjects()	// オブジェクトを一時的に保存しておく配列
+	, m_pUIObjects()		// シーンに所属するUIオブジェクト一覧
+	, m_pObjectCollision()	// 各オブジェクトが持つ衝突判定コンポーネント
+#ifdef _DEBUG
+	, m_pSelectObj(nullptr)	// 一覧で選択中のオブジェクト
+	, m_nObjectListSelectNo(-1)
+	, m_pSelectUI(nullptr)	// 一覧で選択中のUIオブジェクト
+	, m_nUISelectNo(-1)
+#endif // _DEBUG
+
+{
+}
+
+/* ========================================
+	初期化関数
+	-------------------------------------
+	内容：初期化処理
+=========================================== */
+void SceneBase::Init()
+{
+#ifdef _DEBUG
+	InitObjectList();
+	InitUIList();
+#endif // _DEBUG
+
+	// クリア
+	m_pObjects.clear();			// シーンに所属するオブジェクト一覧
+	m_pStandbyObjects.clear();	// オブジェクトを一時的に保存しておく配列
+	m_pUIObjects.clear();		// シーンに所属するUIオブジェクト一覧
+	InitLocal();				// 個別初期化処理
+
+	CAMERA_MNG_INST.Init(this);	// シーンのカメラを初期化
+}
+
+/* ========================================
+	終了関数
+	-------------------------------------
+	内容：終了処理
+=========================================== */
+void SceneBase::Uninit()
+{
+#ifdef _DEBUG
+	WIN_OBJ_LIST.Clear();
+	WIN_OBJ_INFO.Clear();
+	WIN_UI_LIST.Clear();
+	WIN_UI_INFO.Clear();
+	WIN_CAMERA_INFO["CameraList"].RemoveListItemAll();
+
+#endif // _DEBUG
+
+	UninitLocal();	// 個別終了処理
+
+	// 所持UIオブジェクト配列の全要素を削除
+	for (auto& pObject : m_pUIObjects)
+	{
+		pObject->Uninit();
+	}
+	m_pUIObjects.clear();	// クリア
+
+	// 所持オブジェクト配列の全要素を削除
+	for (auto& pObject : m_pObjects)
+	{
+		pObject->Uninit();
+	}
+	m_pObjects.clear();	// クリア
+
+	// 一時保存していたオブジェクト配列の全要素を削除
+	for (auto& pObject : m_pStandbyObjects)
+	{
+		pObject->Uninit();
+	}
+	m_pStandbyObjects.clear();	// クリア
+
+}
+
+/* ========================================
+	更新関数
+	-------------------------------------
+	内容：更新処理
+=========================================== */
+void SceneBase::Update()
+{
+	UpdateObject();	// オブジェクト更新
+	UpdateUI();		// UI更新
+
+#ifdef _DEBUG
+	// リスト未選択時は選択オブジェクトをクリア
+	if (m_nObjectListSelectNo == -1) m_pSelectObj = nullptr;
+	// UIリスト未選択時は選択UIオブジェクトをクリア
+	if (m_nUISelectNo == -1) m_pSelectUI = nullptr;
+
+	ReloadDebugObjectList();	// オブジェクトリスト再読み込み
+	ReloadDebugUIList();		// UIオブジェクトリスト再読み込み
+#endif // _DEBUG
+}
+
+/* ========================================
+	描画関数
+	-------------------------------------
+	内容：描画処理
+=========================================== */
+void SceneBase::Draw()
+{
+	// 所持オブジェクト配列の全要素を描画
+	for (auto& pObject : m_pObjects)
+	{
+		pObject->Draw();	
+	}
+
+	// 所持UIオブジェクト配列の全要素を描画
+	for (auto& pUIObject : m_pUIObjects)
+	{
+		pUIObject->Draw();
+	}
+
+	DrawLocal();	// 個別描画処理
+}
+
+/* ========================================
+	オブジェクト更新関数
+	-------------------------------------
+	内容：更新処理
+=========================================== */
+void SceneBase::UpdateObject()
+{
+	m_bIsUpdating = true;	// 更新中フラグを立てる
+
+	// 所持オブジェクト配列の全要素を更新
+	for (auto& pObject : m_pObjects)
+	{
+		pObject->Update();
+	}
+
+	m_bIsUpdating = false;	// 更新中フラグを解除
+
+	// 一時保存オブジェクト配列
+	for (auto& pObject : m_pStandbyObjects)
+	{
+		pObject->Update();
+		m_pObjects.emplace_back(std::move(pObject));	// オブジェクト配列に移動
+	}
+	m_pStandbyObjects.clear();	// クリア
+
+	
+	UpdateCollision();	// 各当たり判定更新(死亡したオブジェクトをm_bColStatesMapから削除するためにこの位置に記述)
+	RemoveDeadObjects();// 死亡状態のオブジェクトを削除
+}
+
+/* ========================================
+	UI更新関数
+	-------------------------------------
+	内容：更新処理
+=========================================== */
+void SceneBase::UpdateUI()
+{
+	// 所持UIオブジェクト配列の全要素を更新
+	for (auto& pObject : m_pUIObjects)
+	{
+		pObject->Update();
+	}
+	RemoveDeadUIObjects();	// 死亡状態のUIオブジェクトを削除
+	UpdateLocal();			// 個別更新処理
+}
+
+/* ========================================
+	オブジェクト削除関数
+	-------------------------------------
+	内容：死亡状態のオブジェクトを削除
+=========================================== */
+void SceneBase::RemoveDeadObjects()
+{
+	// ↓のループ内でオブジェクトの状態が変わるので、一時保存用にコピー
+	std::map<ObjectBase*, ObjectBase::E_State> pObjectStateMap;	
+	for (auto& pObject : m_pObjects)
+		pObjectStateMap.insert(std::make_pair(pObject.get(), pObject->GetState()));
+
+	// 死亡状態のオブジェクトを削除
+	for (auto it = m_pObjects.begin(); it != m_pObjects.end();)
+	{
+		ObjectBase* pObject = it->get();
+		// 死亡状態かどうか
+		if (pObjectStateMap.at(pObject) == ObjectBase::E_State::STATE_DEAD)
+		{
+#ifdef _DEBUG
+			// 削除対象オブジェクトが一覧で選択中の場合
+			if(m_nObjectListSelectNo == ITEM_OBJ_LIST.GetListNo(pObject->GetListName().c_str()))
+			{
+				WIN_OBJ_INFO.Clear();	// オブジェクト情報ウィンドウクリア
+
+				m_nObjectListSelectNo = -1;								// 選択番号をリセット
+				ITEM_OBJ_LIST.SetListNo(-1);	// 選択番号をリセット
+			}
+#endif
+			// 子オブジェクトがある場合
+			if (pObject->GetChildObjects().size() > 0)
+			{
+				for (auto& pChild : pObject->GetChildObjects())
+				{
+					this->RemoveSceneObject(pChild);	// 子オブジェクトを削除
+				}
+			}
+			// 親オブジェクトがある場合
+			if (pObject->GetParentObject())
+			{
+				pObject->GetParentObject()->RemoveChildObject(pObject);	// 親オブジェクトから削除
+			}
+
+			pObject->Uninit();			// 終了処理
+			it = m_pObjects.erase(it);	// 削除
+
+		}
+		else
+		{
+			++it;	// 次の要素へ
+		}
+	}
+
+}
+
+/* ========================================
+	UIオブジェクト削除関数
+	-------------------------------------
+	内容：死亡状態のUIオブジェクトを削除
+=========================================== */
+void SceneBase::RemoveDeadUIObjects()
+{
+	// ↓のループ内でUIオブジェクトの状態が変わるので、一時保存用にコピー
+	std::map<UIObjectBase*, UIObjectBase::E_State> pUIObjectStateMap;
+	for (auto& pUIObject : m_pUIObjects)
+		pUIObjectStateMap.insert(std::make_pair(pUIObject.get(), pUIObject->GetState()));
+
+	// 死亡状態のUIオブジェクトを削除
+	for (auto it = m_pUIObjects.begin(); it != m_pUIObjects.end();)
+	{
+		UIObjectBase* pUIObject = it->get();
+		// 死亡状態かどうか
+		if (pUIObjectStateMap.at(pUIObject) == UIObjectBase::E_State::STATE_DEAD)
+		{
+#ifdef _DEBUG
+			// 削除対象UIオブジェクトが一覧で選択中の場合
+			if (m_nUISelectNo == WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].GetListNo(pUIObject->GetListName().c_str()))
+			{
+				WIN_UI_INFO.Clear();	// UIオブジェクト情報ウィンドウクリア
+
+				m_nUISelectNo = -1;								// 選択番号をリセット
+				WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].SetListNo(-1);	// 選択番号をリセット
+			}
+#endif
+			// 子UIオブジェクトがある場合
+			if (pUIObject->GetChildUIs().size() > 0)
+			{
+				for (auto& pChild : pUIObject->GetChildUIs())
+				{
+					this->RemoveSceneUI(pChild);	// 子UIオブジェクトを削除
+				}
+			}
+			// 親UIオブジェクトがある場合
+			if (pUIObject->GetParentUI())
+			{
+				pUIObject->GetParentUI()->RemoveChildUI(pUIObject);	// 親UIオブジェクトから削除
+			}
+
+			pUIObject->Uninit();			// 終了処理
+			it = m_pUIObjects.erase(it);	// 削除
+		}
+		else
+		{
+			++it;	// 次の要素へ
+		}
+	}
+
+}
+
+/* ========================================
+	オブジェクト追加関数
+	-------------------------------------
+	内容：シーンにオブジェクトを追加
+		　※ファイルデータからオブジェクトを追加する場合に使用
+	-------------------------------------
+	引数：追加するオブジェクトポインタ
+=========================================== */
+void SceneBase::AddSceneObjectBase(ObjectBase* pObject)
+{
+	// シーンが更新中かどうかをチェックします
+	if (m_bIsUpdating)
+	{
+		// 一時保存用の配列にユニークポインタを移動します
+		m_pStandbyObjects.push_back(std::unique_ptr<ObjectBase>(pObject));
+	}
+	else
+	{
+		// シーンのオブジェクト配列にユニークポインタを移動します
+		m_pObjects.push_back(std::unique_ptr<ObjectBase>(pObject));
+	}
+}
+
+/* ========================================
+	オブジェクト追加関数
+	-------------------------------------
+	内容：シーンにオブジェクトを追加
+		　※ファイルデータからオブジェクトを追加する場合に使用
+	-------------------------------------
+	戻値：追加したオブジェクトポインタ
+=========================================== */
+void SceneBase::AddSceneUI(UIObjectBase* pUIObject)
+{	// シーンのUIオブジェクト配列にユニークポインタを移動します
+	m_pUIObjects.push_back(std::unique_ptr<UIObjectBase>(pUIObject));
+}
+
+/* ========================================
+	オブジェクト検索関数
+	-------------------------------------
+	内容：シーンに所属するオブジェクトを検索
+	-------------------------------------
+	引数：sName	オブジェクト名
+	-------------------------------------
+	戻値：取得オブジェクトポインタ
+=========================================== */
+ObjectBase* SceneBase::FindSceneObject(std::string sName)
+{
+	// 名前が一致するオブジェクトを検索
+	for (auto& pObject : m_pObjects)
+	{
+		if (pObject->GetName() == sName)
+		{
+			return pObject.get();
+		}
+	}
+
+	return nullptr;
+}
+
+/* ========================================
+	UIオブジェクト検索関数
+	-------------------------------------
+	内容：シーンに所属するUIオブジェクトを検索
+	-------------------------------------
+	引数：sName	UIオブジェクト名
+	-------------------------------------
+	戻値：取得UIオブジェクトポインタ
+=========================================== */
+UIObjectBase* SceneBase::FindSceneUI(std::string sName)
+{
+	// 名前が一致するUIオブジェクトを検索
+	for (auto& pUIObject : m_pUIObjects)
+	{
+		if (pUIObject->GetName() == sName)
+		{
+			return pUIObject.get();
+		}
+	}
+
+	return nullptr;
+}
+
+/* ========================================
+	オブジェクト削除関数
+	-------------------------------------
+	内容：シーンに所属するオブジェクトを削除
+		　※死亡状態のオブジェクトを削除する場合に使用(子オブジェクトの削除時)
+	-------------------------------------
+	引数：pObject	削除するオブジェクトポインタ
+=========================================== */
+void SceneBase::RemoveSceneObject(ObjectBase* pObject)
+{
+	// 子オブジェクトがある場合
+	if (pObject->GetChildObjects().size() > 0)
+	{
+		for (auto& pChild : pObject->GetChildObjects())
+		{
+			this->RemoveSceneObject(pChild);	// 子オブジェクトを削除
+		}
+	}
+
+	pObject->RemoveParentObject();						// 親オブジェクトから削除
+	pObject->SetState(ObjectBase::E_State::STATE_DEAD);	// 死亡状態に設定
+
+}
+
+/* ========================================
+	UIオブジェクト削除関数
+	-------------------------------------
+	内容：シーンに所属するUIオブジェクトを削除
+		　※死亡状態のUIオブジェクトを削除する場合に使用(子UIオブジェクトの削除時)
+	-------------------------------------
+	引数：pUIObject	削除するUIオブジェクトポインタ
+=========================================== */
+void SceneBase::RemoveSceneUI(UIObjectBase* pUIObject)
+{
+	// 子オブジェクトがある場合
+	if (pUIObject->GetChildUIs().size() > 0)
+	{
+		for (auto& pChild : pUIObject->GetChildUIs())
+		{
+			this->RemoveSceneUI(pChild);	// 子UIオブジェクトを削除
+		}
+	}
+		
+	pUIObject->RemoveParentUI();							// 親UIオブジェクトから削除
+	pUIObject->SetState(UIObjectBase::E_State::STATE_DEAD);	// 死亡状態に設定
+
+}
+
+
+/* ========================================
+	衝突判定配列追加関数
+	-------------------------------------
+	内容：衝突判定を管理する配列に追加
+		　衝突判定コンポーネントの初期化で呼ばれる
+	-------------------------------------
+	引数1：衝突判定コンポーネント
+=========================================== */
+void SceneBase::AddObjectCollision(ComponentCollisionBase* pCollision)
+{
+	m_pObjectCollision.emplace_back(pCollision);	// emplace_backで追加(コピーを避ける)
+}
+
+/* ========================================
+	衝突判定配列削除関数
+	-------------------------------------
+	内容：衝突判定を管理する配列から削除
+		　衝突判定コンポーネントの終了処理で呼ばれる
+	-------------------------------------
+	引数1：衝突判定コンポーネント
+=========================================== */
+void SceneBase::RemoveObjectCollision(ComponentCollisionBase* pCollision)
+{
+	// 衝突判定を管理する配列から削除
+	m_pObjectCollision.erase(
+		std::remove(m_pObjectCollision.begin(), m_pObjectCollision.end(), pCollision), m_pObjectCollision.end());
+}
+
+/* ========================================
+	当たり判定配列更新関数
+	-------------------------------------
+	内容：各オブジェクトが持つ当たり判定
+		　コンポーネントを更新する
+=========================================== */
+void SceneBase::UpdateCollision()
+{
+	// 例：0と1、0と2、1と2、1と3、2と3、と全ての組み合わせで衝突判定を行う
+	for (size_t i = 0; i < m_pObjectCollision.size(); ++i) {
+		for (size_t j = i + 1; j < m_pObjectCollision.size(); ++j) {
+
+			// 衝突判定を行うコンポーネントを取得
+			ComponentCollisionBase* collisionA = m_pObjectCollision.at(i);
+			ComponentCollisionBase* collisionB = m_pObjectCollision.at(j);
+
+			collisionA->UpdateCollision(collisionB);
+			collisionB->UpdateCollision(collisionA); 
+		}
+	}
+}
+
+
+/* ========================================
+	ユニーク名前生成関数
+	-------------------------------------
+	内容：名前が重複している場合に、
+		　連番をつけた名前を生成する
+	-------------------------------------
+	引数：sName	オブジェクト名
+	-------------------------------------
+	戻値：調整後の名前
+=========================================== */
+std::string SceneBase::CreateUniqueName(std::string sName)
+{
+	// 名前が重複している場合は連番を付ける
+	int nDupCnt = 0;	// 重複回数
+	for (auto& pObject : m_pObjects)
+	{
+		// 名前が含まれている場合(既に連番をつけている場合を想定して)
+		if (pObject->GetName().find(sName) != std::string::npos)
+		{
+			nDupCnt++;
+		}
+	}
+
+	if (nDupCnt > 0)
+	{
+		sName += "_" + std::to_string(nDupCnt);	
+		return sName = CreateUniqueName(sName);	// オブジェクト名と重複チェック
+	}
+	else
+	{
+		return sName;
+	}
+
+}
+
+/* ========================================
+	ユニーク名前UI生成関数
+	-------------------------------------
+	内容：名前が重複している場合に、
+		　連番をつけた名前を生成する
+	-------------------------------------
+	引数：sName	UIオブジェクト名
+	-------------------------------------
+	戻値：調整後の名前
+=========================================== */
+std::string SceneBase::CreateUniqueUIName(std::string sName)
+{
+	// 名前が重複している場合は連番を付ける
+	int nDupCnt = 0;	// 重複回数
+	for (auto& pUIObject : m_pUIObjects)
+	{
+		// 名前が含まれている場合(既に連番をつけている場合を想定して)
+		if (pUIObject->GetName().find(sName) != std::string::npos)
+		{
+			nDupCnt++;
+		}
+	}
+
+	if (nDupCnt > 0)
+	{
+		sName += "_" + std::to_string(nDupCnt);
+		return sName = CreateUniqueUIName(sName);	// UIオブジェクト名と重複チェック
+	}
+	else
+	{
+		return sName;
+	}
+}
+
+
+/* ========================================
+	全オブジェクト取得関数
+	-------------------------------------
+	内容：シーンに所属する全てのオブジェクトを取得
+	-------------------------------------
+	戻値：取得したオブジェクトのポインタ配列
+=========================================== */
+std::vector<ObjectBase*> SceneBase::GetAllSceneObjects()
+{
+	std::vector<ObjectBase*> objects;
+
+	for (const auto& pObject : m_pObjects)
+	{
+		objects.push_back(pObject.get());
+	}
+
+	return objects;
+}
+
+/* ========================================
+	全UIオブジェクト取得関数
+	-------------------------------------
+	内容：シーンに所属する全てのUIオブジェクトを取得
+	-------------------------------------
+	戻値：取得したUIオブジェクトのポインタ配列
+=========================================== */
+std::vector<UIObjectBase*> SceneBase::GetAllSceneUIObjects()
+{
+	std::vector<UIObjectBase*> objects;
+
+	for (const auto& pUIObject : m_pUIObjects)
+	{
+		objects.push_back(pUIObject.get());
+	}
+
+	return objects;
+}
+
+/* ========================================
+	タグ別オブジェクト収集関数
+	-------------------------------------
+	内容：シーンに所属する特定のタグのオブジェクト
+		　を全て収集する
+		 ※テンプレートではないが、似たような処理の為、ここに記載。
+	-------------------------------------
+	戻値：取得したオブジェクトのポインタ配列
+========================================== */
+std::vector<ObjectBase*> SceneBase::GetSceneObjectsTag(E_ObjectTag tag)
+{
+	// 取得したオブジェクトを格納する配列
+	std::vector<ObjectBase*> objects;
+
+	// シーンに所属するオブジェクトを検索
+	for (const auto& pObject : m_pObjects)
+	{
+		// オブジェクトの型が一致したら配列に追加
+		if (pObject->GetTag() == tag)
+		{
+			objects.push_back(pObject.get());
+		}
+	}
+
+	return objects;	// 取得したオブジェクトの配列を返す
+}
+
+
+// デバッグ用 ========================================================
+#ifdef _DEBUG
+
+/* ========================================
+	ウィンドウ初期化(オブジェクト一覧)関数
+	-------------------------------------
+	内容：オブジェクト一覧の初期化を行う
+=========================================== */
+void SceneBase::InitObjectList()
+{
+	using namespace DebugUI;
+
+
+	// オブジェクト削除ボタン
+	WIN_OBJ_LIST.AddItem(Item::CreateCallBack("Remove", Item::Kind::Command, [this](bool isWrite, void* arg)
+	{
+		if (m_nObjectListSelectNo == -1) return;					// 選択されていない場合は処理しない
+		// シーン上のカメラが1つの場合、カメラオブジェクトは削除不可
+		if (dynamic_cast<ObjectCamera*>(m_pSelectObj) != nullptr && CAMERA_MNG_INST.GetCameraNum() == 1) return;
+		// カメラオブジェクトがアクティブの場合、削除不可
+		if (CAMERA_MNG_INST.GetActiveCamera() == m_pSelectObj)	return;
+
+		m_pSelectObj->SetState(ObjectBase::E_State::STATE_DEAD);	// 死亡状態に設定
+
+	}));
+
+	// オブジェクトフォーカスボタン
+	WIN_OBJ_LIST.AddItem(Item::CreateCallBack("Focus", Item::Kind::Command, [this](bool isWrite, void* arg)
+	{
+		if (m_nObjectListSelectNo == -1) return;					// 選択されていない場合は処理しない
+		// 選択されていない場合は処理しない
+		if (m_nObjectListSelectNo == -1) return;
+		// アクティブカメラはフォーカス移動不可
+		if (m_pSelectObj == CAMERA_MNG_INST.GetActiveCamera()) return;
+
+		CAMERA_MNG_INST.FocusMoveCamera(m_pSelectObj);	// カメラを指定オブジェクトにフォーカス移動
+
+	}, false, true));
+
+	// オブジェクト一覧
+	Item::ConstCallback  FuncListClick = [this](const void* arg) {
+		// クリックされたオブジェクトの情報を表示
+
+		std::string sObjName = reinterpret_cast<const char*>(arg);
+		m_nObjectListSelectNo = ITEM_OBJ_LIST.GetListNo(sObjName.c_str());	// 選択番号を取得
+
+		// 名前に"L"が含まれている場合(子オブジェクトの場合)
+		if (sObjName.find(CHILD_HEAD_TEXT) != std::string::npos) 
+		{
+			// "L"を除去した名前に変換
+			int nHeadTextCnt = sObjName.find(CHILD_HEAD_TEXT);					
+			sObjName = sObjName.substr(nHeadTextCnt + CHILD_HEAD_TEXT.size());	
+		}
+
+		InitObjectInfo(sObjName);
+
+	};
+	Item* pList = Item::CreateList(ITEM_OBJ_LIST_NAME.c_str(), FuncListClick, false);
+	WIN_OBJ_LIST.AddItem(pList);
+
+}
+
+/* ========================================
+	ウィンドウ初期化(オブジェクト情報)関数
+	-------------------------------------
+	内容：オブジェクト情報の初期化を行う
+		　※一覧のオブジェクト名をクリックする度呼ばれる
+	-------------------------------------
+	引数：string オブジェクト名
+=========================================== */
+void SceneBase::InitObjectInfo(std::string sName)
+{
+	using namespace DebugUI;
+
+	WIN_OBJ_INFO.Clear();	// 表示リセット
+
+	// 名前が一致するオブジェクトを検索
+	for (auto& pObject : m_pObjects)
+	{
+		if (pObject->GetName() == sName)
+		{
+			// オブジェクト情報を表示
+			pObject->Debug();			
+			m_pSelectObj = pObject.get();	// 選択中のオブジェクトを保持
+			break;
+		}
+	}
+}
+
+/* ========================================
+	ウィンドウ初期化(UIオブジェクト一覧)関数
+	-------------------------------------
+	内容：UIオブジェクト一覧の初期化を行う
+=========================================== */
+void SceneBase::InitUIList()
+{
+
+	using namespace DebugUI;
+
+	// UI削除ボタン
+	WIN_UI_LIST.AddItem(Item::CreateCallBack("Remove", Item::Kind::Command, [this](bool isWrite, void* arg)
+	{
+		if (m_nUISelectNo == -1) return;					// 選択されていない場合は処理しない
+
+		m_pSelectUI->SetState(UIObjectBase::E_State::STATE_DEAD);	// 死亡状態に設定
+
+	}));
+
+
+	Item::ConstCallback  FuncListClick = [this](const void* arg) {
+		// クリックされたオブジェクトの情報を表示
+
+		std::string sUIName = reinterpret_cast<const char*>(arg);
+		m_nUISelectNo = WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].GetListNo(sUIName.c_str());	// 選択番号を取得
+
+		// 名前に"L"が含まれている場合(子オブジェクトの場合)
+		if (sUIName.find(DebugUI::CHILD_HEAD_TEXT) != std::string::npos)
+		{
+			// "L"を除去した名前に変換
+			int nHeadTextCnt = sUIName.find(DebugUI::CHILD_HEAD_TEXT);
+			sUIName = sUIName.substr(nHeadTextCnt + DebugUI::CHILD_HEAD_TEXT.size());
+		}
+
+		InitUIInfo(sUIName);
+	};
+
+	Item* pList = Item::CreateList(ITEM_UI_LIST_NAME.c_str(), FuncListClick, false);
+	WIN_UI_LIST.AddItem(pList);
+}
+
+/* ========================================
+	ウィンドウ初期化(UIオブジェクト情報)関数
+	-------------------------------------
+	内容：UIオブジェクト情報の初期化を行う
+		　※一覧のオブジェクト名をクリックする度呼ばれる
+	-------------------------------------
+	引数：string UIオブジェクト名
+=========================================== */
+void SceneBase::InitUIInfo(std::string sName)
+{
+	using namespace DebugUI;
+
+	WIN_UI_INFO.Clear();	// 表示リセット
+
+	// 名前が一致するオブジェクトを検索
+	for (auto& pUI : m_pUIObjects)
+	{
+		if (pUI->GetName() == sName)
+		{
+			// オブジェクト情報を表示
+			pUI->Debug();
+			m_pSelectUI = pUI.get();	// 選択中のオブジェクトを保持
+			break;
+		}
+	}
+}
+
+/* ========================================
+	デバッグ用オブジェクト一覧再読込関数
+	-------------------------------------
+	内容：オブジェクト一覧を再読み込みする
+=========================================== */
+void SceneBase::ReloadDebugObjectList()
+{
+	// オブジェクト一覧をクリア
+	ITEM_OBJ_LIST.RemoveListItemAll();
+
+	// シーンに所属する全てのオブジェクトを取得
+	for (const auto& pObject : m_pObjects)
+	{
+		if (pObject->GetParentObject()) continue;	// 親オブジェクトがある場合は飛ばす
+		// オブジェクト一覧に追加
+		ITEM_OBJ_LIST.AddListItem(pObject->GetName().c_str());
+		AddObjectListChild(pObject.get());
+	}
+}
+
+/* ========================================
+	デバッグ用オブジェクト一覧子オブジェクト追加関数
+	-------------------------------------
+	内容：オブジェクト一覧に子オブジェクトを追加
+		　※子がある限り再帰的に呼び出される
+	-------------------------------------
+	引数：ObjectBase* 親オブジェクト
+=========================================== */
+void SceneBase::AddObjectListChild(ObjectBase* pObject)
+{
+	// 子オブジェクトがある場合
+	if (pObject->GetChildObjects().size() > 0)
+	{
+		for (auto& pChild : pObject->GetChildObjects())
+		{
+			// 挿入位置
+			int nInsertNo = ITEM_OBJ_LIST.GetListNo(pObject->GetListName().c_str());
+			// オブジェクト一覧に追加
+			ITEM_OBJ_LIST.InsertListItem(pChild->GetListName().c_str(), nInsertNo + 1);
+			// 子オブジェクトを追加
+			AddObjectListChild(pChild);	
+		}
+	}
+	else
+	{
+		return;
+	}
+}
+
+/* ========================================
+	デバッグ用UIオブジェクト一覧再読込関数
+	-------------------------------------
+	内容：UIオブジェクト一覧を再読み込みする
+=========================================== */
+void SceneBase::ReloadDebugUIList()
+{
+	// オブジェクト一覧をクリア
+	WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].RemoveListItemAll();
+
+	// シーンに所属する全てのオブジェクトを取得
+	for (const auto& pUI : m_pUIObjects)
+	{
+		if (pUI->GetParentUI()) continue;	// 親オブジェクトがある場合は飛ばす
+		// オブジェクト一覧に追加
+		ITEM_UI_LIST.AddListItem(pUI->GetName().c_str());
+		AddUIListChild(pUI.get());
+	}
+}
+
+/* ========================================
+	デバッグ用UIオブジェクト一覧子オブジェクト追加関数
+	-------------------------------------
+	内容：UIオブジェクト一覧に子オブジェクトを追加
+		　※子がある限り再帰的に呼び出される
+	-------------------------------------
+	引数：UIObjectBase* 親UIオブジェクト
+=========================================== */
+void SceneBase::AddUIListChild(UIObjectBase* pUIObject)
+{
+	// 子オブジェクトがある場合
+	if (pUIObject->GetChildUIs().size() > 0)
+	{
+		for (auto& pChild : pUIObject->GetChildUIs())
+		{
+			// 挿入位置
+			int nInsertNo = WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].GetListNo(pUIObject->GetListName().c_str());
+			// オブジェクト一覧に追加
+			ITEM_UI_LIST.InsertListItem(pChild->GetListName().c_str(), nInsertNo + 1);
+			// 子オブジェクトを追加
+			AddUIListChild(pChild);
+		}
+	}
+	else
+	{
+		return;
+	}
+}
+
+#endif
