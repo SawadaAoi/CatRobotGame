@@ -126,7 +126,7 @@ void ObjectBase::Draw()
 =========================================== */
 void ObjectBase::InitDefaultComponent()
 {
-	AddComponent<ComponentTransform>();	// Transformコンポーネントを追加	
+	m_pCompTransform = AddComponent<ComponentTransform>();	// Transformコンポーネントを追加	
 }
 
 /* ========================================
@@ -310,6 +310,15 @@ void ObjectBase::InputLocalData(std::ifstream& file)
 	// 継承して各オブジェクトで処理を記述
 }
 
+/* ========================================
+	ゲッター(トランスフォーム)関数
+	-------------------------------------
+	戻値：ComponentTransform* トランスフォームコンポーネントのポインタ
+=========================================== */
+ComponentTransform* ObjectBase::GetTransform() const
+{
+	return m_pCompTransform;
+}
 
 /* ========================================
 	ゲッター(所持シーン)関数
