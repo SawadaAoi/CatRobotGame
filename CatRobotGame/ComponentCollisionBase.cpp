@@ -132,26 +132,10 @@ void ComponentCollisionBase::UpdateCollision(ComponentCollisionBase* otherCol)
 {
 	ObjectBase* pOtherObj = otherCol->GetOwnerObject();	// 相手のオブジェクトを取得
 
-	if (pOtherObj->GetState() == ObjectBase::STATE_DEAD)
-	{
-		m_bColStatesMap.erase(otherCol->GetOwnerObject());
-
-#ifdef _DEBUG
-		// デバッグ衝突オブジェクトリストから削除
-		if (CHECK_DISP_COMP(m_sColCompName.c_str()))
-		{
-			if (!m_pColObjList)
-				WIN_OBJ_INFO["CollObjectList"].RemoveListItem(pOtherObj->GetName().c_str());
-		}
-#endif // _DEBUG
-
-		return;
-	}
-
-	if (!m_bIsEnabled) return;								// このコリジョンが無効なら処理しない
-	if (!otherCol->GetEnable()) return;					// 相手のコリジョンが無効なら処理しない
-	if (!m_bIsDynamic && !otherCol->GetDynamic()) return;	// 両方のコリジョンが静的なら処理しない
-
+	if (pOtherObj->GetState() == ObjectBase::STATE_DEAD) return;	// 相手のオブジェクトが死亡状態なら処理しない
+	if (!m_bIsEnabled) return;										// このコリジョンが無効なら処理しない
+	if (!otherCol->GetEnable()) return;								// 相手のコリジョンが無効なら処理しない
+	if (!m_bIsDynamic && !otherCol->GetDynamic()) return;			// 両方のコリジョンが静的なら処理しない
 
 	// 衝突オブジェクトが一覧にない場合、追加
 	if (m_bColStatesMap.find(pOtherObj) == m_bColStatesMap.end())
@@ -184,6 +168,37 @@ void ComponentCollisionBase::UpdateCollision(ComponentCollisionBase* otherCol)
 	// 衝突状態を更新
 	m_bColStatesMap.at(pOtherObj) = bColCurrent;
 
+}
+
+/* ========================================
+	衝突状態マップ更新関数
+	-------------------------------------
+	内容：衝突状態マップの更新処理
+		　衝突判定の結果、相手のオブジェクトが変わる事があるので、
+		  衝突判定更新後に呼び出して、マップを更新する
+	-------------------------------------
+	引数1：衝突相手の当たり判定コンポーネント
+=========================================== */
+void ComponentCollisionBase::UpdateCollisionMap(ComponentCollisionBase* otherCol)
+{
+	ObjectBase* pOtherObj = otherCol->GetOwnerObject();	// 相手のオブジェクトを取得
+
+	// 死亡状態の場合はマップから削除
+	if (pOtherObj->GetState() == ObjectBase::STATE_DEAD)
+	{
+		m_bColStatesMap.erase(otherCol->GetOwnerObject());
+
+#ifdef _DEBUG
+		// デバッグ衝突オブジェクトリストから削除
+		if (CHECK_DISP_COMP(m_sColCompName.c_str()))
+		{
+			if (!m_pColObjList)
+				WIN_OBJ_INFO["CollObjectList"].RemoveListItem(pOtherObj->GetName().c_str());
+		}
+#endif // _DEBUG
+
+		return;
+	}
 }
 
 /* ========================================

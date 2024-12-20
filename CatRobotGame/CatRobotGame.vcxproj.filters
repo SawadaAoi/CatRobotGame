@@ -192,6 +192,9 @@
     <Filter Include="ソース ファイル\App\GameObject\Camera\0_Super">
       <UniqueIdentifier>{17cb88c7-33b0-47b2-9e66-d50ff343dd9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\GameObject\Bullet">
+      <UniqueIdentifier>{653cc415-5d5c-4d8e-a736-7b13cbff17d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -451,6 +454,12 @@
     </ClCompile>
     <ClCompile Include="ObjectCameraDebug.cpp">
       <Filter>ソース ファイル\App\GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBullet.cpp">
+      <Filter>ソース ファイル\App\GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBulletPlayer.cpp">
+      <Filter>ソース ファイル\App\GameObject\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -729,6 +738,12 @@
     </ClInclude>
     <ClInclude Include="ObjectCameraDebug.h">
       <Filter>ソース ファイル\App\GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBullet.h">
+      <Filter>ソース ファイル\App\GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBulletPlayer.h">
+      <Filter>ソース ファイル\App\GameObject\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
