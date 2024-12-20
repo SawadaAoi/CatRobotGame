@@ -12,6 +12,7 @@
 // UI
 #include "UIObjectBase.h"
 #include "UIObjectText.h"
+#include "UIObjectPlayerHP.h"
 
 /* ========================================
 	ëSUIìoò^ä÷êî
@@ -22,5 +23,6 @@ void UITypeRegistry::RegisterAllUITypes()
 {
 	REGISTER_UI_TYPE(UIObjectBase);
 	REGISTER_UI_TYPE(UIObjectText);
+	REGISTER_UI_TYPE(UIObjectPlayerHP);
 
 }

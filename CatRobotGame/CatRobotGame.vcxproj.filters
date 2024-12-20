@@ -195,6 +195,12 @@
     <Filter Include="ソース ファイル\App\GameObject\Bullet">
       <UniqueIdentifier>{653cc415-5d5c-4d8e-a736-7b13cbff17d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\UI\Object\Game">
+      <UniqueIdentifier>{40ae2899-aff0-4f90-8853-c0ed3af8e60b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\App\UI\Object\Game\Player">
+      <UniqueIdentifier>{7de68e45-7040-4276-8637-f5874c41a21b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -466,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="RegisterUITypeMap.cpp">
       <Filter>ソース ファイル\System\DataInOut</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObjectPlayerHP.cpp">
+      <Filter>ソース ファイル\App\UI\Object\Game\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -750,6 +759,9 @@
     </ClInclude>
     <ClInclude Include="ObjectBulletPlayer.h">
       <Filter>ソース ファイル\App\GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObjectPlayerHP.h">
+      <Filter>ソース ファイル\App\UI\Object\Game\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -67,6 +67,8 @@ void ObjectPlayer::InitLocal()
 
 	m_pCompModelAnime = AddComponent<ComponentModelAnime>();
 
+
+
 }
 
 /* ========================================
@@ -132,6 +134,9 @@ void ObjectPlayer::CheckGround()
 ========================================= */
 void ObjectPlayer::Damage()
 {
+	if (m_bInvincible)	return;	// 無敵時間中はダメージを受けない
+	if (m_nHp <= 0)		return;	// HPが0以下の場合はダメージを受けない
+
 	// ダメージアニメーション
 
 	m_bInvincible = true;	// 無敵時間開始

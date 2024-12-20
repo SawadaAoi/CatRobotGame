@@ -27,10 +27,15 @@
 
 void SceneGameTest::InitLocal()
 {
+	//FileManager::StageUIOutput("Assets/Save/TestUI.ui");
+
 	AddSceneObject<ObjectLightDirectional>("LightDirectional");
 	m_pPlayer = AddSceneObject<ObjectPlayer>("Player");
 
 	AddSceneObject<ObjectCameraPlayer>("PlayerCamera");
+
+	FileManager::UIInput("Assets/Save/GameUI/PlayerHP.ui");
+
 
 	AddSceneObject<ObjectCameraDebug>("ObjectCameraDebug");
 
@@ -47,7 +52,6 @@ void SceneGameTest::InitLocal()
 
 void SceneGameTest::UninitLocal()
 {
-	//FileManager::StageUIOutput("Assets/Save/TestUI.ui");
 }
 
 void SceneGameTest::UpdateLocal()

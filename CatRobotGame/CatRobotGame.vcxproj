@@ -257,6 +257,7 @@
     <ClCompile Include="UIComponentText.cpp" />
     <ClCompile Include="UIComponentTransform.cpp" />
     <ClCompile Include="UIObjectBase.cpp" />
+    <ClCompile Include="UIObjectPlayerHP.cpp" />
     <ClCompile Include="UIObjectText.cpp" />
     <ClCompile Include="UITypeRegistry.cpp" />
     <ClCompile Include="VertexShader.cpp" />
@@ -352,6 +353,7 @@
     <ClInclude Include="UIComponentText.h" />
     <ClInclude Include="UIComponentTransform.h" />
     <ClInclude Include="UIObjectBase.h" />
+    <ClInclude Include="UIObjectPlayerHP.h" />
     <ClInclude Include="UIObjectText.h" />
     <ClInclude Include="UITypeRegistry.h" />
     <ClInclude Include="Vector2.h" />
