@@ -58,6 +58,7 @@ void ObjectPlayer::InitLocal()
 	m_pCompPlayerController = AddComponent<ComponentPlayerController>();
 
 	m_pCompModelAnime = AddComponent<ComponentModelAnime>();
+
 }
 
 /* ========================================
@@ -83,6 +84,4 @@ void ObjectPlayer::UpdateLocal()
 
 }
 
-void ObjectPlayer::DrawLocal()
-{
-}
+

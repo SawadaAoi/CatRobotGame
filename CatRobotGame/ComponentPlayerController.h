@@ -13,6 +13,7 @@
 // =============== インクルード =====================
 #include "ComponentBase.h"
 #include "Windows.h"
+#include <unordered_map>
 
 // =============== 前方宣言 =======================
 class ComponentTransform;
@@ -31,6 +32,7 @@ public:
 		LEFT,			// 左
 		RIGHT,			// 右
 		JUMP,			// ジャンプ
+		SHOT,			// ショット
 		Max
 	};
 
@@ -55,6 +57,7 @@ public:
 private:
 	void Move();	// 移動処理
 	void Jump();	// ジャンプ処理
+	void Shot();	// 弾発射処理
 
 	Vector3<float> MoveKeybord();	// キーボード入力処理
 	Vector3<float> MoveController();	// コントローラー入力処理
@@ -71,11 +74,11 @@ private:
 	 float m_fJumpPower;	// ジャンプ力
 
 	 BYTE m_MoveKey[E_MoveKey::Max];		// 移動キー
-
 	 bool m_bUseJump;	// ジャンプ中フラグ
 	 
 	 // 入力有効フラグ
 	 bool m_bIsInputEnable;
+
 
 };
 

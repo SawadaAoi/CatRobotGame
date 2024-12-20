@@ -13,7 +13,7 @@
 #include "ObjectBase.h"
 #include <memory>
 
-
+// =============== 前方宣言 =====================
 class ComponentTransform;
 class ComponentGroundRaycast;
 class ComponentRigidbody;
@@ -28,15 +28,14 @@ public:
 	ObjectPlayer(SceneBase* pScene);
 	void InitLocal();
 	void UpdateLocal();
-	void DrawLocal();
 
 	// ゲッター
 	DEFINE_OBJECT_TYPE(ObjectPlayer)	// オブジェクトの種類ID取得関数
 
 private:
-	ComponentGroundRaycast* m_pCompGroundRaycast;
-	ComponentRigidbody* m_pCompRigidbody;
-	ComponentModelAnime* m_pCompModelAnime;
-	ComponentPlayerController* m_pCompPlayerController;
+	ComponentGroundRaycast*		m_pCompGroundRaycast;
+	ComponentRigidbody*			m_pCompRigidbody;
+	ComponentModelAnime*		m_pCompModelAnime;
+	ComponentPlayerController*	m_pCompPlayerController;
 };
 

@@ -58,12 +58,12 @@ public:
 private:
 	void UpdateTriangleVertex();	// 三角形の頂点を更新
 private:
-	ComponentTransform* m_pOwnerTransform;	// 所有オブジェクトの座標、回転、スケール
+	ComponentTransform* m_pCompTransform;	// 所有オブジェクトの座標、回転、スケール
 
 	std::unique_ptr<ShapeLine>			m_pNormalLine;				// 法線
 	Vector3<float>						m_vNormalDirection;			// 法線の方向
 	Vector3<float>						m_vWorldNormalDirection;	// ワールド座標の法線の方向
-	bool								m_bIsDispNormal;	// 法線の表示フラグ
-	std::vector<T_TriangleVertex>		m_TriangleVertices;	// 地面を構成する三角形の頂点(左上、右下)
+	bool								m_bIsDispNormal;			// 法線の表示フラグ
+	std::vector<T_TriangleVertex>		m_TriangleVertices;			// 地面を構成する三角形の頂点(左上、右下)
 };
 

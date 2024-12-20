@@ -9,14 +9,15 @@
 // =============== インクルード =====================
 #include "ComponentPlayerController.h"
 #include "ObjectBase.h"		// 所持オブジェクトの取得
+#include "ObjectBulletPlayer.h"
 #include "ObjectCameraPlayer.h"	// 移動方向計算用
 
-#include "ComponentTransform.h"	// トランスフォームコンポーネント
 #include "ComponentRigidbody.h"	// リジッドボディコンポーネント
+#include "ComponentTransform.h"	// トランスフォームコンポーネント
 
 #include "Input.h"
-#include "unordered_map"
 #include "SceneManager.h"
+#include "unordered_map"
 
 // =============== 定数定義 =======================
 // ComponentRigidbody::E_ForceModeを省略
@@ -36,6 +37,7 @@ const std::unordered_map<std::string, BYTE> KEY_MAP
 	{ "LEFT"	, VK_LEFT	 },
 	{ "RIGHT"	, VK_RIGHT	 },
 	{ "CONTROL" , VK_CONTROL },
+	{ "ENTER"	, VK_RETURN  },
 	{ "A", 'A' },
 	{ "B", 'B' },
 	{ "C", 'C' },
@@ -74,13 +76,16 @@ const std::unordered_map<std::string, BYTE> KEY_MAP
 =========================================== */
 ComponentPlayerController::ComponentPlayerController(ObjectBase* pOwner)
 	: ComponentBase(pOwner, OrderPlayerControl)
+	, m_pObjCamera(nullptr)
 	, m_pCompTran(nullptr)
 	, m_pCompRigidbody(nullptr)
 	, m_fMoveSpeed(DEFAULT_MOVE_SPEED)
 	, m_fRotateSpeed(DEFAULT_ROTATE_SPEED)
 	, m_fJumpPower(DEFAULT_JUMP_POWER)
-	, m_MoveKey{ 'W', 'S', 'A', 'D', VK_SPACE }
+	, m_MoveKey{ 'W', 'S', 'A', 'D', VK_SPACE , VK_RETURN }
 	, m_bIsInputEnable(true)
+	, m_bUseJump(true)
+
 {
 }
 
@@ -127,6 +132,7 @@ void ComponentPlayerController::Update()
 
 	Move();		// 移動
 	Jump();		// ジャンプ
+	Shot();		// ショット
 }
 
 
@@ -162,6 +168,22 @@ void ComponentPlayerController::Jump()
 	{
 		m_pCompRigidbody->AddForce(Vector3<float>::Up() * m_fJumpPower, E_ForceMode::IMPULSE);
 		m_pCompTran->TranslateY(1.1f);	// 少し浮かせる(地面判定の位置修正を考慮して)
+	}
+}
+
+/* ========================================
+	弾発射関数
+	-------------------------------------
+	内容：進行方向に弾を発射する
+========================================== */
+void ComponentPlayerController::Shot()
+{
+	// ショット
+	if (Input::IsKeyTrigger(m_MoveKey[E_MoveKey::SHOT]))
+	{
+		ObjectBullet* pBullet = m_pOwnerObj->GetOwnerScene()->AddSceneObject<ObjectBulletPlayer>("PlayerBullet");
+		pBullet->GetTransform()->SetLocalPosition(m_pCompTran->GetWorldPosition());
+		pBullet->GetTransform()->SetLocalRotation(m_pCompTran->GetWorldRotation());
 	}
 }
 
@@ -274,7 +296,6 @@ void ComponentPlayerController::SetUseJump(bool bUseJump)
 	m_bUseJump = bUseJump;
 
 }
-
 
 
 
