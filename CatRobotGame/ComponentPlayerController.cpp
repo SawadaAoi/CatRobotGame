@@ -285,16 +285,64 @@ void ComponentPlayerController::RotateToMoveDir(Vector3<float> moveDir)
 }
 
 
+/* ========================================
+	ゲッター(移動速度)関数
+	-------------------------------------
+	戻値：float		移動速度
+=========================================== */
+float ComponentPlayerController::GetMoveSpeed()
+{
+	return m_fMoveSpeed;
+}
+
+/* ========================================
+	ゲッター(回転速度)関数
+	-------------------------------------
+	戻値：float		回転速度
+=========================================== */
+float ComponentPlayerController::GetRotateSpeed()
+{
+	return m_fRotateSpeed;
+}
 
 /* ========================================
 	ゲッター(ジャンプ有効フラグ)関数
 	-------------------------------------
 	戻値：bool		ジャンプ有効フラグ
 =========================================== */
+bool ComponentPlayerController::GetUseJump()
+{
+	return m_bUseJump;
+}
+
+/* ========================================
+	セッター(移動速度)関数
+	-------------------------------------
+	戻値：float		移動速度
+=========================================== */
+void ComponentPlayerController::SetMoveSpeed(float fMoveSpeed)
+{
+	m_fMoveSpeed = fMoveSpeed;
+}
+
+/* ========================================
+	セッター(回転速度)関数
+	-------------------------------------
+	戻値：float		回転速度
+=========================================== */
+void ComponentPlayerController::SetRotateSpeed(float fRotateSpeed)
+{
+	m_fRotateSpeed = fRotateSpeed;
+}
+
+/* ========================================
+	セッター(ジャンプ有効フラグ)関数
+	-------------------------------------
+	戻値：bool		ジャンプ有効フラグ
+=========================================== */
 void ComponentPlayerController::SetUseJump(bool bUseJump)
 {
 	m_bUseJump = bUseJump;
-
 }
 
 

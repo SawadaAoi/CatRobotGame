@@ -41,9 +41,8 @@ void SceneGameTest::InitLocal()
 	m_StaticPlane->GetComponent<ComponentTransform>()->SetLocalScale(Vector3(100.0f, 1.0f, 100.0f));
 
 
-	//AddSceneObject<ObjectBlock>("Block1");
-
-	AddSceneObject<ObjectBullet>("Bullet1");
+	ObjectBase* pBlock = AddSceneObject<ObjectBlock>("Block1");
+	pBlock->SetTag(E_ObjectTag::Enemy);
 }
 
 void SceneGameTest::UninitLocal()

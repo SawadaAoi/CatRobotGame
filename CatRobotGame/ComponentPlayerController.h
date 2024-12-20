@@ -44,8 +44,13 @@ public:
 	void Update() override;
 
 	// ゲッター
+	float GetMoveSpeed();
+	float GetRotateSpeed();
+	bool GetUseJump();
 
 	// セッター
+	void SetMoveSpeed(float fMoveSpeed);
+	void SetRotateSpeed(float fRotateSpeed);
 	void SetUseJump(bool bUseJump);
 
 	DEFINE_COMPONENT_TYPE	// コンポーネントの種類ID取得関数

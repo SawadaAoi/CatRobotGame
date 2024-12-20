@@ -29,13 +29,38 @@ public:
 	void InitLocal();
 	void UpdateLocal();
 
+	void OnCollisionEnter(ObjectBase* pHit) override;
+
 	// ゲッター
+	int GetHp();
+	int GetMaxHp();
+	bool GetInvincible();
+
+	// セッター
+	void SetHp(int hp);
+	void SetMaxHp(int maxHp);
+	void SetInvincible(bool bInvincible);
+
 	DEFINE_OBJECT_TYPE(ObjectPlayer)	// オブジェクトの種類ID取得関数
 
+private:
+	void CheckGround();
+	void Damage();
+	void InvincibleUpdate();
 private:
 	ComponentGroundRaycast*		m_pCompGroundRaycast;
 	ComponentRigidbody*			m_pCompRigidbody;
 	ComponentModelAnime*		m_pCompModelAnime;
 	ComponentPlayerController*	m_pCompPlayerController;
+
+	// HP
+	int m_nHp;
+	int m_nMaxHp;
+
+	bool	m_bInvincible;	// 無敵時間フラグ
+	float	m_fInvCnt;		// 無敵時間カウント
+	float	m_fInvFlashCnt;	// 無敵時間点滅カウント
+
+	
 };
 
