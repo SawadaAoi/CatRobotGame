@@ -17,8 +17,11 @@
 #include "TimeManager.h"	// 経過時間をどこでも取得できるようにするため
 #include <fstream>
 
+
 // =============== 前方宣言 =====================
 class SceneBase;	// シーン基底クラス
+class UIComponentTransform;	// トランスフォームコンポーネント
+class UIComponentSprite;	// スプライトコンポーネント
 
 // =============== 定数定義 =======================
 // オブジェクトID取得関数の定義を省略するためのマクロ
@@ -52,6 +55,13 @@ public:
 
 		STATE_MAX,		// 状態の最大数
 	};
+
+	struct S_SaveData
+	{
+		int nTextureID;
+		bool bIsVisible;
+	};
+
 public:
 	UIObjectBase() = delete;
 	UIObjectBase(SceneBase* pScene);
@@ -76,7 +86,6 @@ public:
 	void RemoveChildUI(UIObjectBase* pChildObj);	// 子オブジェクトの削除
 	void RemoveAllChildUIs();						// 全ての子オブジェクトの削除
 	int GetGenerationCount();						// 子オブジェクトの数を取得
-
 
 	// ファイル入出力
 	virtual void OutPutLocalData(std::ofstream& file);	// オブジェクトのデータ出力
@@ -124,6 +133,9 @@ private:
 protected:
 	SceneBase*										m_pOwnerScene;	// 所有シーン
 	std::vector<std::unique_ptr<UIComponentBase>>	m_pComponents;	// コンポーネント一覧
+
+	UIComponentTransform*	m_pCompTransform;	// トランスフォームコンポーネント
+	UIComponentSprite*		m_pCompSprite;		// スプライトコンポーネント
 
 	std::string m_sName;	// UI名
 	E_State		m_eState;	// UIの状態

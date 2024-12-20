@@ -12,7 +12,6 @@
 // =============== インクルード ===================
 #include "UIObjectBase.h"
 #include "SceneManager.h"
-#include <unordered_map>
 
 
 // =============== 定数定義 =======================
@@ -32,6 +31,9 @@ public:
     UIObjectBase* CreateUI(const std::string& sClassName);              // UI生成
 
     static void RegisterAllUITypes();                                   // UIの登録を行う関数
+
+    // ゲッター
+    std::unordered_map<std::string, CreateFunction*>& GetUITypeMap();
 private:
     // 文字列とクラス生成関数のマップ
     std::unordered_map<std::string, CreateFunction*> m_UITypeMap;

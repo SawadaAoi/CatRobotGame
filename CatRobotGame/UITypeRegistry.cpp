@@ -1,7 +1,7 @@
 /* ========================================
 	DX22Base/
 	------------------------------------
-	オブジェクト種類登録用cpp
+	UI種類登録用cpp
 	------------------------------------
 	UITypeRegistry.cpp
 ========================================== */
@@ -9,9 +9,6 @@
 // =============== インクルード ===================
 #include "UITypeRegistry.h"
 
-// オブジェクト
-#include "UIObjectBase.h"
-#include "UIObjectText.h"
 
 /* ========================================
 	インスタンス取得関数
@@ -27,12 +24,12 @@ UITypeRegistry& UITypeRegistry::GetInstance()
 }
 
 /* ========================================
-	オブジェクトクラス登録関数
+	UIクラス登録関数
 	-------------------------------------
-	内容：オブジェクトクラスをマップに登録する
+	内容：UIクラスをマップに登録する
 	-------------------------------------
-	引数1：オブジェクトクラス名
-	引数2：オブジェクト生成関数
+	引数1：UIクラス名
+	引数2：UI生成関数
 =========================================== */
 void UITypeRegistry::Register(const std::string& sClassName, CreateFunction* func)
 {
@@ -40,13 +37,13 @@ void UITypeRegistry::Register(const std::string& sClassName, CreateFunction* fun
 }
 
 /* ========================================
-	オブジェクト生成関数
+	UI生成関数
 	-------------------------------------
-	内容：クラス名文字列からオブジェクトを生成する
+	内容：クラス名文字列からUIを生成する
 	-------------------------------------
-	引数：オブジェクトクラス名
+	引数：UIクラス名
 	-------------------------------------
-	戻値：オブジェクト
+	戻値：UIポインタ
 =========================================== */
 UIObjectBase* UITypeRegistry::CreateUI(const std::string& sClassName)
 {
@@ -58,14 +55,13 @@ UIObjectBase* UITypeRegistry::CreateUI(const std::string& sClassName)
 	return nullptr;
 }
 
-/* ========================================
-	全オブジェクト登録関数
-	-------------------------------------
-	内容：全てのオブジェクトを登録する
-=========================================== */
-void UITypeRegistry::RegisterAllUITypes()
-{
-	REGISTER_UI_TYPE(UIObjectBase);
-	REGISTER_UI_TYPE(UIObjectText);
 
+/* ========================================
+	ゲッター(UIマップ)関数
+	-------------------------------------
+	戻値：unordered_map<std::string, CreateFunction*>& UIマップ
+=========================================== */
+std::unordered_map<std::string, UITypeRegistry::CreateFunction*>& UITypeRegistry::GetUITypeMap()
+{
+	return m_UITypeMap;
 }

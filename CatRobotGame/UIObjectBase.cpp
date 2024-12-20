@@ -13,8 +13,9 @@
 #include "UIComponentBase.h"	// UIコンポーネント基底クラス
 #include <windows.h>
 #include "UIComponentTransform.h"
-#include "UIComponentSprite.h"
+#include "UIComponentSprite.h"	
 #include "SceneManager.h"
+#include "TextureManager.h"
 
 /* ========================================
 	コンストラクタ関数
@@ -26,6 +27,8 @@
 UIObjectBase::UIObjectBase(SceneBase* pScene)
 	: m_pOwnerScene(pScene)
 	, m_pComponents()
+	, m_pCompTransform(nullptr)
+	, m_pCompSprite(nullptr)
 	, m_sName("NoName")
 	, m_eState(E_State::STATE_ACTIVE)
 	, m_pParentUI(nullptr)
@@ -133,7 +136,6 @@ void UIObjectBase::SetParentUI(UIObjectBase* pParentObj)
 	}
 
 	m_pParentUI->AddChildUI(this);	// 親オブジェクトの更新
-
 }
 
 /* ========================================
@@ -149,7 +151,7 @@ void UIObjectBase::AddChildUI(UIObjectBase* pChildObj)
 	for (auto& pChild : m_pChildUIs)
 	{
 		if (pChild == pChildObj)	return;
-	}
+}
 	m_pChildUIs.push_back(pChildObj);	// 自オブジェクトの更新
 
 	// 既に子オブジェクトが更新済みかチェック
@@ -157,7 +159,6 @@ void UIObjectBase::AddChildUI(UIObjectBase* pChildObj)
 	if (pChildObj->GetParentUI() == this) return;
 
 	pChildObj->SetParentUI(this);	// 子オブジェクトの更新
-
 
 }
 
@@ -175,7 +176,7 @@ void UIObjectBase::RemoveParentUI()
 	m_pParentUI = nullptr;					// 親オブジェクトを空に設定
 
 	// 自身のTransformコンポーネントの親解除処理
-	this->GetComponent<UIComponentTransform>()->ClearParent();	
+	this->GetComponent<UIComponentTransform>()->ClearParent();
 }
 
 /* ========================================
@@ -194,7 +195,6 @@ void UIObjectBase::RemoveChildUI(UIObjectBase* pChildObj)
 
 	pChildObj->m_pParentUI = nullptr;								// 親オブジェクトを空に設定
 	pChildObj->GetComponent<UIComponentTransform>()->ClearParent();	// Transformコンポーネントの親解除処理
-
 }
 
 /* ========================================
@@ -243,8 +243,8 @@ int UIObjectBase::GetGenerationCount()
 =========================================== */
 void UIObjectBase::InitDefaultComponent()
 {
-	AddComponent<UIComponentTransform>();	// Transformコンポーネントを追加	
-	AddComponent<UIComponentSprite>();		// Spriteコンポーネントを追加
+	m_pCompTransform = AddComponent<UIComponentTransform>();	// Transformコンポーネントを追加	
+	m_pCompSprite = AddComponent<UIComponentSprite>();		// Spriteコンポーネントを追加
 }
 
 /* ========================================
@@ -256,7 +256,15 @@ void UIObjectBase::InitDefaultComponent()
 =========================================== */
 void UIObjectBase::OutPutLocalData(std::ofstream& file)
 {
-	// 継承して各オブジェクトで処理を記述
+	S_SaveData data;
+
+	// テクスチャID
+	data.nTextureID = TEXTURE_MNG_INST.GetTextureKey(m_pCompSprite->GetTexture());
+	// テクスチャ表示フラグ
+	data.bIsVisible = m_pCompSprite->GetIsVisible();
+
+	// ファイルに書き込む
+	file.write((char*)&data, sizeof(S_SaveData));
 }
 
 /* ========================================
@@ -268,8 +276,17 @@ void UIObjectBase::OutPutLocalData(std::ofstream& file)
 =========================================== */
 void UIObjectBase::InputLocalData(std::ifstream& file)
 {
-	// 継承して各オブジェクトで処理を記述
+	S_SaveData data;
+
+	// ファイルから読み込む
+	file.read((char*)&data, sizeof(S_SaveData));
+
+	// テクスチャ設定
+	m_pCompSprite->SetTexture(GET_TEXTURE_DATA((TextureManager::E_TEX_KEY)data.nTextureID));
+	// テクスチャ表示フラグ設定
+	m_pCompSprite->SetIsVisible(data.bIsVisible);
 }
+
 
 
 /* ========================================
@@ -465,8 +482,8 @@ void UIObjectBase::ChangeName()
 	std::string sReName = WIN_UI_INFO["UIBase"]["UIReName"].GetPath();	// 変更後の名前
 	std::string sOldName = this->GetName();								// 変更前の名前
 
-	if (sReName.empty()) return;		// 変更後の名前が空の場合は処理しない
-	if (sReName == sOldName) return;	// 同じ名前の場合は処理しない
+	if (sReName.empty())		return;	// 変更後の名前が空の場合は処理しない
+	if (sReName == sOldName)	return;	// 同じ名前の場合は処理しない
 
 	sReName = SceneManager::GetScene()->CreateUniqueUIName(sReName);	// 重複しない名前に変更
 

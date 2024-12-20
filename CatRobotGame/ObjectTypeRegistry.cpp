@@ -9,17 +9,6 @@
 // =============== インクルード ===================
 #include "ObjectTypeRegistry.h"
 
-// オブジェクト
-#include "ObjectPlayer.h"
-#include "ObjectGround.h"
-#include "ObjectBlock.h"
-#include "ObjectCamera.h"
-
-#include "ObjectLight.h"
-#include "ObjectLightDirectional.h"
-#include "ObjectLightPoint.h"
-#include "ObjectLightSpot.h"
-
 /* ========================================
 	インスタンス取得関数
 	-------------------------------------
@@ -66,20 +55,11 @@ ObjectBase* ObjectTypeRegistry::CreateObject(const std::string& sClassName)
 }
 
 /* ========================================
-	全オブジェクト登録関数
+	ゲッター(オブジェクトマップ)関数
 	-------------------------------------
-	内容：全てのオブジェクトを登録する
+	戻値：unordered_map<std::string, CreateFunction*>& オブジェクトマップ
 =========================================== */
-void ObjectTypeRegistry::RegisterAllObjectTypes()
+std::unordered_map<std::string, ObjectTypeRegistry::CreateFunction*>& ObjectTypeRegistry::GetObjectTypeMap()
 {
-	REGISTER_OBJECT_TYPE(ObjectBase);
-	REGISTER_OBJECT_TYPE(ObjectPlayer);
-	REGISTER_OBJECT_TYPE(ObjectGround);
-	REGISTER_OBJECT_TYPE(ObjectBlock);
-	REGISTER_OBJECT_TYPE(ObjectCamera);
-	REGISTER_OBJECT_TYPE(ObjectLight);
-	REGISTER_OBJECT_TYPE(ObjectLightDirectional);
-	REGISTER_OBJECT_TYPE(ObjectLightPoint);
-	REGISTER_OBJECT_TYPE(ObjectLightSpot);
-    
+	return m_ObjectTypeMap;
 }
