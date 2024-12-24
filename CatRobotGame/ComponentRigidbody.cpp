@@ -37,7 +37,7 @@ ComponentRigidbody::ComponentRigidbody(ObjectBase* pOwner)
 	, m_vVelocity(Vector3<float>(0.0f, 0.0f, 0.0f))
 	, m_vAcceleration(Vector3<float>(0.0f, 0.0f, 0.0f))
 	, m_fMass(1.0f)
-	, m_bUseGravity(false)
+	, m_bUseGravity(true)
 	, m_bIsGround(false)
 	, m_fGroundCheckDelay(0.0f)
 	, m_fAirDrag(DEFAULT_AIR_DRAG)
@@ -87,6 +87,10 @@ void ComponentRigidbody::Update()
 	{
 		ResolveOverlapCollision();	// Õ“ËŽž‚Ì‚ß‚èž‚Ý‰ðŒˆ
 	}
+	else
+	{
+		m_pCompCollisionOBB = m_pOwnerObj->GetComponent<ComponentCollisionOBB>();
+	}
 
 
 	// ’n–ÊÚG”»’è‚ª‚ ‚éê‡
@@ -94,6 +98,10 @@ void ComponentRigidbody::Update()
 	{
 		CheckRaycastGround();	// ’n–ÊÚG”»’è
 		
+	}
+	else
+	{
+		m_pCompGroundRay = m_pOwnerObj->GetComponent<ComponentGroundRaycast>();
 	}
 
 

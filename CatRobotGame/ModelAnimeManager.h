@@ -21,8 +21,8 @@
 
 #define GET_MODEL_ANIME ModelAnimeManager::GetInstance().GetModelData	// インスタンス取得
 
-#define ANIME_BASE_KEY		ModelAnimeManager::E_ANIME_BASE_KEY	// アニメーションモデル取得キー省略
-#define ANIME_KEY_PLAYER	ModelAnimeManager::E_ANIME_PLAYER		// プレイヤーアニメーション種類取得キー省略
+#define ANIME_BASE_KEY		ModelAnimeManager::E_ANIME_BASE_KEY		// アニメーションモデル取得キー省略
+#define ANIME_KEY_PLAYER	ModelAnimeManager::E_ANIME_KEY_PLAYER	// プレイヤーアニメーション種類取得キー省略
 #define ANIME_KEY_ENEMY		ModelAnimeManager::E_ANIME_KEY_ENEMY	// 敵アニメーション種類取得キー省略
 
 class ModelAnimeManager
@@ -38,7 +38,7 @@ public:
 		AB_MAX,
 	};
 
-	enum E_ANIME_PLAYER
+	enum E_ANIME_KEY_PLAYER
 	{
 		PLYR_IDLE,		// 待機
 		PLYR_WALK,		// 歩行
