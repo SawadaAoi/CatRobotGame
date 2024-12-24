@@ -343,6 +343,7 @@ void ComponentEnemyMoveRandom::Debug(DebugUI::Window& window)
 
 	Item* EnemyMoveRandom = Item::CreateGroup("EnemyMoveRandom");
 
+	EnemyMoveRandom->AddGroupItem(Item::CreateBind("MoveSpeed", Item::Kind::Float, &m_fMoveSpeed));
 	EnemyMoveRandom->AddGroupItem(Item::CreateValue("TargetPos", Item::Kind::Text));
 	EnemyMoveRandom->AddGroupItem(Item::CreateBind("SwitchTime", Item::Kind::Float, &m_fTargetSwitchTime));
 	EnemyMoveRandom->AddGroupItem(Item::CreateBind("SwitchCnt", Item::Kind::Float, &m_fTargetSwitchCnt));
