@@ -179,6 +179,7 @@
     <ClCompile Include="ComponentEnemyMoveRandom.cpp" />
     <ClCompile Include="ComponentEnemyState.cpp" />
     <ClCompile Include="ComponentEnemyMoveLinear.cpp" />
+    <ClCompile Include="ComponentGroundBox.cpp" />
     <ClCompile Include="ComponentLightBase.cpp" />
     <ClCompile Include="DirectWriteCustomFont.cpp" />
     <ClCompile Include="FileManager.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="ComponentEnemyMoveRandom.h" />
     <ClInclude Include="ComponentEnemyState.h" />
     <ClInclude Include="ComponentEnemyMoveLinear.h" />
+    <ClInclude Include="ComponentGroundBox.h" />
     <ClInclude Include="ComponentLightBase.h" />
     <ClInclude Include="ComponentOrder.h" />
     <ClInclude Include="DirectWriteCustomFont.h" />

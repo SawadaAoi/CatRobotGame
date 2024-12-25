@@ -6,6 +6,7 @@
 #include "ComponentGeometry.h"
 #include "ComponentModelAnime.h"
 #include "ComponentTransform.h"
+#include "ComponentGroundBox.h"
 #include "FileManager.h"
 #include "Input.h"
 #include "ModelAnimeManager.h"
@@ -54,6 +55,13 @@ void SceneGameTest::InitLocal()
 	AddSceneObject<ObjectGoal>("ObjectGoal")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 10.0f));
 
 	AddSceneObject<ObjectGameStateManager>("GameStateManager");
+
+	AddSceneObject<ObjectBlock>("Block1")->GetTransform()->SetLocalPosition(Vector3(5.0f, 0.5f, 5.0f));
+	GetSceneObject<ObjectBlock>("Block1")->GetTransform()->SetLocalScale(Vector3(5.0f, 1.0f, 5.0f));
+
+	GetSceneObject<ObjectBlock>("Block1")->AddComponent<ComponentGroundBox>();
+	GetSceneObject<ObjectBlock>("Block1")->SetTag(E_ObjectTag::Ground);
+
 }
 
 void SceneGameTest::UninitLocal()

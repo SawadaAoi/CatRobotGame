@@ -533,6 +533,9 @@
     <ClCompile Include="ObjectGameStateManager.cpp">
       <Filter>ソース ファイル\App\GameObject\System</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentGroundBox.cpp">
+      <Filter>ソース ファイル\App\Component\Ground</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -849,6 +852,9 @@
     </ClInclude>
     <ClInclude Include="ObjectGameStateManager.h">
       <Filter>ソース ファイル\App\GameObject\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentGroundBox.h">
+      <Filter>ソース ファイル\App\Component\Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
