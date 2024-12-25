@@ -17,7 +17,8 @@
 
 // =============== 定数定義 =======================
 const float DEFAULT_CHASE_START_DIST	= 10.0f;		// 追跡開始距離
-const float DEFAULT_LIMIT_DIST_SQ		= 1.0f * 1.0f;	// 移動先に到達する距離の2乗
+const float LIMIT_DIST_SQ_TO_PLYR		= 1.0f * 1.0f;	// 移動先に到達する距離の2乗
+const float LIMIT_DIST_SQ_TO_START		= 0.5f * 0.5f;	// 移動先に到達する距離の2乗
 
 /* ========================================
 	コンストラクタ関数
@@ -29,8 +30,7 @@ const float DEFAULT_LIMIT_DIST_SQ		= 1.0f * 1.0f;	// 移動先に到達する距離の2乗
 ComponentEnemyMoveChase::ComponentEnemyMoveChase(ObjectBase* pOwner)
 	:ComponentEnemyMoveBase(pOwner)
 	, m_pTargetObj(nullptr)
-	, m_fDistSq(0.0f)
-	, m_fLimitDistSq(DEFAULT_LIMIT_DIST_SQ)
+	, m_fLimitDistSq(LIMIT_DIST_SQ_TO_PLYR)
 	, m_fChaseStartDist(DEFAULT_CHASE_START_DIST)
 #ifdef _DEBUG
 	, m_bDispDistLine(true)
@@ -38,6 +38,8 @@ ComponentEnemyMoveChase::ComponentEnemyMoveChase(ObjectBase* pOwner)
 	, m_bDispDistLine(false)
 #endif // _DEBUG
 	, m_pDistLine(nullptr)
+	, m_vStartPos(Vector3<float>::Zero())
+	, m_qStartRot()
 {
 }
 
@@ -52,6 +54,9 @@ void ComponentEnemyMoveChase::Init()
 
 	m_pTargetObj = m_pOwnerObj->GetOwnerScene()->FindSceneObject("Player");
 	m_pDistLine = std::make_unique<ShapeLine>(1);
+
+	m_vStartPos = m_pCompTransform->GetWorldPosition();
+	m_qStartRot = m_pCompTransform->GetWorldRotation();
 }
 
 /* ========================================
@@ -65,7 +70,9 @@ void ComponentEnemyMoveChase::Update()
 	if (CHECK_DISP_COMP("EnemyMoveChase"))
 	{
 		WIN_OBJ_INFO["EnemyMoveChase"]["TargetObj"].SetText(m_pTargetObj ? m_pTargetObj->GetName() : "None");
-		WIN_OBJ_INFO["EnemyMoveChase"]["ChaseStartDistSqr"].SetText(std::to_string(m_fChaseStartDist * m_fChaseStartDist));
+		float fDist = m_pTargetObj ? 
+			(m_pTargetObj->GetTransform()->GetWorldPosition() - m_pCompTransform->GetWorldPosition()).Length() : 0.0f;
+		WIN_OBJ_INFO["EnemyMoveChase"]["DistanceToPlayer"].SetText(std::to_string(fDist));
 	}
 #endif // _DEBUG
 
@@ -107,30 +114,57 @@ void ComponentEnemyMoveChase::Draw()
 void ComponentEnemyMoveChase::Move()
 {
 	// プレイヤーの座標を取得
-	Vector3<float> vTargetPos = m_pTargetObj->GetComponent<ComponentTransform>()->GetWorldPosition();
+	Vector3<float> vTargetPos = m_pTargetObj->GetTransform()->GetWorldPosition();
 
-	// プレイヤーとの距離を計算
-	m_fDistSq = m_pCompTransform->GetWorldPosition().DistanceSq(vTargetPos);
+	Vector3<float> vDir = vTargetPos - m_pCompTransform->GetWorldPosition();
 
-	// 追跡開始距離より近づいたら追跡開始　かつ　追跡限界距離より遠い場合
-	if (m_fDistSq < m_fChaseStartDist * m_fChaseStartDist
-		&& m_fDistSq >= m_fLimitDistSq)
+	// 追跡開始距離より近づいたら追跡開始
+	if(vDir.LengthSq() < (m_fChaseStartDist * m_fChaseStartDist))
 	{
-		// プレイヤーの座標に向かって移動
-		Vector3 vDir = vTargetPos - m_pCompTransform->GetWorldPosition();
-		vDir.Normalize();	// 正規化
-		vDir.y = 0.0f;		// 高さは考慮しない
-		m_pCompRigidbody->SetVelocity(vDir * m_fMoveSpeed);
+		// プレイヤーとの距離が追跡限界距離より遠い場合は追跡
+		if (vDir.LengthSq() > m_fLimitDistSq)
+		{
+			vDir.y = 0.0f;
+			// プレイヤーの座標に向かって移動
+			m_pCompRigidbody->SetVelocity(vDir.GetNormalize() * m_fMoveSpeed);
 
-		// 移動先の座標を向く(高さは考慮しない)
-		Vector3<float> vLook = vTargetPos;
-		vLook.y = m_pCompTransform->GetWorldPosition().y;
-		m_pCompTransform->LookAt(vLook);
+			// 移動先の座標を向く(高さは考慮しない)
+			Vector3<float> vLook = vTargetPos;
+			vLook.y = m_pCompTransform->GetWorldPosition().y;
+			m_pCompTransform->LookAt(vLook);
+		}
+		else
+		{
+			// 移動停止
+			m_pCompRigidbody->SetVelocity(Vector3<float>::Zero());
+			// 正面を向く
+			m_pCompTransform->SetLocalRotation(m_qStartRot);
+		}
+
 	}
+	// 追跡開始距離より遠い場合は初期座標に向かって移動
 	else
 	{
-		// 移動停止
-		m_pCompRigidbody->SetVelocity(Vector3<float>::Zero());
+		Vector3<float> vDir = m_vStartPos - m_pCompTransform->GetWorldPosition();
+
+		if (vDir.LengthSq() > LIMIT_DIST_SQ_TO_START)
+		{
+			vDir.y = 0.0f;
+			// 移動開始座標に向かって移動
+			m_pCompRigidbody->SetVelocity(vDir.GetNormalize() * m_fMoveSpeed);
+
+			// 移動先の座標を向く(高さは考慮しない)
+			Vector3<float> vLook = m_vStartPos;
+			vLook.y = m_pCompTransform->GetWorldPosition().y;
+			m_pCompTransform->LookAt(vLook);
+		}
+		else
+		{
+			// 移動停止
+			m_pCompRigidbody->SetVelocity(Vector3<float>::Zero());
+			// 正面を向く
+			m_pCompTransform->SetLocalRotation(m_qStartRot);
+		}
 	}
 
 }
@@ -236,9 +270,8 @@ void ComponentEnemyMoveChase::Debug(DebugUI::Window& window)
 
 	pEnemyMoveChaser->AddGroupItem(Item::CreateBind("MoveSpeed",			Item::Kind::Float, &m_fMoveSpeed));
 	pEnemyMoveChaser->AddGroupItem(Item::CreateValue("TargetObj",			Item::Kind::Text));
-	pEnemyMoveChaser->AddGroupItem(Item::CreateBind("DistanceSq",			Item::Kind::Float, &m_fDistSq));
+	pEnemyMoveChaser->AddGroupItem(Item::CreateValue("DistanceToPlayer",	Item::Kind::Text));
 	pEnemyMoveChaser->AddGroupItem(Item::CreateBind("ChaseStartDist",		Item::Kind::Float, &m_fChaseStartDist));
-	pEnemyMoveChaser->AddGroupItem(Item::CreateValue("ChaseStartDistSqr",	Item::Kind::Text));
 
 	window.AddItem(pEnemyMoveChaser);
 }

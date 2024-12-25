@@ -29,7 +29,7 @@ public:
 	void InitLocal();
 	void UpdateLocal();
 
-	void OnCollisionEnter(ObjectBase* pHit) override;
+	void OnCollisionStay(ObjectBase* pHit) override;
 
 	// ÉQÉbÉ^Å[
 	int GetHp();

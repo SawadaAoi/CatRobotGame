@@ -19,6 +19,7 @@
 #include "ObjectLightPoint.h"
 #include "ObjectLightSpot.h"
 #include "ObjectPlayer.h"
+#include "ObjectEnemy.h"
 #include "SceneGameTest.h"
 #include "SceneManager.h"
 #include "UIComponentSprite.h"
@@ -46,8 +47,8 @@ void SceneGameTest::InitLocal()
 	m_StaticPlane->GetComponent<ComponentTransform>()->SetLocalScale(Vector3(100.0f, 1.0f, 100.0f));
 
 
-	ObjectBase* pBlock = AddSceneObject<ObjectBlock>("Block1");
-	pBlock->SetTag(E_ObjectTag::Enemy);
+	AddSceneObject<ObjectEnemy>("ObjectEnemy")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
+
 }
 
 void SceneGameTest::UninitLocal()

@@ -13,6 +13,7 @@
 // =============== インクルード =====================
 #include "ComponentEnemyMoveBase.h"
 #include <memory>
+#include "Quaternion.h"
 
 // =============== 前方宣言 =======================
 class ShapeLine;
@@ -49,12 +50,13 @@ private:
 private:
 	ObjectBase* m_pTargetObj;	// 追跡対象オブジェクト
 
-	float m_fDistSq;			// プレイヤーとの距離
 	float m_fChaseStartDist;	// 追跡開始距離
-
 	float m_fLimitDistSq;		// 追跡限界距離
 
-	bool m_bDispDistLine;		// 距離ライン表示フラグ
+	bool m_bDispDistLine;					// 距離ライン表示フラグ
 	std::unique_ptr<ShapeLine> m_pDistLine;	// 距離ライン描画用
+
+	Vector3<float>	m_vStartPos;	// 移動開始座標
+	Quaternion		m_qStartRot;	// 移動開始角度
 };
 

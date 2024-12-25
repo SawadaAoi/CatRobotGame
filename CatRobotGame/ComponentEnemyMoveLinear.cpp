@@ -106,10 +106,10 @@ void ComponentEnemyMoveLinear::Move()
 	Vector3<float> vCurrentWayPoint = m_vtWayPoints[m_nCurrentWayPoint];
 
 	// ˆÚ“®æ‚Æ‚Ì‹——£‚ğŒvZ
-	Vector3<float> vDistance = vCurrentWayPoint - m_pCompTransform->GetWorldPosition();
+	Vector3<float> vDir = vCurrentWayPoint - m_pCompTransform->GetWorldPosition();
 
 	// ˆÚ“®æ‚É“’B‚µ‚Ä‚¢‚éê‡
-	if (vDistance.LengthSq() < LIMIT_DISTANCE_SQ)
+	if (vDir.LengthSq() < LIMIT_DISTANCE_SQ)
 	{
 		m_nCurrentWayPoint++;
 
@@ -122,7 +122,7 @@ void ComponentEnemyMoveLinear::Move()
 	else
 	{
 		// ˆÚ“®æ‚ÉŒü‚©‚Á‚ÄˆÚ“®
-		m_pCompRigidbody->SetVelocity(vDistance.GetNormalize() * m_fMoveSpeed);
+		m_pCompRigidbody->SetVelocity(vDir.GetNormalize() * m_fMoveSpeed);
 
 	}
 
