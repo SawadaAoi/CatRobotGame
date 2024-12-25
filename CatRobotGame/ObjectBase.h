@@ -120,7 +120,7 @@ public:
 	void SetLightUse(bool bUse);		// ライト使用の設定
 #ifdef _DEBUG
 	void Debug();					// デバッグ用の処理(オブジェクト情報ウィンドウに表示)
-	virtual void DebugLocal() {};	// 個別デバッグ処理
+	virtual void DebugLocal(DebugUI::Window& window) {};	// 個別デバッグ処理
 
 	DebugUI::Item* InitParentList();	// 親リストの初期化
 

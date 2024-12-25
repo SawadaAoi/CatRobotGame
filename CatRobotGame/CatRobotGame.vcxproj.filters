@@ -225,6 +225,9 @@
     <Filter Include="ソース ファイル\App\GameObject\Other">
       <UniqueIdentifier>{ce9ead32-44fa-45c0-bf3a-8403914c37ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\GameObject\System">
+      <UniqueIdentifier>{45383674-3ed0-4859-a750-a81cad9ec206}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -526,6 +529,9 @@
     </ClCompile>
     <ClCompile Include="ObjectGoal.cpp">
       <Filter>ソース ファイル\App\GameObject\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectGameStateManager.cpp">
+      <Filter>ソース ファイル\App\GameObject\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -840,6 +846,9 @@
     </ClInclude>
     <ClInclude Include="ObjectGoal.h">
       <Filter>ソース ファイル\App\GameObject\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectGameStateManager.h">
+      <Filter>ソース ファイル\App\GameObject\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

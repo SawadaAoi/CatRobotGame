@@ -26,8 +26,8 @@ class ObjectPlayer :
 {
 public:
 	ObjectPlayer(SceneBase* pScene);
-	void InitLocal();
-	void UpdateLocal();
+	void InitLocal() override;
+	void UpdateLocal() override;
 
 	void OnCollisionStay(ObjectBase* pHit) override;
 
