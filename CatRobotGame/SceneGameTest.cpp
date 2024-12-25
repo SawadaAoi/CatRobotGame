@@ -20,6 +20,7 @@
 #include "ObjectLightSpot.h"
 #include "ObjectPlayer.h"
 #include "ObjectEnemy.h"
+#include "ObjectGoal.h"
 #include "SceneGameTest.h"
 #include "SceneManager.h"
 #include "UIComponentSprite.h"
@@ -49,6 +50,7 @@ void SceneGameTest::InitLocal()
 
 	AddSceneObject<ObjectEnemy>("ObjectEnemy")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
 
+	AddSceneObject<ObjectGoal>("ObjectGoal")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 10.0f));
 }
 
 void SceneGameTest::UninitLocal()

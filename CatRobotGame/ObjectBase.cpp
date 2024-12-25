@@ -112,6 +112,7 @@ void ObjectBase::Draw()
 	// 所持コンポーネント配列の全要素を描画
 	for (auto& pComponent : m_pComponents)
 	{
+		if (!pComponent->GetActive()) continue;	// コンポーネントが非アクティブの場合は更新しない
 		pComponent->Draw();
 	}
 

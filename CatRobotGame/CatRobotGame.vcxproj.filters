@@ -222,6 +222,9 @@
     <Filter Include="ソース ファイル\App\Component\Enemy\Attack\0_Super">
       <UniqueIdentifier>{fcbfb0c5-a231-40b1-90fb-97a5cd948799}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\GameObject\Other">
+      <UniqueIdentifier>{ce9ead32-44fa-45c0-bf3a-8403914c37ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -520,6 +523,9 @@
     </ClCompile>
     <ClCompile Include="ComponentEnemyAttackCharge.cpp">
       <Filter>ソース ファイル\App\Component\Enemy\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectGoal.cpp">
+      <Filter>ソース ファイル\App\GameObject\Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -831,6 +837,9 @@
     </ClInclude>
     <ClInclude Include="ComponentEnemyAttackCharge.h">
       <Filter>ソース ファイル\App\Component\Enemy\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectGoal.h">
+      <Filter>ソース ファイル\App\GameObject\Other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
