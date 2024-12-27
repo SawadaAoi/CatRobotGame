@@ -209,6 +209,7 @@ void ComponentEnemyMoveLinear::AddWayPoint(const Vector3<float>& vWayPoint)
 	{
 		// 移動座標リストの更新
 		InitDebugWayPointList();
+		m_nSelectWayPointIdx = m_nCurrentWayPoint;
 	}
 #endif // _DEBUG
 
