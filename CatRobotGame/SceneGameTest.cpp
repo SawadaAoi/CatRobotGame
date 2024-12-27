@@ -21,6 +21,7 @@
 #include "ObjectLightSpot.h"
 #include "ObjectPlayer.h"
 #include "ObjectEnemy.h"
+#include "ObjectEnemyLinear.h"
 #include "ObjectGoal.h"
 #include "ObjectGameStateManager.h"
 #include "SceneGameTest.h"
@@ -34,6 +35,8 @@ void SceneGameTest::InitLocal()
 	//FileManager::StageUIOutput("Assets/Save/TestUI.ui");
 
 	AddSceneObject<ObjectLightDirectional>("LightDirectional");
+	GetSceneObject<ObjectLightDirectional>("LightDirectional")->GetTransform()->SetLocalRotationEuler(Vector3(110.0f, 0.0f, 0.0f));
+
 	m_pPlayer = AddSceneObject<ObjectPlayer>("Player");
 
 	AddSceneObject<ObjectCameraPlayer>("PlayerCamera");
@@ -50,7 +53,7 @@ void SceneGameTest::InitLocal()
 	m_StaticPlane->GetComponent<ComponentTransform>()->SetLocalScale(Vector3(100.0f, 1.0f, 100.0f));
 
 
-	AddSceneObject<ObjectEnemy>("ObjectEnemy")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
+	AddSceneObject<ObjectEnemyLinear>("ObjectEnemy")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
 
 	AddSceneObject<ObjectGoal>("ObjectGoal")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 10.0f));
 

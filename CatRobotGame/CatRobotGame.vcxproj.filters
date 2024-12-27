@@ -536,6 +536,9 @@
     <ClCompile Include="ComponentGroundBox.cpp">
       <Filter>ソース ファイル\App\Component\Ground</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectEnemyLinear.cpp">
+      <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -855,6 +858,9 @@
     </ClInclude>
     <ClInclude Include="ComponentGroundBox.h">
       <Filter>ソース ファイル\App\Component\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectEnemyLinear.h">
+      <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -59,8 +59,8 @@ void ComponentEnemyMoveLinear::Init()
 ========================================= */
 void ComponentEnemyMoveLinear::Update()
 {
-	// 移動座標がない場合は何もしない
-	if (m_vtWayPoints.empty())
+	// 移動座標が1つ以下の場合は処理を行わない
+	if (m_vtWayPoints.size() <= 1)
 	{
 		return;
 	}
@@ -71,7 +71,7 @@ void ComponentEnemyMoveLinear::Update()
 	else
 		Move();
 
-	
+
 	if (m_bDispMoveLine)
 	{	// 移動ラインの更新
 		for (int i = 0; i < m_vtWayPoints.size(); i++)
@@ -79,8 +79,6 @@ void ComponentEnemyMoveLinear::Update()
 			int nNextIndex = (i + 1) % m_vtWayPoints.size();	// 最後の座標の場合は最初の座標に戻る
 			Vector3<float> vStart = m_vtWayPoints[i];
 			Vector3<float> vEnd = m_vtWayPoints[nNextIndex];
-			vStart.y	+= 0.5f;
-			vEnd.y		+= 0.5f;
 			m_pMoveLine->UpdateLine(i + 1, vStart, vEnd, ColorVec3::BLUE);
 		}
 	}
@@ -106,7 +104,7 @@ void ComponentEnemyMoveLinear::Draw()
 	内容：移動処理
 ========================================= */
 void ComponentEnemyMoveLinear::Move()
-{	
+{
 	// 現在の座標番号の座標を取得
 	Vector3<float> vCurrentWayPoint = m_vtWayPoints[m_nCurrentWayPoint];
 
@@ -333,15 +331,15 @@ void ComponentEnemyMoveLinear::Debug(DebugUI::Window& window)
 	pGroupMoveLinear->AddGroupItem(Item::CreateBind("DispMoveLine", Item::Kind::Bool, &m_bDispMoveLine, false, true));
 	pGroupMoveLinear->AddGroupItem(Item::CreateValue("WayPointNum", Item::Kind::Text));
 	pGroupMoveLinear->AddGroupItem(Item::CreateCallBack("CurrentWayPoint", Item::Kind::Int,		// 現在の座標番号
-		[this](bool isWrite, void* arg){ FuncWayCurrent(isWrite, arg);}));
+		[this](bool isWrite, void* arg) { FuncWayCurrent(isWrite, arg); }));
 	pGroupMoveLinear->AddGroupItem(Item::CreateCallBack("AddWayPoint", Item::Kind::Command,		// 移動座標追加
-		[this](bool isWrite, void* arg) { AddWayPoint({ 0.0f, 0.0f, 0.0f });}));
+		[this](bool isWrite, void* arg) { AddWayPoint(m_pCompTransform->GetWorldPosition()); }));
 	pGroupMoveLinear->AddGroupItem(Item::CreateCallBack("RemoveWayPoint", Item::Kind::Command, 	// 移動座標削除
-		[this](bool isWrite, void* arg)	{ RemoveWayPoint(m_nSelectWayPointIdx);}, false, true));
+		[this](bool isWrite, void* arg) { RemoveWayPoint(m_nSelectWayPointIdx); }, false, true));
 
 	// 移動座標
-	pGroupMoveLinear->AddGroupItem(Item::CreateCallBack("WayPoint", Item::Kind::Vector, 
-		[this](bool isWrite, void* arg){ FuncWayPoint(isWrite, arg);}));
+	pGroupMoveLinear->AddGroupItem(Item::CreateCallBack("WayPoint", Item::Kind::Vector,
+		[this](bool isWrite, void* arg) { FuncWayPoint(isWrite, arg); }));
 
 	// 移動座標リスト
 	pGroupMoveLinear->AddGroupItem(Item::CreateList("WayPointList", [this](const void* arg)
