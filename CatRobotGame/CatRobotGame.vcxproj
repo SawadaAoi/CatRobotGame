@@ -226,7 +226,9 @@
     <ClCompile Include="ObjectCameraDebug.cpp" />
     <ClCompile Include="ObjectCameraPlayer.cpp" />
     <ClCompile Include="ObjectEnemy.cpp" />
+    <ClCompile Include="ObjectEnemyChase.cpp" />
     <ClCompile Include="ObjectEnemyLinear.cpp" />
+    <ClCompile Include="ObjectEnemyRandom.cpp" />
     <ClCompile Include="ObjectGameStateManager.cpp" />
     <ClCompile Include="ObjectGoal.cpp" />
     <ClCompile Include="ObjectGround.cpp" />
@@ -334,7 +336,9 @@
     <ClInclude Include="ObjectCameraDebug.h" />
     <ClInclude Include="ObjectCameraPlayer.h" />
     <ClInclude Include="ObjectEnemy.h" />
+    <ClInclude Include="ObjectEnemyChase.h" />
     <ClInclude Include="ObjectEnemyLinear.h" />
+    <ClInclude Include="ObjectEnemyRandom.h" />
     <ClInclude Include="ObjectGameStateManager.h" />
     <ClInclude Include="ObjectGoal.h" />
     <ClInclude Include="ObjectGround.h" />

@@ -539,6 +539,12 @@
     <ClCompile Include="ObjectEnemyLinear.cpp">
       <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectEnemyChase.cpp">
+      <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectEnemyRandom.cpp">
+      <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -860,6 +866,12 @@
       <Filter>ソース ファイル\App\Component\Ground</Filter>
     </ClInclude>
     <ClInclude Include="ObjectEnemyLinear.h">
+      <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectEnemyChase.h">
+      <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectEnemyRandom.h">
       <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
