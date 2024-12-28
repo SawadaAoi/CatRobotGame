@@ -81,6 +81,7 @@ public:
 	std::vector<ObjectBase*> GetAllSceneObjects();					// シーン上に存在する全てのオブジェクトを取得
 	std::vector<UIObjectBase*> GetAllSceneUIObjects();				// シーン上に存在する全てのUIオブジェクトを取得
 	std::vector<ObjectBase*> GetSceneObjectsTag(E_ObjectTag tag);	// タグに対応するオブジェクトを取得
+	ObjectBase* GetSceneObjectTag(E_ObjectTag tag);					// タグに対応するオブジェクトを取得(一番最初に見つかったもの)
 
 private:
 	void UpdateCollision();	// 衝突判定更新関数
