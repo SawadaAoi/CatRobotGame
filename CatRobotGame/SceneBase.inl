@@ -73,13 +73,40 @@ inline T* SceneBase::GetSceneObject(std::string sName)
 	// 指定の種類のオブジェクトを全て取得
 	std::vector<T*> pObjectList = GetSceneObjects<T>();	
 
-	// オブジェクト名が一致したものを探す
+	// シーンに所属するオブジェクトを検索
 	for (const auto& pObject : pObjectList)
 	{
 		// オブジェクト名が一致したらポインタを返す
 		if (pObject->GetName() == sName)
 		{
 			return static_cast<T*>(pObject);
+		}
+	}
+
+	return nullptr;	// 見つからなかった場合はnullptrを返す
+}
+
+/* ========================================
+	オブジェクト取得関数
+	-------------------------------------
+	内容：シーンに所属するオブジェクトを取得する
+		　※一番最初に見つかったオブジェクトを取得
+	-------------------------------------
+	引数：取得オブジェクトポインタ
+========================================== */
+template<typename T>
+inline T* SceneBase::GetSceneObject()
+{
+	// 基底クラスがObjectBaseでない場合はエラーを出力
+	if (std::is_base_of<ObjectBase, T>() == false)	return nullptr;
+
+		// シーンに所属するオブジェクトを検索
+	for (const auto& pObject : m_pObjects)
+	{
+		// オブジェクトの型が一致したらオブジェクトポインタを返す
+		if (pObject->GetTypeID() == T::GetStaticTypeID())
+		{
+			return static_cast<T*>(pObject.get());
 		}
 	}
 
@@ -172,6 +199,33 @@ inline T* SceneBase::GetSceneUI(std::string sName)
 		if (pUIObject->GetName() == sName)
 		{
 			return static_cast<T*>(pUIObject);
+		}
+	}
+
+	return nullptr;	// 見つからなかった場合はnullptrを返す
+}
+
+/* ========================================
+	UIオブジェクト取得関数
+	-------------------------------------
+	内容：シーンに所属するUIオブジェクトを取得する
+		　※一番最初に見つかったUIオブジェクトを取得
+	-------------------------------------
+	戻値：取得UIオブジェクトポインタ
+========================================== */
+template<typename T>
+inline T* SceneBase::GetSceneUI()
+{
+	// 基底クラスがUIObjectBaseでない場合は追加しない
+	if (std::is_base_of<UIObjectBase, T>::value == false)	return nullptr;
+
+	// シーンに所属するオブジェクトを検索
+	for (const auto& pUIObject : m_pUIObjects)
+	{
+		// オブジェクトの型が一致したらオブジェクトポインタを返す
+		if (pUIObject->GetTypeID() == T::GetStaticTypeID())
+		{
+			return static_cast<T*>(pUIObject.get());
 		}
 	}
 
