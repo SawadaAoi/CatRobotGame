@@ -108,6 +108,30 @@ void CameraManager::SwitchCamera(int num)
 }
 
 /* ========================================
+	カメラ切り替え関数
+	-------------------------------------
+	内容：カメラの切り替え
+	-------------------------------------
+	引数1：カメラのポインタ
+=========================================== */
+void CameraManager::SwitchCamera(ObjectCamera* pCamera)
+{
+	if (pCamera == nullptr) return;
+
+	// カメラリストを全て非アクティブにする
+	ResetActiveCamera();
+
+	pCamera->SetActive(true);		// 指定のカメラをアクティブにする
+	m_pActiveCamera = pCamera;	// アクティブカメラを設定
+
+#ifdef _DEBUG
+	// オブジェクト一覧に追加
+	WIN_CAMERA_INFO["ActiveCamera"].SetText(m_pActiveCamera->GetName().c_str());
+
+#endif // _DEBUG
+}
+
+/* ========================================
 	カメラ追加関数
 	-------------------------------------
 	内容：カメラを一覧に追加

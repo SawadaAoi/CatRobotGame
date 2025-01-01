@@ -225,6 +225,7 @@
     <ClCompile Include="ObjectBulletPlayer.cpp" />
     <ClCompile Include="ObjectCamera.cpp" />
     <ClCompile Include="ObjectCameraDebug.cpp" />
+    <ClCompile Include="ObjectCameraGameClear.cpp" />
     <ClCompile Include="ObjectCameraPlayer.cpp" />
     <ClCompile Include="ObjectEnemy.cpp" />
     <ClCompile Include="ObjectEnemyChase.cpp" />
@@ -336,6 +337,7 @@
     <ClInclude Include="ObjectBulletPlayer.h" />
     <ClInclude Include="ObjectCamera.h" />
     <ClInclude Include="ObjectCameraDebug.h" />
+    <ClInclude Include="ObjectCameraGameClear.h" />
     <ClInclude Include="ObjectCameraPlayer.h" />
     <ClInclude Include="ObjectEnemy.h" />
     <ClInclude Include="ObjectEnemyChase.h" />
