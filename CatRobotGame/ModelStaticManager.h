@@ -31,7 +31,7 @@ public:
 	{
 		TEST_MODEL,
 		TEST_MODEL2,
-		ENEMY_MOUSE,
+		PLAYER_CAT,
 		MAX,
 	};
 
@@ -39,7 +39,7 @@ public:
 	{
 		{MODEL_KEY::TEST_MODEL, "Assets/Model/Test/TestObject.fbx"},
 		{MODEL_KEY::TEST_MODEL2, "Assets/Model/Golem/Golem.fbx"},
-		{MODEL_KEY::ENEMY_MOUSE, "Assets/Model/Mouse/Villain.fbx"},
+		{MODEL_KEY::PLAYER_CAT, "Assets/Model/PlayerCat/Cat.fbx"},
 	};
 
 	// 各モデルデータ大きさ指定
@@ -47,7 +47,7 @@ public:
 	{
 		{MODEL_KEY::TEST_MODEL, 1.0f},
 		{MODEL_KEY::TEST_MODEL2, 0.01f},
-		{MODEL_KEY::ENEMY_MOUSE, 0.5f},
+		{MODEL_KEY::PLAYER_CAT, 0.6f},
 	};
 
 public:
