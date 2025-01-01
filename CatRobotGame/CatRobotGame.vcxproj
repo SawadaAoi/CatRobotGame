@@ -172,6 +172,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ComponentCollisionPlane.cpp" />
     <ClCompile Include="ComponentEnemyAttackBase.cpp" />
     <ClCompile Include="ComponentEnemyAttackCharge.cpp" />
     <ClCompile Include="ComponentEnemyMoveBase.cpp" />
@@ -279,6 +280,7 @@
     <ClCompile Include="ModelStaticMake.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ComponentCollisionPlane.h" />
     <ClInclude Include="ComponentEnemyAttackBase.h" />
     <ClInclude Include="ComponentEnemyAttackCharge.h" />
     <ClInclude Include="ComponentEnemyMoveBase.h" />

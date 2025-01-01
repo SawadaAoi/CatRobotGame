@@ -10,7 +10,10 @@
 #include "ComponentRigidbody.h"
 #include "ComponentTransform.h"
 #include "ComponentGroundRaycast.h"
+#include "ComponentCollisionBase.h"
+#include "ComponentCollisionAABB.h"
 #include "ComponentCollisionOBB.h"
+#include "ComponentCollisionSphere.h"
 #include "ObjectBase.h"
 
 
@@ -33,7 +36,7 @@ ComponentRigidbody::ComponentRigidbody(ObjectBase* pOwner)
 	: ComponentBase(pOwner,OrderRigidBody)
 	, m_pCompTransform(nullptr)
 	, m_pCompGroundRay(nullptr)
-	, m_pCompCollisionOBB(nullptr)
+	, m_pCompCollisionBase(nullptr)
 	, m_vVelocity(Vector3<float>(0.0f, 0.0f, 0.0f))
 	, m_vAcceleration(Vector3<float>(0.0f, 0.0f, 0.0f))
 	, m_fMass(1.0f)
@@ -52,9 +55,10 @@ ComponentRigidbody::ComponentRigidbody(ObjectBase* pOwner)
 ========================================= */
 void ComponentRigidbody::Init()
 {
-	m_pCompTransform = m_pOwnerObj->GetComponent<ComponentTransform>();
-	m_pCompGroundRay = m_pOwnerObj->GetComponent<ComponentGroundRaycast>();
-	m_pCompCollisionOBB = m_pOwnerObj->GetComponent<ComponentCollisionOBB>();
+	m_pCompTransform		= m_pOwnerObj->GetComponent<ComponentTransform>();
+	m_pCompGroundRay		= m_pOwnerObj->GetComponent<ComponentGroundRaycast>();
+
+	SetCollisionComponent();	
 }
 
 /* ========================================
@@ -70,7 +74,6 @@ void ComponentRigidbody::Update()
 		m_vAcceleration += Vector3<float>(0.0f, GRAVITY_FORCE, 0.0f);
 	}
 
-
 	// 抵抗力の計算（空気中と地面で異なる係数を使用）
 	float dragCoefficient		= m_bIsGround ? m_fGroundDrag : m_fAirDrag;
 	Vector3<float> fDragForce	= (m_vVelocity * -1.0f) * dragCoefficient;
@@ -78,18 +81,18 @@ void ComponentRigidbody::Update()
 	// 抵抗力を加速度に反映
 	m_vAcceleration += fDragForce / m_fMass;
 
-	m_vVelocity		 += m_vAcceleration * DELTA_TIME;	// 加速度を速度に加算
+	m_vVelocity		 += m_vAcceleration * DELTA_TIME;		// 加速度を速度に加算
 	m_pCompTransform->Translate(m_vVelocity * DELTA_TIME);	// 速度を座標に加算
 
 
 	// 衝突判定がある場合
-	if (m_pCompCollisionOBB)
+	if (m_pCompCollisionBase)
 	{
 		ResolveOverlapCollision();	// 衝突時のめり込み解決
 	}
 	else
 	{
-		m_pCompCollisionOBB = m_pOwnerObj->GetComponent<ComponentCollisionOBB>();
+		SetCollisionComponent();
 	}
 
 
@@ -185,13 +188,13 @@ void ComponentRigidbody::ResolveOverlapCollision()
 	using T_MTV = ComponentCollisionOBB::T_MTV;
 
 	// めり込み情報配列を取得
-	std::vector<T_MTV> mtvs = m_pCompCollisionOBB->GetMtvs();
+	std::vector<T_MTV> mtvs = m_pCompCollisionBase->GetMtvs();
 
 	// オブジェクト数分ループ
 	for (const T_MTV& mtv : mtvs)
 	{
 		// 衝突している場合 && トリガーでない場合
-		if (mtv.bIsCol && !mtv.bIsTrigger && !m_pCompCollisionOBB->GetTrigger())
+		if (mtv.bIsCol && !mtv.bIsTrigger && !m_pCompCollisionBase->GetTrigger())
 		{
 			// めり込み方向
 			Vector3<float> vReturnDir	= mtv.vAxis * -1.0f;	// 衝突軸の反対方向
@@ -207,8 +210,32 @@ void ComponentRigidbody::ResolveOverlapCollision()
 			{
 				m_vVelocity -= (vReturnDir * fDot);	// めり込み方向に対する速度の成分を減算
 			}
-			//DebugConsole::Printf("MTV.vAxis: %f, %f, %f", m_pCompCollisionOBB->GetMTV().vAxis.x, m_pCompCollisionOBB->GetMTV().vAxis.y, m_pCompCollisionOBB->GetMTV().vAxis.z);
 		}
+	}
+}
+
+/* ========================================
+	衝突コンポーネント設定関数
+	-------------------------------------
+	内容：所有者オブジェクトに設定されているコリジョンコンポーネントを取得
+		　形状によって異なるコリジョンコンポーネントを取得
+========================================= */
+void ComponentRigidbody::SetCollisionComponent()
+{
+	// AABB
+	if (m_pOwnerObj->GetComponent<ComponentCollisionAABB>())
+	{
+		m_pCompCollisionBase = m_pOwnerObj->GetComponent<ComponentCollisionAABB>();
+	}
+	// OBB
+	else if (m_pOwnerObj->GetComponent<ComponentCollisionOBB>())
+	{
+		m_pCompCollisionBase = m_pOwnerObj->GetComponent<ComponentCollisionOBB>();
+	}
+	// 球
+	else if (m_pOwnerObj->GetComponent<ComponentCollisionSphere>())
+	{
+		m_pCompCollisionBase = m_pOwnerObj->GetComponent<ComponentCollisionSphere>();
 	}
 }
 
