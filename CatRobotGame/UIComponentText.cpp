@@ -53,6 +53,7 @@ void UIComponentText::Init()
 =========================================== */
 void UIComponentText::Draw()
 {
+#ifdef DEBUG
 	if (CHECK_DISP_COMPUI("UI_Text"))
 	{
 		if (WIN_UI_INFO["UI_Text"]["UseTextBox"].GetBool())
@@ -66,6 +67,9 @@ void UIComponentText::Draw()
 
 
 	}
+#endif // DEBUG
+
+
 
 
 	TEXT_WRITE.SetFontType(m_eFontType);

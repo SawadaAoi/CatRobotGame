@@ -37,7 +37,7 @@ ComponentGroundRaycast::ComponentGroundRaycast(ObjectBase* pOwner)
 	, m_bIsHit(false)
 	, m_bIsDispRayLine(false)
 	, m_bIsDispTriPointToHitPos(false)
-#elif
+#else
 	, m_bIsHit(false)
 	, m_bIsDispRayLine(false)
 	, m_bIsDispTriPointToHitPos(false)

@@ -18,6 +18,7 @@
 // ƒV[ƒ“
 #include <type_traits>
 #include "SceneGameTest.h"
+#include "SceneStage1.h"
 
 
 // =============== –¼‘O‹óŠÔ ===================
@@ -42,6 +43,8 @@ namespace DebugUI
 	const std::map< std::string, std::function<void()>> SCENE_MAP =
 	{
 		{"SceneGameTest", []() { SceneManager::ChangeScene<SceneGameTest>(); } },
+		{"SceneStage1", []() { SceneManager::ChangeScene<SceneStage1>(); } },
+
 	};
 
 /* ========================================

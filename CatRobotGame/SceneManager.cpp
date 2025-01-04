@@ -10,6 +10,7 @@
 #include "SceneManager.h"
 #include "SceneBase.h"
 #include "SceneGameTest.h"
+#include "SceneStage1.h"
 
 
 /* ========================================
@@ -19,7 +20,7 @@
 =========================================== */
 void SceneManager::Init()
 {
-	ChangeScene<SceneGameTest>();
+	ChangeScene<SceneStage1>();
 }
 
 /* ========================================

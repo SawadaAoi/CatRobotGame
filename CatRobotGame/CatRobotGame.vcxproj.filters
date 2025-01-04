@@ -228,6 +228,9 @@
     <Filter Include="ソース ファイル\App\GameObject\System">
       <UniqueIdentifier>{45383674-3ed0-4859-a750-a81cad9ec206}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\Scene\Stage">
+      <UniqueIdentifier>{f10dec5f-aa90-44f4-bf8b-4516607b78f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -550,6 +553,9 @@
     </ClCompile>
     <ClCompile Include="ObjectCameraGameClear.cpp">
       <Filter>ソース ファイル\App\GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneStage1.cpp">
+      <Filter>ソース ファイル\App\Scene\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -885,6 +891,9 @@
     </ClInclude>
     <ClInclude Include="ObjectCameraGameClear.h">
       <Filter>ソース ファイル\App\GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneStage1.h">
+      <Filter>ソース ファイル\App\Scene\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

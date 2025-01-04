@@ -12,6 +12,7 @@
 // =============== インクルード ===================
 #include "UIObjectBase.h"
 #include "SceneManager.h"
+#include <unordered_map>
 
 
 // =============== 定数定義 =======================
