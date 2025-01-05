@@ -207,9 +207,9 @@ void FileManager::UIOutput(std::string sPath)
 
 		// 位置、回転、拡大
 		UIComponentTransform* pTransform = uiObj->GetComponent<UIComponentTransform>();
-		data.vPos = pTransform->GetLocalPosition();
-		data.fRot = pTransform->GetLocalRotation();
-		data.vScale = pTransform->GetLocalScale();
+		data.vPos = pTransform->GetWorldPosition();
+		data.fRot = pTransform->GetWorldRotation();
+		data.vScale = pTransform->GetWorldScale();
 
 		// オブジェクト名
 		strncpy(data.cUIName, uiObj->GetName().c_str(), sizeof(data.cUIName) - 1);
@@ -280,6 +280,7 @@ void FileManager::UIInput(std::string sPath)
 			pTransform->SetLocalPosition(data.vPos);
 			pTransform->SetLocalRotation(data.fRot);
 			pTransform->SetLocalScale(data.vScale);
+			pTransform->UpdateWorldTransform();		// ワールド座標の更新
 
 			// シーンに追加
 			pScene->AddSceneUI(pUI);
@@ -310,11 +311,14 @@ void FileManager::UIInput(std::string sPath)
 		std::string sObjectName = data.cUIName;
 		std::string sParentName = data.cParentName;
 
+		// オブジェクト取得
+		UIObjectBase* pUI = pScene->FindSceneUI(sObjectName);
+		// UI個別のデータ入力(ファイル位置の整合性を取るために読み込む)
+		pUI->InputLocalData(file);
+
 		// 親オブジェクトがいない場合はスキップ
 		if (sParentName.empty())	continue;
-
-		// オブジェクトと親オブジェクトを取得
-		UIObjectBase* pUI = pScene->FindSceneUI(sObjectName);
+		// 親オブジェクト取得
 		UIObjectBase* pParent = pScene->FindSceneUI(sParentName);
 
 		// どちらも存在していたら親子関係を設定
