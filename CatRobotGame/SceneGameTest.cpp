@@ -26,6 +26,7 @@
 #include "ObjectEnemyRandom.h"
 #include "ObjectGoal.h"
 #include "ObjectGameStateManager.h"
+#include "ObjectSkyBox.h"
 #include "SceneGameTest.h"
 #include "SceneManager.h"
 #include "UIComponentSprite.h"
@@ -35,6 +36,8 @@
 void SceneGameTest::InitLocal()
 {
 	//FileManager::UIOutput("Assets/Save/TestUI.ui");
+
+	AddSceneObject<ObjectSkyBox>("SkyBox");
 
 	AddSceneObject<ObjectLightDirectional>("LightDirectional");
 	GetSceneObject<ObjectLightDirectional>("LightDirectional")->GetTransform()->SetLocalRotationEuler(Vector3(110.0f, 0.0f, 0.0f));

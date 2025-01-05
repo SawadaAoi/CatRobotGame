@@ -240,6 +240,7 @@
     <ClCompile Include="ObjectLightPoint.cpp" />
     <ClCompile Include="ObjectLightSpot.cpp" />
     <ClCompile Include="ObjectPlayer.cpp" />
+    <ClCompile Include="ObjectSkyBox.cpp" />
     <ClCompile Include="ObjectTypeRegistry.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="RegisterObjectTypeMap.cpp" />
@@ -354,6 +355,7 @@
     <ClInclude Include="ObjectLightPoint.h" />
     <ClInclude Include="ObjectLightSpot.h" />
     <ClInclude Include="ObjectPlayer.h" />
+    <ClInclude Include="ObjectSkyBox.h" />
     <ClInclude Include="ObjectTag.h" />
     <ClInclude Include="ObjectTypeRegistry.h" />
     <ClInclude Include="Quaternion.h" />

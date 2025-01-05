@@ -8,6 +8,10 @@
 
 // =============== インクルード ===================
 #include "ObjectLightDirectional.h"
+#include "ComponentTransform.h"
+
+// =============== 定数定義 =======================
+const float DEFAULT_ROTATE_X = 70.0f;
 
 /* ========================================
 	コンストラクタ関数
@@ -29,8 +33,11 @@ ObjectLightDirectional::ObjectLightDirectional(SceneBase* pScene)
 void ObjectLightDirectional::InitLocal()
 {
 	// 親クラスの初期化関数を呼ぶ
-	ObjectLight::InitLocal();	
+	ObjectLight::InitLocal();
 
 	// ライト種類を設定
 	m_pCompLightBase->SetLightType(ComponentLightBase::E_LightType::DIRECTIONAL);
+
+	// ライトの向きを設定
+	m_pCompTransform->RotateX(DEFAULT_ROTATE_X);
 }
