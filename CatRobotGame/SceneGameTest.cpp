@@ -55,8 +55,8 @@ void SceneGameTest::InitLocal()
 	m_StaticPlane->GetComponent<ComponentTransform>()->SetLocalScale(Vector3(100.0f, 1.0f, 100.0f));
 
 
-	//AddSceneObject<ObjectEnemyLinear>("ObjectEnemy")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
-	AddSceneObject<ObjectEnemyChase>("ObjectEnemyChase")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
+	AddSceneObject<ObjectEnemyLinear>("ObjectEnemy")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
+	//AddSceneObject<ObjectEnemyChase>("ObjectEnemyChase")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
 
 	AddSceneObject<ObjectGoal>("ObjectGoal")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 10.0f));
 
@@ -68,6 +68,8 @@ void SceneGameTest::InitLocal()
 	GetSceneObject<ObjectBlock>("Block1")->AddComponent<ComponentGroundBox>();
 	GetSceneObject<ObjectBlock>("Block1")->SetTag(E_ObjectTag::Ground);
 
+	AddSceneObject<ObjectBlock>("Block2")->GetTransform()->SetLocalPosition(Vector3(0.0f, 0.5f, -6.0f));
+	AddSceneObject<ObjectBlock>("Block3")->GetTransform()->SetLocalPosition(Vector3(0.0f, 0.5f, -5.0f));
 }
 
 void SceneGameTest::UninitLocal()
