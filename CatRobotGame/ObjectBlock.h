@@ -1,9 +1,9 @@
 /* ========================================
-	DX22Base/
+	CatRobotGame/
 	------------------------------------
-	ブロック用ヘッダ
+	ブロックオブジェクト用ヘッダ
 	------------------------------------
-	説明：シンプルなブロックオブジェクト
+	説明：ブロックオブジェクトの基底クラス
 	------------------------------------
 	ObjectBlock.h
 ========================================== */
@@ -14,19 +14,25 @@
 
 // =============== 前方宣言 =======================
 class ComponentGeometry;
-class ComponentCollisionOBB;
+class ComponentCollisionBase;
 
 // =============== クラス定義 ===================
 class ObjectBlock
 	: public ObjectBase
 {
 public:
+	enum E_COL_TYPE
+	{
+		COL_OBB,
+		COL_AABB,
+	};
+
 	struct S_SaveData
 	{
 		int nTextureID;
 		bool bUseTex;
+		E_COL_TYPE eColType;
 	};
-
 public:
 	ObjectBlock(SceneBase* pScene);
 
@@ -37,8 +43,10 @@ public:
 
 	DEFINE_OBJECT_TYPE(ObjectBlock)	// オブジェクトの種類ID取得関数
 	
-private:
+protected:
 	ComponentGeometry*		m_pCompGeometry;
-	ComponentCollisionOBB*	m_pCompColObb;
+	ComponentCollisionBase*	m_pCompColBase;
+
+	E_COL_TYPE m_eColType;	// 衝突判定形状
 };
 
