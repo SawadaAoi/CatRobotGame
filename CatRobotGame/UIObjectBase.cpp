@@ -128,6 +128,9 @@ void UIObjectBase::SetParentUI(UIObjectBase* pParentObj)
 
 	m_pParentUI = pParentObj;	// 自オブジェクトの更新
 
+	// 自身のトランスフォームを再計算
+	m_pCompTransform->RecalculateLocalTransform();
+
 	// 既に親オブジェクトが更新済みかチェック
 	// ※子オブジェクト追加関数から呼び出された場合
 	for (auto& pChild : m_pParentUI->m_pChildUIs)
@@ -287,7 +290,15 @@ void UIObjectBase::InputLocalData(std::ifstream& file)
 	m_pCompSprite->SetIsVisible(data.bIsVisible);
 }
 
-
+/* ========================================
+	ゲッター(トランスフォーム)関数
+	-------------------------------------
+	戻値：ComponentTransform* トランスフォームコンポーネントのポインタ
+=========================================== */
+UIComponentTransform* UIObjectBase::GetTransform() const
+{
+	return m_pCompTransform;
+}
 
 /* ========================================
 	ゲッター(所持シーン)関数

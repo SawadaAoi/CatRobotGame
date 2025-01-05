@@ -22,7 +22,7 @@ UIComponentTransform::UIComponentTransform(UIObjectBase* pOwner)
 	: UIComponentBase(pOwner, UIOrderTransform)
 	, m_vLocalPosition(0.0f, 0.0f)
 	, m_fLocalRotation(0.0f)
-	, m_vLocalScale(1.0f, 1.0f)
+	, m_vLocalScale(100.0f, 100.0f)
 	, m_vWorldPosition(0.0f, 0.0f)
 	, m_fWorldRotation(0.0f)
 	, m_vWorldScale(1.0f, 1.0f)
@@ -107,6 +107,50 @@ void UIComponentTransform::ClearParent()
 	m_vLocalPosition	= m_vWorldPosition;
 	m_fLocalRotation	= m_fWorldRotation;
 	m_vLocalScale		= m_vWorldScale;
+}
+
+/* ========================================
+	ローカル座標再計算関数
+	-------------------------------------
+	内容：親オブジェクトがセットされた時に、
+		　現在のローカル座標の座標、回転、大きさを保持したまま
+		  親オブジェクトのワールド座標を考慮したローカル座標を再計算する
+=========================================== */
+void UIComponentTransform::RecalculateLocalTransform()
+{
+	if (!m_pOwnerObj->GetParentUI()) return;	// 親オブジェクトがない場合は処理しない
+
+	// 回転、座標の再計算
+	// 親オブジェクトのTransformコンポーネントを取得
+	UIComponentTransform* pParentTran = m_pOwnerObj->GetParentUI()->GetComponent<UIComponentTransform>();
+	// 親オブジェクトのワールド行列(回転、座標)を生成
+	DirectX::XMMATRIX parentMat =
+		DirectX::XMMatrixRotationZ(pParentTran->GetWorldRotation()) *		// 回転
+		DirectX::XMMatrixTranslation(							// 座標		
+			pParentTran->GetWorldPosition().x,
+			pParentTran->GetWorldPosition().y,
+			0.0f);
+
+	// ローカル行列(回転、座標)を生成
+	DirectX::XMMATRIX localMat =
+		DirectX::XMMatrixRotationZ(m_fWorldRotation)*
+		DirectX::XMMatrixTranslation(m_vWorldPosition.x, m_vWorldPosition.y, 0.0f);
+
+	// 親のワールド行列の逆行列を取得
+	DirectX::XMMATRIX parentMatInv = DirectX::XMMatrixInverse(nullptr, parentMat);
+
+	// ローカル行列と親の逆行列を掛け合わせてローカル行列を取得
+	DirectX::XMMATRIX computedLocalMatrix = localMat * parentMatInv;
+
+	// 作成した行列から座標、回転を取得
+	Vector3<float> vPos = Vector3<float>::FromMatrix_Translation(computedLocalMatrix);		// 座標取得
+	Vector3<float> vRot = Vector3<float>::FromMatrix_RotationEuler(computedLocalMatrix);	// 回転取得
+	m_vLocalPosition.x	= vPos.x;
+	m_vLocalPosition.y	= vPos.y;
+	m_fLocalRotation	= vRot.z;
+
+	// 大きさの再計算(回転、座標と一緒に計算すると大きさが不正確になるため別で計算)
+	m_vLocalScale = m_vWorldScale / pParentTran->GetWorldScale();
 }
 
 /* ========================================

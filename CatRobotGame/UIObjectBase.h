@@ -92,6 +92,7 @@ public:
 	virtual void InputLocalData(std::ifstream& file);	// オブジェクトのデータ入力
 
 	// ゲッター
+	UIComponentTransform* GetTransform() const;			// トランスフォームコンポーネントの取得
 	SceneBase* GetOwnerScene() const;					// 所有シーンの取得
 	E_State GetState() const;							// UIの状態の取得
 	virtual size_t GetTypeID() const;					// コンポーネントの種類IDの取得

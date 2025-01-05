@@ -22,8 +22,9 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void UpdateWorldTransform();	// ワールド変換の更新
-	void ClearParent();			// 親オブジェクトを削除
+	void UpdateWorldTransform();		// ワールド変換の更新
+	void ClearParent();					// 親オブジェクトを削除
+	void RecalculateLocalTransform();	// ローカル変数の再計算
 
 	// 座標変換
 	void Translate(const Vector2<float>& vPos);	// 移動

@@ -150,11 +150,11 @@ void ComponentTransform::RecalculateLocalTransform()
 	DirectX::XMMATRIX parentMatInv = DirectX::XMMatrixInverse(nullptr, parentMat);
 
 	// ローカル行列と親の逆行列を掛け合わせてローカル行列を取得
-	DirectX::XMMATRIX localMatInv = localMat * parentMatInv;
+	DirectX::XMMATRIX computedLocalMatrix = localMat * parentMatInv;
 
 	// 作成した行列から座標、回転を取得
-	m_vLocalPosition = Vector3<float>::FromMatrix_Translation(localMatInv);	// 座標取得
-	m_qLocalRotation = Quaternion::FromDirectXMatrix(localMatInv);			// 回転取得
+	m_vLocalPosition = Vector3<float>::FromMatrix_Translation(computedLocalMatrix);	// 座標取得
+	m_qLocalRotation = Quaternion::FromDirectXMatrix(computedLocalMatrix);			// 回転取得
 	
 
 	// 大きさの再計算(回転、座標と一緒に計算すると大きさが不正確になるため別で計算)

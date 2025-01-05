@@ -53,9 +53,9 @@ void FileManager::StageObjectOutput(std::string sPath)
 
 		// 位置、回転、拡大
 		ComponentTransform* pTransform = object->GetComponent<ComponentTransform>();
-		data.vPos = pTransform->GetLocalPosition();
-		data.qRot = pTransform->GetLocalRotation();
-		data.vScale = pTransform->GetLocalScale();
+		data.vPos	= pTransform->GetWorldPosition();
+		data.qRot	= pTransform->GetWorldRotation();
+		data.vScale = pTransform->GetWorldScale();
 
 		// オブジェクト名
 		strncpy(data.cObjectName, object->GetName().c_str(), sizeof(data.cObjectName) - 1);
@@ -126,7 +126,7 @@ void FileManager::StageObjectInput(std::string sPath)
 			pTransform->SetLocalPosition(data.vPos);
 			pTransform->SetLocalRotation(data.qRot);
 			pTransform->SetLocalScale(data.vScale);
-
+			pTransform->UpdateWorldTransform();	// ワールド変換の更新
 			// シーンに追加
 			pScene->AddSceneObjectBase(pObject);
 			// オブジェクト個別のデータ入力
@@ -156,11 +156,14 @@ void FileManager::StageObjectInput(std::string sPath)
 		std::string sObjectName = data.cObjectName;
 		std::string sParentName = data.cParentName;
 
+		// オブジェクト取得
+		ObjectBase* pObject = pScene->FindSceneObject(sObjectName);
+		// オブジェクト個別のデータ入力(ファイル位置の整合性を取るために読み込む)
+		pObject->InputLocalData(file);
+
 		// 親オブジェクトがいない場合はスキップ
 		if (sParentName.empty())	continue;
-
-		// オブジェクトと親オブジェクトを取得
-		ObjectBase* pObject = pScene->FindSceneObject(sObjectName);
+		// 親オブジェクト取得
 		ObjectBase* pParent = pScene->FindSceneObject(sParentName);
 
 		// どちらも存在していたら親子関係を設定

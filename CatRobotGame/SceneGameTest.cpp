@@ -34,7 +34,7 @@
 
 void SceneGameTest::InitLocal()
 {
-	//FileManager::StageUIOutput("Assets/Save/TestUI.ui");
+	//FileManager::UIOutput("Assets/Save/TestUI.ui");
 
 	AddSceneObject<ObjectLightDirectional>("LightDirectional");
 	GetSceneObject<ObjectLightDirectional>("LightDirectional")->GetTransform()->SetLocalRotationEuler(Vector3(110.0f, 0.0f, 0.0f));
