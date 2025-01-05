@@ -141,7 +141,7 @@ void InitSceneList()
 		// 選択したらシーン変更
 		std::string sSceneName = reinterpret_cast<const char*>(arg);	// リスト項目名
 		SCENE_MAP.at(sSceneName)();	// シーン変更
-	}, false);
+	}, true);
 
 	// シーン名をリストに追加
 	for (auto& scene : SCENE_MAP)

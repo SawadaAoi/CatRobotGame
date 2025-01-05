@@ -187,7 +187,10 @@ public:
 	void SetParametric(AnimeNo no1, AnimeNo no2);								// 合成設定
 	void SetParametricBlend(float blendRate);									// 合成割合設定
 	void SetAnimationTime(AnimeNo no, float time);								// 現在再生時間を変更
+	void SetAnimationTimeRatio(AnimeNo no, float rate);						// 再生割合を変更
 	float GetAnimeNowTime(AnimeNo no);											// 現在再生時間を取得
+	float GetAnimeTotalTime(AnimeNo no);										// アニメーションの総再生時間を取得
+	float GetAnimePlaybackRatio(AnimeNo no);									// アニメーション再生割合を取得
 	void SetAnimationSpeed(AnimeNo no, float speed);							// 再生速度を変更
 
 	bool IsPlay(AnimeNo no);	// 再生中かどうか
