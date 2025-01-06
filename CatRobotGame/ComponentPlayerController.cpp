@@ -333,8 +333,12 @@ void ComponentPlayerController::RotateToMoveDir(Vector3<float> moveDir)
 =========================================== */
 void ComponentPlayerController::MoveAnime(Vector3<float> vMoveDir)
 {
+	// ゲームクリア、ゲームオーバーアニメ再生中は処理しない
+	if (m_pCompModelAnime->GetIsPlayAnime(ANIME_KEY_PLAYER::PLYR_GAMECLEAR) ||
+		m_pCompModelAnime->GetIsPlayAnime(ANIME_KEY_PLAYER::PLYR_GAMEOVER)) return;
+
 	// ショットアニメが再生されている場合、移動アニメは再生しない
-	if (m_pCompModelAnime->GetIsPlayAnime(ANIME_KEY_PLAYER::PLYR_SHOT)) return;
+	if (m_pCompModelAnime->GetIsPlayAnime(ANIME_KEY_PLAYER::PLYR_SHOT))		return;
 
 	// 移動している場合
 	if (std::abs(vMoveDir.x) > 0.0f || std::abs(vMoveDir.z) > 0.0f)
