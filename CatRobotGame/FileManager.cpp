@@ -23,6 +23,8 @@
 #include "UITypeRegistry.h"
 
 
+#include <unordered_map>	// 親子関係の設定用
+
 /* ========================================
 	ファイル出力(シーンオブジェクト)関数
 	-------------------------------------
@@ -91,6 +93,9 @@ void FileManager::StageObjectOutput(std::string sPath)
 ========================================== */
 void FileManager::StageObjectInput(std::string sPath)
 {
+	// 親オブジェクトのマップ
+	std::unordered_map<ObjectBase*, std::string> mapObjectParent;
+
 	// ファイルを開く
 	std::ifstream file(sPath, std::ios::in | std::ios::binary);
 
@@ -131,45 +136,24 @@ void FileManager::StageObjectInput(std::string sPath)
 			pScene->AddSceneObjectBase(pObject);
 			// オブジェクト個別のデータ入力
 			pObject->InputLocalData(file);
+			// 親オブジェクトマップに追加
+			mapObjectParent[pObject] = data.cParentName;
 		}
 	}
 
-	// 親子関係の設定 -----------------------------------------------
-
-	// ファイルの位置を先頭に戻す
-	// ファイルのオブジェクトを全て登録してから親子関係を設定するため
-	file.clear();
-	file.seekg(0, std::ios::beg);
-
-	// ファイルの終端まで読み込む
-	while (!file.eof())
+	// 親子関係の設定
+	for (auto& object : mapObjectParent)
 	{
-		S_SaveDataObject data;
-		file.read((char*)&data, sizeof(S_SaveDataObject));
-
-		if (file.eof())
-		{
-			break;
-		}
-
-		// 親子関係の設定
-		std::string sObjectName = data.cObjectName;
-		std::string sParentName = data.cParentName;
-
-		// オブジェクト取得
-		ObjectBase* pObject = pScene->FindSceneObject(sObjectName);
-		// オブジェクト個別のデータ入力(ファイル位置の整合性を取るために読み込む)
-		pObject->InputLocalData(file);
-
+		std::string sParentName = object.second;
 		// 親オブジェクトがいない場合はスキップ
-		if (sParentName.empty())	continue;
+		if (sParentName.empty()) continue;
 		// 親オブジェクト取得
 		ObjectBase* pParent = pScene->FindSceneObject(sParentName);
 
-		// どちらも存在していたら親子関係を設定
-		if (pObject && pParent)
+		// 親オブジェクトが存在していたら親子関係を設定
+		if (pParent)
 		{
-			pObject->SetParentObject(pParent);
+			object.first->SetParentObject(pParent);
 		}
 	}
 
@@ -245,6 +229,9 @@ void FileManager::UIOutput(std::string sPath)
 ========================================== */
 void FileManager::UIInput(std::string sPath)
 {
+	// 親UIのマップ
+	std::unordered_map<UIObjectBase*, std::string> mapUIParent;
+
 	// ファイルを開く
 	std::ifstream file(sPath, std::ios::in | std::ios::binary);
 
@@ -285,47 +272,27 @@ void FileManager::UIInput(std::string sPath)
 			pScene->AddSceneUI(pUI);
 			// UI個別のデータ入力
 			pUI->InputLocalData(file);
+			// 親UIマップに追加
+			mapUIParent[pUI] = data.cParentName;
 		}
 	}
 
-	// 親子関係の設定 -----------------------------------------------
-
-	// ファイルの位置を先頭に戻す
-	// ファイルのオブジェクトを全て登録してから親子関係を設定するため
-	file.clear();
-	file.seekg(0, std::ios::beg);
-
-	// ファイルの終端まで読み込む
-	while (!file.eof())
+	// 親子関係の設定
+	for (auto& uiParent : mapUIParent)
 	{
-		S_SaveDataUI data;
-		file.read((char*)&data, sizeof(S_SaveDataUI));
-
-		if (file.eof())
-		{
-			break;
-		}
-
-		// 親子関係の設定
-		std::string sObjectName = data.cUIName;
-		std::string sParentName = data.cParentName;
-
-		// オブジェクト取得
-		UIObjectBase* pUI = pScene->FindSceneUI(sObjectName);
-		// UI個別のデータ入力(ファイル位置の整合性を取るために読み込む)
-		pUI->InputLocalData(file);
-
-		// 親オブジェクトがいない場合はスキップ
-		if (sParentName.empty())	continue;
-		// 親オブジェクト取得
+		std::string sParentName = uiParent.second;
+		// 親UIがいない場合はスキップ
+		if (sParentName.empty()) continue;
+		// 親UI取得
 		UIObjectBase* pParent = pScene->FindSceneUI(sParentName);
 
-		// どちらも存在していたら親子関係を設定
-		if (pUI && pParent)
+		// 親UIが存在していたら親子関係を設定
+		if (pParent)
 		{
-			pUI->SetParentUI(pParent);
+			uiParent.first->SetParentUI(pParent);
 		}
 	}
+
 
 	file.close();
 }
