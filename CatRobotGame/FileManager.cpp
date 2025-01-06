@@ -126,7 +126,7 @@ void FileManager::StageObjectInput(std::string sPath)
 			pTransform->SetLocalPosition(data.vPos);
 			pTransform->SetLocalRotation(data.qRot);
 			pTransform->SetLocalScale(data.vScale);
-			pTransform->UpdateWorldTransform();	// ワールド変換の更新
+
 			// シーンに追加
 			pScene->AddSceneObjectBase(pObject);
 			// オブジェクト個別のデータ入力
@@ -280,7 +280,6 @@ void FileManager::UIInput(std::string sPath)
 			pTransform->SetLocalPosition(data.vPos);
 			pTransform->SetLocalRotation(data.fRot);
 			pTransform->SetLocalScale(data.vScale);
-			pTransform->UpdateWorldTransform();		// ワールド座標の更新
 
 			// シーンに追加
 			pScene->AddSceneUI(pUI);

@@ -19,7 +19,7 @@
 const Vector2<float> DEFAULT_SCALE = Vector2<float>(100.0f, 100.0f);
 
 const std::string HEART_OBJECT_NAME			= "Heart_";
-const Vector2<float> HEART_TEXTURE_RATIO	= Vector2<float>(1.4f, 1.0f);
+const Vector2<float> HEART_TEXTURE_RATIO	= Vector2<float>(140.0f, 100.0f);
 
 /* ========================================
 	コンストラクタ関数
@@ -42,13 +42,14 @@ UIObjectPlayerHP::UIObjectPlayerHP(SceneBase* pScene)
 ========================================== */
 void UIObjectPlayerHP::InitLocal()
 {
-	m_pPlayer = m_pOwnerScene->GetSceneObject<ObjectPlayer>("Player");
+	m_pPlayer = static_cast<ObjectPlayer*>(m_pOwnerScene->GetSceneObjectTag(E_ObjectTag::Player));
 
 	m_pCompTransform->SetLocalScale(DEFAULT_SCALE);
 	m_pCompSprite->SetIsVisible(false);
 
 	int nHP = m_pPlayer->GetHp();		// TODO: プレイヤーのHPを取得する
 
+	// HP数分のハートを生成
 	for (int i = 0; i < nHP; i++)
 	{
 		UIObjectBase* pUIObject = m_pOwnerScene->AddSceneUI<UIObjectBase>(HEART_OBJECT_NAME + std::to_string(i));
@@ -76,11 +77,11 @@ void UIObjectPlayerHP::UpdateLocal()
 {
 	if (!m_pPlayer)
 	{
-		m_pPlayer = m_pOwnerScene->GetSceneObject<ObjectPlayer>("Player");
+		m_pPlayer = static_cast<ObjectPlayer*>(m_pOwnerScene->GetSceneObjectTag(E_ObjectTag::Player));
 	}
 
-	int nHP = m_pPlayer->GetHp();		// TODO: プレイヤーのHPを取得する
-	int nHPMax = m_pPlayer->GetMaxHp();		// TODO: プレイヤーの最大HPを取得する
+	int nHP		= m_pPlayer->GetHp();		// TODO: プレイヤーのHPを取得する
+	int nHPMax	= m_pPlayer->GetMaxHp();	// TODO: プレイヤーの最大HPを取得する
 
 	// HPの表示数を更新
 	for (int i = 0; i < nHPMax; i++)

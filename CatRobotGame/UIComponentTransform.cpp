@@ -338,6 +338,7 @@ Vector2<float> UIComponentTransform::GetWorldScale()
 void UIComponentTransform::SetLocalPosition(Vector2<float> vPos)
 {
 	m_vLocalPosition = vPos;
+	UpdateWorldTransform();
 }
 
 /* ========================================
@@ -358,6 +359,7 @@ void UIComponentTransform::SetWorldPosition(Vector2<float> vPos)
 void UIComponentTransform::SetLocalRotation(float fRot)
 {
 	m_fLocalRotation = fRot;
+	UpdateWorldTransform();
 }
 
 /* ========================================
@@ -378,6 +380,7 @@ void UIComponentTransform::SetWorldRotation(float fRot)
 void UIComponentTransform::SetLocalScale(Vector2<float> vScale)
 {
 	m_vLocalScale = vScale;
+	UpdateWorldTransform();
 }
 
 /* ========================================
