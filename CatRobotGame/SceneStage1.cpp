@@ -10,7 +10,7 @@
 
 void SceneStage1::InitLocal()
 {
-	FileManager::StageObjectInput("Assets/Save/Stage/Stage1_0106.stg");
+	FileManager::StageObjectInput("Assets/Save/Stage/Stage1_0107.stg");
 
 	ObjectPlayer* pPlayer = AddSceneObject<ObjectPlayer>("Player");
 	pPlayer->GetTransform()->SetLocalPosition(Vector3(15.5f, 1.0f, -15.5f));
