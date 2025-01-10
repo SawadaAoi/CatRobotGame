@@ -46,7 +46,6 @@ public:
 	virtual void MakeMesh() = 0;	// 図形作成
  
 
-
 	// ゲッター
 	Vector3<float>	GetPosition();
 	Vector3<float>	GetScale();
@@ -54,6 +53,12 @@ public:
 
 	Vector3<float>	GetColor();
 	E_DrawMode		GetDrawMode();
+
+	bool GetIsTexture();
+	bool GetIsCulling();
+	Vector2<float> GetUvScale(); 
+	Vector2<float> GetUvOffset();
+	
 
 	// セッター
 	void SetPosition(Vector3<float> fPos);
@@ -70,6 +75,10 @@ public:
 	void SetCameraPos(Vector3<float> fCameraPos);												// カメラ位置設定(ピクセルシェーダー用)
 	void SetLights(std::vector<ObjectLight*> lights);											// ライト設定(ピクセルシェーダー用)
 
+	void SetIsCulling(bool bCulling);	// カリング設定
+
+	void SetUvScale(Vector2<float> fScale);
+	void SetUvOffset(Vector2<float> fOffset);
 
 private:
 	void SetWVPMatrix();
@@ -88,10 +97,15 @@ protected:
 
 	Texture*		m_pTexture;		// テクスチャ
 	int				m_bIsTex;		// テクスチャ使用フラグ
+	bool			m_bIsCulling;	// カリングフラグ(カリングするかどうか)
+
+	Vector2<float>	m_fUvScale;		// テクスチャ座標スケール
+	Vector2<float>	m_fUvOffset;	// テクスチャ座標オフセット
 
 	Vector3<float> m_fColor;		// 色	
 
 	DirectX::XMFLOAT4X4 m_WVP[3];	// ワールド、ビュー、プロジェクション行列
+
 };
 
 

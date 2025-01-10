@@ -27,6 +27,7 @@
 #include "ObjectGoal.h"
 #include "ObjectGameStateManager.h"
 #include "ObjectSkyBox.h"
+#include "ObjectWall.h"
 #include "SceneGameTest.h"
 #include "SceneManager.h"
 #include "UIComponentSprite.h"
@@ -40,7 +41,6 @@ void SceneGameTest::InitLocal()
 	AddSceneObject<ObjectSkyBox>("SkyBox");
 
 	AddSceneObject<ObjectLightDirectional>("LightDirectional");
-	GetSceneObject<ObjectLightDirectional>("LightDirectional")->GetTransform()->SetLocalRotationEuler(Vector3(110.0f, 0.0f, 0.0f));
 
 	m_pPlayer = AddSceneObject<ObjectPlayer>("Player");
 
@@ -73,6 +73,8 @@ void SceneGameTest::InitLocal()
 
 	AddSceneObject<ObjectBlock>("Block2")->GetTransform()->SetLocalPosition(Vector3(0.0f, 0.5f, -6.0f));
 	AddSceneObject<ObjectBlock>("Block3")->GetTransform()->SetLocalPosition(Vector3(0.0f, 0.5f, -5.0f));
+
+	AddSceneObject< ObjectWall>("Wall1")->GetTransform()->SetLocalPosition(Vector3(4.0f, 0.5f, 0.0f));
 }
 
 void SceneGameTest::UninitLocal()

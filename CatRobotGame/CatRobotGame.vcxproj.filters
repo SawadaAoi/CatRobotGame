@@ -548,9 +548,6 @@
     <ClCompile Include="ObjectEnemyRandom.cpp">
       <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentCollisionPlane.cpp">
-      <Filter>ソース ファイル\App\Component\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectCameraGameClear.cpp">
       <Filter>ソース ファイル\App\GameObject\Camera</Filter>
     </ClCompile>
@@ -565,6 +562,9 @@
     </ClCompile>
     <ClCompile Include="ObjectSkyBox.cpp">
       <Filter>ソース ファイル\App\GameObject\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectWall.cpp">
+      <Filter>ソース ファイル\App\GameObject\StageObject\Plane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -892,9 +892,6 @@
     <ClInclude Include="ObjectEnemyRandom.h">
       <Filter>ソース ファイル\App\GameObject\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentCollisionPlane.h">
-      <Filter>ソース ファイル\App\Component\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectCameraGameClear.h">
       <Filter>ソース ファイル\App\GameObject\Camera</Filter>
     </ClInclude>
@@ -909,6 +906,9 @@
     </ClInclude>
     <ClInclude Include="ObjectSkyBox.h">
       <Filter>ソース ファイル\App\GameObject\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectWall.h">
+      <Filter>ソース ファイル\App\GameObject\StageObject\Plane</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

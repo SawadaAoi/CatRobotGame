@@ -172,7 +172,6 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ComponentCollisionPlane.cpp" />
     <ClCompile Include="ComponentEnemyAttackBase.cpp" />
     <ClCompile Include="ComponentEnemyAttackCharge.cpp" />
     <ClCompile Include="ComponentEnemyMoveBase.cpp" />
@@ -242,6 +241,7 @@
     <ClCompile Include="ObjectPlayer.cpp" />
     <ClCompile Include="ObjectSkyBox.cpp" />
     <ClCompile Include="ObjectTypeRegistry.cpp" />
+    <ClCompile Include="ObjectWall.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="RegisterObjectTypeMap.cpp" />
     <ClCompile Include="RegisterUITypeMap.cpp" />
@@ -284,7 +284,6 @@
     <ClCompile Include="ModelStaticMake.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ComponentCollisionPlane.h" />
     <ClInclude Include="ComponentEnemyAttackBase.h" />
     <ClInclude Include="ComponentEnemyAttackCharge.h" />
     <ClInclude Include="ComponentEnemyMoveBase.h" />
@@ -358,6 +357,7 @@
     <ClInclude Include="ObjectSkyBox.h" />
     <ClInclude Include="ObjectTag.h" />
     <ClInclude Include="ObjectTypeRegistry.h" />
+    <ClInclude Include="ObjectWall.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneGameTest.h" />
