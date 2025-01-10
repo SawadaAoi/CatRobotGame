@@ -239,6 +239,7 @@
     <ClCompile Include="ObjectLightPoint.cpp" />
     <ClCompile Include="ObjectLightSpot.cpp" />
     <ClCompile Include="ObjectPlayer.cpp" />
+    <ClCompile Include="ObjectPlayerStart.cpp" />
     <ClCompile Include="ObjectSkyBox.cpp" />
     <ClCompile Include="ObjectTypeRegistry.cpp" />
     <ClCompile Include="ObjectWall.cpp" />
@@ -354,6 +355,7 @@
     <ClInclude Include="ObjectLightPoint.h" />
     <ClInclude Include="ObjectLightSpot.h" />
     <ClInclude Include="ObjectPlayer.h" />
+    <ClInclude Include="ObjectPlayerStart.h" />
     <ClInclude Include="ObjectSkyBox.h" />
     <ClInclude Include="ObjectTag.h" />
     <ClInclude Include="ObjectTypeRegistry.h" />

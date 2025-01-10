@@ -20,6 +20,7 @@
 #include "ObjectLightPoint.h"
 #include "ObjectLightSpot.h"
 #include "ObjectPlayer.h"
+#include "ObjectPlayerStart.h"
 #include "ObjectEnemy.h"
 #include "ObjectEnemyLinear.h"
 #include "ObjectEnemyChase.h"
@@ -42,16 +43,16 @@ void SceneGameTest::InitLocal()
 
 	AddSceneObject<ObjectLightDirectional>("LightDirectional");
 
-	m_pPlayer = AddSceneObject<ObjectPlayer>("Player");
+	//m_pPlayer = AddSceneObject<ObjectPlayer>("Player");
+	//m_pPlayer->GetComponent<ComponentTransform>()->SetLocalPosition(Vector3(0.0f, 3.0f, 5.0f));
 
+	AddSceneObject<ObjectPlayerStart>("PlayerStart")->GetTransform()->SetLocalPosition(Vector3(0.0f, 3.0f, 5.0f));
 	AddSceneObject<ObjectCameraPlayer>("PlayerCamera");
 
 	FileManager::UIInput("Assets/Save/GameUI/PlayerHP.ui");
 
 
 	AddSceneObject<ObjectCameraDebug>("ObjectCameraDebug");
-
-	m_pPlayer->GetComponent<ComponentTransform>()->SetLocalPosition(Vector3(0.0f, 3.0f, 5.0f));
 
 	m_StaticPlane = AddSceneObject<ObjectGround>("Ground");
 	m_StaticPlane->GetComponent<ComponentTransform>()->SetLocalPosition(Vector3(0.0f, 0.0f, 0.0f));

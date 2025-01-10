@@ -27,6 +27,8 @@ public:
 
 	DEFINE_UI_OBJECT_TYPE(UIObjectPlayerHP)
 private:
+	void CreateHP();
+private:
 	std::vector<UIObjectBase*> m_pUIObjectHP;
 	ObjectPlayer* m_pPlayer;
 };

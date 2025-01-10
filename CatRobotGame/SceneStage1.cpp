@@ -1,6 +1,7 @@
 #include "SceneStage1.h"
 
 #include "ObjectPlayer.h"
+#include "ObjectPlayerStart.h"
 #include "ObjectCameraPlayer.h"
 
 #include "FileManager.h"
@@ -10,10 +11,10 @@
 
 void SceneStage1::InitLocal()
 {
-	FileManager::StageObjectInput("Assets/Save/Stage/Stage1_0107.stg");
+	FileManager::StageObjectInput("Assets/Save/Stage/Stage1_0111.stg");
 
-	ObjectPlayer* pPlayer = AddSceneObject<ObjectPlayer>("Player");
-	pPlayer->GetTransform()->SetLocalPosition(Vector3(15.5f, 1.0f, -15.5f));
+	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
+	
 
 	AddSceneObject<ObjectCameraPlayer>("PlayerCamera");
 
