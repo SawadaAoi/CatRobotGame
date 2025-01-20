@@ -85,6 +85,7 @@ void ObjectRespawn::OnCollisionEnter(ObjectBase* pHit)
 	}
 }
 
+
 /* ========================================
 	ゲッター(リスポーン種類)関数
 	-------------------------------------
@@ -125,3 +126,80 @@ void ObjectRespawn::SetRespawnPosition(const Vector3<float>& pos)
 {
 	m_RespawnPosition = pos;
 }
+
+/* ========================================
+	ローカルデータ出力関数
+	-------------------------------------
+	内容：オブジェクトのローカルデータをファイルに書き込む
+	-------------------------------------
+	引数1：ファイル
+=========================================== */
+void ObjectRespawn::OutPutLocalData(std::ofstream& file)
+{
+	S_SaveData data;
+
+	// リスポーン種類
+	data.eRespawnType = m_RespawnType;
+	// リスポーン位置
+	data.vRespawnPosition = m_RespawnPosition;
+
+	// ファイルに書き込む
+	file.write((char*)&data, sizeof(S_SaveData));
+}
+
+/* ========================================
+	ローカルデータ入力関数
+	-------------------------------------
+	内容：ファイルからオブジェクトのローカルデータを読み込む
+	-------------------------------------
+	引数1：ファイル
+=========================================== */
+void ObjectRespawn::InputLocalData(std::ifstream& file)
+{
+	S_SaveData data;
+
+	// ファイルから読み込む
+	file.read((char*)&data, sizeof(S_SaveData));
+
+	// リスポーン種類
+	m_RespawnType = data.eRespawnType;
+	// リスポーン位置
+	m_RespawnPosition = data.vRespawnPosition;
+}
+
+
+
+
+#ifdef _DEBUG
+/* ========================================
+	デバッグ関数
+	-------------------------------------
+	内容：デバッグ用の処理
+======================================== */
+void ObjectRespawn::DebugLocal(DebugUI::Window& window)
+{
+	using namespace DebugUI;
+
+	Item* pGroupRespawn = Item::CreateGroup("Respawn");
+
+	// リスポーン種類
+	pGroupRespawn->AddGroupItem(Item::CreateList("RespawnType", [this](const void* arg)
+	{
+		int nNum = WIN_OBJ_INFO["Respawn"]["RespawnType"].GetInt();
+		m_RespawnType = (E_RespawnType)nNum;
+
+	}, false, true));
+
+	// リスポーン位置
+	pGroupRespawn->AddGroupItem(Item::CreateBind("RespawnPosition", Item::Kind::Vector, &m_RespawnPosition));
+
+	window.AddItem(pGroupRespawn);
+
+	// リスポーン種類リスト追加
+	WIN_OBJ_INFO["Respawn"]["RespawnType"].AddListItem("ReloadScene");
+	WIN_OBJ_INFO["Respawn"]["RespawnType"].AddListItem("Position");
+	WIN_OBJ_INFO["Respawn"]["RespawnType"].SetListNo((int)m_RespawnType);
+
+}
+
+#endif // _DEBUG

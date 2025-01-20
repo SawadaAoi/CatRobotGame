@@ -27,6 +27,14 @@ public:
 		RT_POSITION,		// 決まった位置からリスポーン
 	};
 
+
+	// セーブデータ
+	struct S_SaveData
+	{
+		E_RespawnType	eRespawnType;		// リスポーン種類
+		Vector3<float>	vRespawnPosition;	// リスポーン位置
+	};
+
 public:
 	ObjectRespawn(SceneBase* pScene);
 
@@ -34,6 +42,10 @@ public:
 	void UpdateLocal() override;
 
 	void OnCollisionEnter(ObjectBase* pHit) override;
+
+	// データ保存
+	void OutPutLocalData(std::ofstream& file) override;
+	void InputLocalData(std::ifstream& file) override;
 
 	// ゲッター
 	E_RespawnType GetRespawnType() const;
@@ -44,6 +56,10 @@ public:
 	void SetRespawnPosition(const Vector3<float>& pos);
 
 	DEFINE_OBJECT_TYPE(ObjectRespawn)
+
+#ifdef _DEBUG
+	void DebugLocal(DebugUI::Window& window) override;
+#endif // _DEBUG
 private:
 	E_RespawnType	m_RespawnType;			// リスポーン種類
 	Vector3<float>	m_RespawnPosition;		// リスポーン位置
