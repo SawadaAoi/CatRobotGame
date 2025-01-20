@@ -51,11 +51,11 @@ Item::~Item()
 =========================================== */
 Item* Item::CreateValue(const char* name, Kind kind, bool isSave, bool isSameLine)
 {
-	ItemValue* item = new ItemValue;
-	item->m_sName = name;
-	item->m_eKind = kind;
-	item->m_bSave = isSave;
-	item->m_bSameLine = isSameLine;
+	ItemValue* item		= new ItemValue;
+	item->m_sName		= name;		
+	item->m_eKind		= kind;
+	item->m_bSave		= isSave;
+	item->m_bSameLine	= isSameLine;
 	return item;
 }
 
@@ -74,11 +74,11 @@ Item* Item::CreateValue(const char* name, Kind kind, bool isSave, bool isSameLin
 =========================================== */
 Item* Item::CreateBind(const char* name, Kind kind, void* ptr, bool isSave, bool isSameLine)
 {
-	ItemBind* item = new ItemBind;
-	item->m_sName = name;
-	item->m_eKind = kind;
-	item->m_pBindVar = ptr;
-	item->m_bSave = isSave;
+	ItemBind* item		= new ItemBind;
+	item->m_sName		= name;
+	item->m_eKind		= kind;
+	item->m_pBindVar	= ptr;
+	item->m_bSave		= isSave;
 	item->m_bSameLine = isSameLine;
 	return item;
 }
@@ -98,11 +98,11 @@ Item* Item::CreateBind(const char* name, Kind kind, void* ptr, bool isSave, bool
 =========================================== */
 Item* Item::CreateCallBack(const char* name, Kind kind, Callback func, bool isSave, bool isSameLine)
 {
-	ItemCallback* item = new ItemCallback;
-	item->m_sName = name;
-	item->m_eKind = kind;
-	item->m_CallbackFunc = func;
-	item->m_bSave = isSave;
+	ItemCallback* item	= new ItemCallback;
+	item->m_sName			= name;
+	item->m_eKind			= kind;
+	item->m_CallbackFunc	= func;
+	item->m_bSave			= isSave;
 	item->m_bSameLine = isSameLine;
 	return item;
 }
@@ -120,8 +120,8 @@ Item* Item::CreateCallBack(const char* name, Kind kind, Callback func, bool isSa
 Item* Item::CreateGroup(const char* name)
 {
 	ItemGroup* item = new ItemGroup;
-	item->m_sName = name;
-	item->m_eKind = Item::Group;
+	item->m_sName		= name;
+	item->m_eKind		= Item::Group;
 	return item;
 }
 
@@ -135,19 +135,21 @@ Item* Item::CreateGroup(const char* name)
 	引数3：bool isSave			保存するか
 	引数4：bool isDropDown		表示形式をドロップダウンにするか
 	引数5：bool isSameLine		同じ行に表示するか
+	引数6：int nDispLineNum		表示行数
 	-------------------------------------
 	戻り値：Item* 項目ポインタ
 =========================================== */
-Item* Item::CreateList(const char* name, ConstCallback func, bool isSave, bool bIsDropDown, bool isSameLine)
+Item* Item::CreateList(const char* name, ConstCallback func, bool isSave, bool bIsDropDown, bool isSameLine, int nDispLineNum)
 {
-	ItemList* item = new ItemList;
-	item->m_sName = name;
-	item->m_eKind = Item::List;
-	item->m_CallbackFunc = func;
-	item->m_bSave = isSave;
-	item->m_uValue.nValue = -1;		// 最初は何も選択していない状態
-	item->m_bIsDropDown = bIsDropDown;
-	item->m_bSameLine = isSameLine;
+	ItemList* item			= new ItemList;
+	item->m_sName			= name;
+	item->m_eKind			= Item::List;
+	item->m_CallbackFunc	= func;
+	item->m_bSave			= isSave;
+	item->m_uValue.nValue	= -1;		// 最初は何も選択していない状態
+	item->m_bIsDropDown		= bIsDropDown;
+	item->m_bSameLine		= isSameLine;
+	item->m_nDispLineNum	= nDispLineNum;
 	return item;
 }
 
@@ -540,6 +542,21 @@ std::string Item::GetText() const
 }
 
 /* ========================================
+	ゲッター(リスト表示行数)関数
+	-------------------------------------
+	戻値：int 表示行数
+=========================================== */
+int Item::GetDispLineNum() const
+{
+	if (m_eKind == List)
+	{
+		const ItemList* pItemList = static_cast<const ItemList*>(this);
+		return pItemList->m_nDispLineNum;
+	}
+	return -1;
+}
+
+/* ========================================
 	セッター(項目(bool))関数
 	-------------------------------------
 	引数：bool value 値
@@ -646,6 +663,21 @@ void Item::SetListNo(int value)
 	if (m_eKind == List)
 		reinterpret_cast<ItemValue*>(this)->m_uValue.nValue = value;
 }
+
+/* ========================================
+	セッター(表示行数)関数
+	-------------------------------------
+	内容：表示行数を設定
+	-------------------------------------
+	引数：int value 行数
+=========================================== */
+void Item::SetDispLineNum(int value)
+{
+	if (m_eKind == List)
+		reinterpret_cast<ItemValue*>(this)->m_uValue.nValue = value;
+}
+
+
 
 
 }
