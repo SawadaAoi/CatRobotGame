@@ -29,6 +29,7 @@
 #include "ObjectGameStateManager.h"
 #include "ObjectSkyBox.h"
 #include "ObjectWall.h"
+#include "ObjectRespawn.h"
 #include "SceneGameTest.h"
 #include "SceneManager.h"
 #include "UIComponentSprite.h"
@@ -46,7 +47,9 @@ void SceneGameTest::InitLocal()
 	//m_pPlayer = AddSceneObject<ObjectPlayer>("Player");
 	//m_pPlayer->GetComponent<ComponentTransform>()->SetLocalPosition(Vector3(0.0f, 3.0f, 5.0f));
 
-	AddSceneObject<ObjectPlayerStart>("PlayerStart")->GetTransform()->SetLocalPosition(Vector3(0.0f, 3.0f, 5.0f));
+	ObjectBase* pPlayerStart = AddSceneObject<ObjectPlayerStart>("PlayerStart");
+	pPlayerStart->GetTransform()->SetLocalPosition(Vector3(0.0f, 3.0f, 5.0f));
+	GetSceneObject<ObjectPlayerStart>("PlayerStart")->SetIsPlayerStart(true);
 	AddSceneObject<ObjectCameraPlayer>("PlayerCamera");
 
 	FileManager::UIInput("Assets/Save/GameUI/PlayerHP.ui");
@@ -76,6 +79,8 @@ void SceneGameTest::InitLocal()
 	AddSceneObject<ObjectBlock>("Block3")->GetTransform()->SetLocalPosition(Vector3(0.0f, 0.5f, -5.0f));
 
 	AddSceneObject< ObjectWall>("Wall1")->GetTransform()->SetLocalPosition(Vector3(4.0f, 0.5f, 0.0f));
+
+	AddSceneObject<ObjectRespawn>("Respawn1")->GetTransform()->SetLocalPosition(Vector3(3.0f, 0.5f, -5.0f));
 }
 
 void SceneGameTest::UninitLocal()
