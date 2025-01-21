@@ -32,9 +32,11 @@ ObjectBase::ObjectBase(SceneBase* pScene)
 	, m_pParentObj(nullptr)				// 親オブジェクトをnullptrに設定
 	, m_pChildObjs()					// 子オブジェクト配列を初期化
 	, m_pComponents()					// コンポーネント配列を初期化
+	, m_pCompTransform(nullptr)			// Transformコンポーネントをnullptrに設定
 	, m_eTag(E_ObjectTag::None)			// タグをNoneに設定
 	, m_sName("NoName")					// オブジェクト名をNoNameに設定
 	, m_tLightParam{ DEFAULT_LIGHT_DIFFUSE, DEFAULT_LIGHT_SPECULAR, DEFAULT_LIGHT_AMBIENT, true}	// ライトパラメータ初期化
+	, m_bIsFold(false)					// オブジェクト一覧折りたたみフラグをfalseに設定
 {
 	// 所有者オブジェクトがnullptrの場合はエラーを出力
 	if (pScene == nullptr)
@@ -427,6 +429,17 @@ ObjectBase::T_LightParam ObjectBase::GetLightMaterial() const
 }
 
 /* ========================================
+	ゲッター(オブジェクト一覧折りたたみフラグ)関数
+	-------------------------------------
+	戻値：オブジェクト一覧折りたたみフラグ
+=========================================== */
+bool ObjectBase::GetIsFold() const
+{
+	return m_bIsFold;
+}
+
+
+/* ========================================
 	セッター(状態)関数
 	-------------------------------------
 	引数1：状態
@@ -480,7 +493,15 @@ void ObjectBase::SetLightUse(bool bUse)
 	m_tLightParam.bLightUse = bUse;
 }
 
-
+/* ========================================
+	セッター(オブジェクト一覧折りたたみフラグ)関数
+	-------------------------------------
+	引数1：オブジェクト一覧折りたたみフラグ
+=========================================== */
+void ObjectBase::SetIsFold(bool bIsFold)
+{
+	m_bIsFold = bIsFold;
+}
 
 
 #ifdef _DEBUG
@@ -590,8 +611,8 @@ void ObjectBase::ChangeName()
 
 	// オブジェクト名変更
 	int listNo = ITEM_OBJ_LIST.GetListNo(this->GetListName().c_str());			// オブジェクト一覧の表示位置取得
-	ITEM_OBJ_LIST.RemoveListItem(sOldName.c_str(), DebugUI::CHILD_HEAD_TEXT);	// 変更前の名前をリストから削除
-	
+	ITEM_OBJ_LIST.RemoveListItem(sOldName.c_str());								// 変更前の名前をリストから削除
+
 	this->SetName(sReName);												// 内部の名前変更
 	ITEM_OBJ_LIST.InsertListItem(this->GetListName().c_str(), listNo);	// オブジェクト一覧に変更後の名前を追加
 
@@ -625,6 +646,8 @@ void ObjectBase::ChangeParentList(std::string sParentName)
 		this->RemoveParentObject();			// 親オブジェクトがない場合(Noneを選択)は解除
 		ITEM_OBJ_LIST.SetListNo(-1);
 	}
+
+	m_bIsFold = false;	// オブジェクト一覧を展開
 }
 
 /* ========================================
@@ -653,6 +676,12 @@ std::string ObjectBase::GetListName()
 	else
 	{
 		sName = this->GetName();
+	}
+
+	// 子オブジェクトがある場合は末尾に文字を追加
+	if (m_pChildObjs.size() > 0)
+	{
+		sName += DebugUI::PARENT_END_TEXT;
 	}
 
 	return sName;
