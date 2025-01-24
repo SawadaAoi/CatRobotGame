@@ -1,3 +1,12 @@
+/* ========================================
+	CatRobotGame/
+	------------------------------------
+	シーン(ステージ1)用cpp
+	------------------------------------
+	SceneStage1.cpp
+========================================== */
+
+// =============== インクルード ===================
 #include "SceneStage1.h"
 
 #include "ObjectPlayer.h"
@@ -9,9 +18,15 @@
 #include "ComponentTransform.h"
 #include "ObjectGameStateManager.h"
 
+
+/* ========================================
+	初期化関数
+	-------------------------------------
+	内容：初期化処理
+======================================= */
 void SceneStage1::InitLocal()
 {
-	FileManager::StageObjectInput("Assets/Save/Stage/Stage1_0111.stg");
+	FileManager::StageObjectInput("Assets/Save/Stage/Stage1.stg");
 
 	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
 	

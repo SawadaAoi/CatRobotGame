@@ -1,93 +1,27 @@
-#include "CameraManager.h"
-#include "ComponentCameraBase.h"
-#include "ComponentCollisionAABB.h"
-#include "ComponentCollisionOBB.h"
-#include "ComponentCollisionSphere.h"
-#include "ComponentGeometry.h"
-#include "ComponentModelAnime.h"
-#include "ComponentTransform.h"
-#include "ComponentGroundBox.h"
-#include "FileManager.h"
-#include "Input.h"
-#include "ModelAnimeManager.h"
-#include "ObjectBlock.h"
-#include "ObjectBullet.h"
-#include "ObjectCameraDebug.h"
-#include "ObjectCameraPlayer.h"
-#include "ObjectGround.h"
-#include "ObjectLight.h"
-#include "ObjectLightDirectional.h"
-#include "ObjectLightPoint.h"
-#include "ObjectLightSpot.h"
-#include "ObjectPlayer.h"
-#include "ObjectPlayerStart.h"
-#include "ObjectEnemy.h"
-#include "ObjectEnemyLinear.h"
-#include "ObjectEnemyChase.h"
-#include "ObjectEnemyRandom.h"
-#include "ObjectGoal.h"
-#include "ObjectGameStateManager.h"
-#include "ObjectSkyBox.h"
-#include "ObjectWall.h"
-#include "ObjectRespawn.h"
-#include "SceneGameTest.h"
-#include "SceneManager.h"
-#include "UIComponentSprite.h"
-#include "UIComponentText.h"
-#include "UIComponentTransform.h"
+/* ========================================
+	CatRobotGame/
+	------------------------------------
+	シーン(テスト)用cpp
+	------------------------------------
+	SceneGameTest.cpp
+========================================== */
 
+// =============== インクルード ===================
+#include "SceneGameTest.h"
+#include "ObjectPlayerStart.h"
+#include "FileManager.h"
+
+
+/* ========================================
+	初期化関数
+	-------------------------------------
+	内容：初期化処理
+======================================= */
 void SceneGameTest::InitLocal()
 {
-	//FileManager::UIOutput("Assets/Save/TestUI.ui");
-
-	AddSceneObject<ObjectSkyBox>("SkyBox");
-
-	AddSceneObject<ObjectLightDirectional>("LightDirectional");
-
-	//m_pPlayer = AddSceneObject<ObjectPlayer>("Player");
-	//m_pPlayer->GetComponent<ComponentTransform>()->SetLocalPosition(Vector3(0.0f, 3.0f, 5.0f));
-
-	ObjectBase* pPlayerStart = AddSceneObject<ObjectPlayerStart>("PlayerStart");
-	pPlayerStart->GetTransform()->SetLocalPosition(Vector3(0.0f, 3.0f, 5.0f));
-	GetSceneObject<ObjectPlayerStart>("PlayerStart")->SetIsPlayerStart(true);
-	AddSceneObject<ObjectCameraPlayer>("PlayerCamera");
-
+	FileManager::StageObjectInput("Assets/Save/Stage/TestScene.stg");
 	FileManager::UIInput("Assets/Save/GameUI/PlayerHP.ui");
 
-
-	AddSceneObject<ObjectCameraDebug>("ObjectCameraDebug");
-
-	m_StaticPlane = AddSceneObject<ObjectGround>("Ground");
-	m_StaticPlane->GetComponent<ComponentTransform>()->SetLocalPosition(Vector3(0.0f, 0.0f, 0.0f));
-	m_StaticPlane->GetComponent<ComponentTransform>()->SetLocalScale(Vector3(100.0f, 1.0f, 100.0f));
-
-
-	AddSceneObject<ObjectEnemyLinear>("ObjectEnemy")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
-	//AddSceneObject<ObjectEnemyChase>("ObjectEnemyChase")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 0.0f));
-
-	AddSceneObject<ObjectGoal>("ObjectGoal")->GetTransform()->SetLocalPosition(Vector3(0.0f, 1.0f, 10.0f));
-
-	AddSceneObject<ObjectGameStateManager>("GameStateManager");
-
-	AddSceneObject<ObjectBlock>("Block1")->GetTransform()->SetLocalPosition(Vector3(5.0f, 0.5f, 5.0f));
-	GetSceneObject<ObjectBlock>("Block1")->GetTransform()->SetLocalScale(Vector3(5.0f, 1.0f, 5.0f));
-
-	GetSceneObject<ObjectBlock>("Block1")->AddComponent<ComponentGroundBox>();
-	GetSceneObject<ObjectBlock>("Block1")->SetTag(E_ObjectTag::Ground);
-
-	AddSceneObject<ObjectBlock>("Block2")->GetTransform()->SetLocalPosition(Vector3(0.0f, 0.5f, -6.0f));
-	AddSceneObject<ObjectBlock>("Block3")->GetTransform()->SetLocalPosition(Vector3(0.0f, 0.5f, -5.0f));
-
-	AddSceneObject< ObjectWall>("Wall1")->GetTransform()->SetLocalPosition(Vector3(4.0f, 0.5f, 0.0f));
-
-	AddSceneObject<ObjectRespawn>("Respawn1")->GetTransform()->SetLocalPosition(Vector3(3.0f, 0.5f, -5.0f));
+	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
 }
 
-void SceneGameTest::UninitLocal()
-{
-}
-
-void SceneGameTest::UpdateLocal()
-{
-
-}
