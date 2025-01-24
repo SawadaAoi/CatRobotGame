@@ -899,15 +899,22 @@ void SceneBase::AddObjectListChild(ObjectBase* pObject)
 void SceneBase::ReloadDebugUIList()
 {
 	// オブジェクト一覧をクリア
-	WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].RemoveListItemAll();
+	ITEM_UI_LIST.RemoveListItemAll();
 
-	// シーンに所属する全てのオブジェクトを取得
-	for (const auto& pUI : m_pUIObjects)
+	// オブジェクトを名前の昇順にソートする(オブジェクト一覧を見やすくするため)
+	std::vector<UIObjectBase*> pSortUIs = GetAllSceneUIObjects();	// シーンに所属する全てのオブジェクトを取得
+	std::sort(pSortUIs.begin(), pSortUIs.end(), [](const UIObjectBase* a, const UIObjectBase* b)
+	{
+		return a->GetName() < b->GetName();
+	});
+
+	// 全てのUIをリストに追加
+	for (const auto& pUI : pSortUIs)
 	{
 		if (pUI->GetParentUI()) continue;	// 親オブジェクトがある場合は飛ばす
 		// オブジェクト一覧に追加
 		ITEM_UI_LIST.AddListItem(pUI->GetName().c_str());
-		AddUIListChild(pUI.get());
+		AddUIListChild(pUI);
 	}
 }
 
@@ -924,10 +931,18 @@ void SceneBase::AddUIListChild(UIObjectBase* pUIObject)
 	// 子オブジェクトがある場合
 	if (pUIObject->GetChildUIs().size() > 0)
 	{
-		for (auto& pChild : pUIObject->GetChildUIs())
+		// 子オブジェクトを名前の昇順にソートする(オブジェクト一覧を見やすくするため)
+		std::vector<UIObjectBase*> pSortChildUIs = pUIObject->GetChildUIs();	// 子オブジェクトを取得
+		std::sort(pSortChildUIs.begin(), pSortChildUIs.end(), [](const UIObjectBase* a, const UIObjectBase* b)
+		{
+			return a->GetName() > b->GetName();
+		});
+
+		// 全ての子オブジェクトをリストに追加
+		for (auto& pChild : pSortChildUIs)
 		{
 			// 挿入位置
-			int nInsertNo = WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].GetListNo(pUIObject->GetListName().c_str());
+			int nInsertNo = ITEM_UI_LIST.GetListNo(pUIObject->GetListName().c_str());
 			// オブジェクト一覧に追加
 			ITEM_UI_LIST.InsertListItem(pChild->GetListName().c_str(), nInsertNo + 1);
 			// 子オブジェクトを追加
@@ -939,5 +954,4 @@ void SceneBase::AddUIListChild(UIObjectBase* pUIObject)
 		return;
 	}
 }
-
 #endif
