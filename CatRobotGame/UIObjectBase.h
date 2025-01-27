@@ -101,10 +101,12 @@ public:
 	UIObjectBase* GetParentUI() const;				// 親オブジェクトの取得
 	std::vector<UIObjectBase*> GetChildUIs() const;	// 子オブジェクトの取得
 	std::string GetName() const;						// オブジェクト名の取得
+	bool GetIsFold() const;								// オブジェクト一覧折りたたみフラグの取得
 
 	// セッター
 	void SetState(E_State eState);	// UIの状態の設定
 	void SetName(std::string sName);	// オブジェクト名の設定
+	void SetIsFold(bool bIsFold);		// オブジェクト一覧折りたたみフラグの設定
 
 	// コンポーネント関連
 	template<typename T>
@@ -144,6 +146,9 @@ protected:
 	// 親子関係
 	UIObjectBase*				m_pParentUI;	// 親UI
 	std::vector<UIObjectBase*>	m_pChildUIs;	// 子UI
+
+	// オブジェクト一覧折りたたみフラグ(true:折りたたむ, false:展開)
+	bool m_bIsFold;
 };
 
 #include "UIObjectBase.inl"	// コンポーネント関連のテンプレート関数の実装

@@ -33,6 +33,7 @@ UIObjectBase::UIObjectBase(SceneBase* pScene)
 	, m_eState(E_State::STATE_ACTIVE)
 	, m_pParentUI(nullptr)
 	, m_pChildUIs()
+	, m_bIsFold(false)					// オブジェクト一覧折りたたみフラグをfalseに設定
 {
 	// 所有シーンがnullptrの場合はエラーを出力
 	if (pScene == nullptr)
@@ -362,6 +363,16 @@ std::string UIObjectBase::GetName() const
 }
 
 /* ========================================
+	ゲッター(オブジェクト一覧折りたたみフラグ)関数
+	-------------------------------------
+	戻値：オブジェクト一覧折りたたみフラグ
+=========================================== */
+bool UIObjectBase::GetIsFold() const
+{
+	return m_bIsFold;
+}
+
+/* ========================================
 	ゲッター(親オブジェクト)関数
 	-------------------------------------
 	戻値：親オブジェクト
@@ -399,6 +410,16 @@ void UIObjectBase::SetState(E_State eState)
 void UIObjectBase::SetName(std::string sName)
 {
 	m_sName = sName;
+}
+
+/* ========================================
+	セッター(オブジェクト一覧折りたたみフラグ)関数
+	-------------------------------------
+	引数1：オブジェクト一覧折りたたみフラグ
+=========================================== */
+void UIObjectBase::SetIsFold(bool bIsFold)
+{
+	m_bIsFold = bIsFold;
 }
 
 #ifdef _DEBUG
@@ -500,7 +521,7 @@ void UIObjectBase::ChangeName()
 
 	// オブジェクト名変更
 	int listNo = ITEM_UI_LIST.GetListNo(this->GetListName().c_str());			// オブジェクト一覧の表示位置取得
-	ITEM_UI_LIST.RemoveListItem(sOldName.c_str(), DebugUI::CHILD_HEAD_TEXT);	// 変更前の名前をリストから削除
+	ITEM_UI_LIST.RemoveListItem(sOldName.c_str());	// 変更前の名前をリストから削除
 
 	this->SetName(sReName);												// 内部の名前変更
 	ITEM_UI_LIST.InsertListItem(this->GetListName().c_str(), listNo);	// オブジェクト一覧に変更後の名前を追加
@@ -535,6 +556,8 @@ void UIObjectBase::ChangeParentList(std::string sParentName)
 		this->RemoveParentUI();			// 親オブジェクトがない場合(Noneを選択)は解除
 		ITEM_UI_LIST.SetListNo(-1);		// オブジェクト一覧の選択位置を変更
 	}
+
+	m_bIsFold = false;	// UI一覧を展開
 }
 
 
@@ -566,7 +589,14 @@ std::string UIObjectBase::GetListName()
 		sName = this->GetName();
 	}
 
+	// 子オブジェクトがある場合は末尾に文字を追加
+	if (m_pChildUIs.size() > 0)
+	{
+		sName += DebugUI::PARENT_END_TEXT;
+	}
+
 	return sName;
 }
+
 
 #endif // _DEBUG

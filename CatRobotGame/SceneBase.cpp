@@ -773,20 +773,13 @@ void SceneBase::InitUIList()
 
 	}));
 
-
-	Item::ConstCallback  FuncListClick = [this](const void* arg) {
+	// オブジェクト選択時のコールバック関数
+	Item::ConstCallback  FuncListClick = [this](const void* arg)
+	{
 		// クリックされたオブジェクトの情報を表示
 
 		std::string sUIName = reinterpret_cast<const char*>(arg);
-		m_nUISelectNo = WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].GetListNo(sUIName.c_str());	// 選択番号を取得
-
-		// 名前に"L"が含まれている場合(子オブジェクトの場合)
-		if (sUIName.find(DebugUI::CHILD_HEAD_TEXT) != std::string::npos)
-		{
-			// "L"を除去した名前に変換
-			int nHeadTextCnt = sUIName.find(DebugUI::CHILD_HEAD_TEXT);
-			sUIName = sUIName.substr(nHeadTextCnt + DebugUI::CHILD_HEAD_TEXT.size());
-		}
+		m_nUISelectNo = ITEM_UI_LIST.GetListNo(sUIName.c_str());	// 選択番号を取得
 
 		InitUIInfo(sUIName);
 	};
@@ -809,6 +802,23 @@ void SceneBase::InitUIInfo(std::string sName)
 
 	WIN_UI_INFO.Clear();	// 表示リセット
 
+	// 名前に"L"が含まれている場合(子オブジェクトの場合)
+	if (sName.find(CHILD_HEAD_TEXT) != std::string::npos)
+	{
+		// "L"を除去した名前に変換
+		int nHeadTextCnt = sName.find(CHILD_HEAD_TEXT);							// Lが含まれる位置を取得
+		sName = sName.substr(nHeadTextCnt + CHILD_HEAD_TEXT.size());	// L以降の文字列を取得
+	}
+
+	// 名前に"*"が含まれている場合(親オブジェクトの場合)
+	if (sName.find(PARENT_END_TEXT) != std::string::npos)
+	{
+		// "*"を除去した名前に変換
+		int nEndTextCnt = sName.find(PARENT_END_TEXT);	// *が含まれる位置を取得
+		sName = sName.substr(0, nEndTextCnt);	// *以前の文字列を取得
+	}
+
+
 	// 名前が一致するオブジェクトを検索
 	for (auto& pUI : m_pUIObjects)
 	{
@@ -817,10 +827,15 @@ void SceneBase::InitUIInfo(std::string sName)
 			// オブジェクト情報を表示
 			pUI->Debug();
 			m_pSelectUI = pUI.get();	// 選択中のオブジェクトを保持
+
+			bool bIsFold = pUI->GetIsFold() ? false : true;
+			pUI->SetIsFold(bIsFold);	// 折りたたみ状態を変更
+
 			break;
 		}
 	}
 }
+
 
 /* ========================================
 	デバッグ用オブジェクト一覧再読込関数
@@ -913,8 +928,11 @@ void SceneBase::ReloadDebugUIList()
 	{
 		if (pUI->GetParentUI()) continue;	// 親オブジェクトがある場合は飛ばす
 		// オブジェクト一覧に追加
-		ITEM_UI_LIST.AddListItem(pUI->GetName().c_str());
-		AddUIListChild(pUI);
+		ITEM_UI_LIST.AddListItem(pUI->GetListName().c_str());
+
+		// 折りたたみ状態ではない場合は子オブジェクトを表示する
+		if (!pUI->GetIsFold())
+			AddUIListChild(pUI);
 	}
 }
 
@@ -931,6 +949,8 @@ void SceneBase::AddUIListChild(UIObjectBase* pUIObject)
 	// 子オブジェクトがある場合
 	if (pUIObject->GetChildUIs().size() > 0)
 	{
+		if (pUIObject->GetIsFold()) return;	// 折りたたみ状態の場合は追加しない
+
 		// 子オブジェクトを名前の昇順にソートする(オブジェクト一覧を見やすくするため)
 		std::vector<UIObjectBase*> pSortChildUIs = pUIObject->GetChildUIs();	// 子オブジェクトを取得
 		std::sort(pSortChildUIs.begin(), pSortChildUIs.end(), [](const UIObjectBase* a, const UIObjectBase* b)
@@ -954,4 +974,5 @@ void SceneBase::AddUIListChild(UIObjectBase* pUIObject)
 		return;
 	}
 }
+
 #endif
