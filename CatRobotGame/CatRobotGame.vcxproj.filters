@@ -578,6 +578,9 @@
     <ClCompile Include="SceneTitile.cpp">
       <Filter>ソース ファイル\App\Scene\Title</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectBlockGroundOBB.cpp">
+      <Filter>ソース ファイル\App\GameObject\StageObject\Block</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -930,6 +933,9 @@
     </ClInclude>
     <ClInclude Include="SceneTitile.h">
       <Filter>ソース ファイル\App\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBlockGroundOBB.h">
+      <Filter>ソース ファイル\App\GameObject\StageObject\Block</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

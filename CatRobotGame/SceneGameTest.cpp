@@ -10,7 +10,8 @@
 #include "SceneGameTest.h"
 #include "ObjectPlayerStart.h"
 #include "FileManager.h"
-
+#include "ObjectBlockGroundOBB.h"
+#include "ComponentTransform.h"
 
 /* ========================================
 	‰Šú‰»ŠÖ”

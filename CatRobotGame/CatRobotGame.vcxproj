@@ -221,6 +221,7 @@
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="ObjectBlock.cpp" />
     <ClCompile Include="ObjectBlockGroundAABB.cpp" />
+    <ClCompile Include="ObjectBlockGroundOBB.cpp" />
     <ClCompile Include="ObjectBullet.cpp" />
     <ClCompile Include="ObjectBulletPlayer.cpp" />
     <ClCompile Include="ObjectCamera.cpp" />
@@ -339,6 +340,7 @@
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectBlock.h" />
     <ClInclude Include="ObjectBlockGroundAABB.h" />
+    <ClInclude Include="ObjectBlockGroundOBB.h" />
     <ClInclude Include="ObjectBullet.h" />
     <ClInclude Include="ObjectBulletPlayer.h" />
     <ClInclude Include="ObjectCamera.h" />
