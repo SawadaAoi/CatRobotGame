@@ -234,6 +234,9 @@
     <Filter Include="ソース ファイル\App\GameObject\StageObject\Block\0_Super">
       <UniqueIdentifier>{261c5d92-aeb6-43d0-968c-04ec05c28a03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\Scene\Title">
+      <UniqueIdentifier>{b3216eee-ed7e-44f1-8eb8-6fd41d2bc73e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -571,6 +574,9 @@
     </ClCompile>
     <ClCompile Include="ObjectRespawn.cpp">
       <Filter>ソース ファイル\App\GameObject\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTitile.cpp">
+      <Filter>ソース ファイル\App\Scene\Title</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -921,6 +927,9 @@
     </ClInclude>
     <ClInclude Include="ObjectRespawn.h">
       <Filter>ソース ファイル\App\GameObject\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTitile.h">
+      <Filter>ソース ファイル\App\Scene\Title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

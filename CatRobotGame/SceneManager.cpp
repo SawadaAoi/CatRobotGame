@@ -11,6 +11,7 @@
 #include "SceneBase.h"
 #include "SceneGameTest.h"
 #include "SceneStage1.h"
+#include "SceneTitile.h"
 
 
 /* ========================================

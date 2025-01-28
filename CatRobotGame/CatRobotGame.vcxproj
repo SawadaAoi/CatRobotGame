@@ -251,6 +251,7 @@
     <ClCompile Include="SceneGameTest.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneStage1.cpp" />
+    <ClCompile Include="SceneTitile.cpp" />
     <ClCompile Include="ShapeBox.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="DebugConsole.cpp" />
@@ -367,6 +368,7 @@
     <ClInclude Include="SceneGameTest.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneStage1.h" />
+    <ClInclude Include="SceneTitile.h" />
     <ClInclude Include="ShapeBox.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="DebugConsole.h" />

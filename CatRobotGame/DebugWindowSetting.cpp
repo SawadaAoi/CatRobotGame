@@ -19,7 +19,7 @@
 #include <type_traits>
 #include "SceneGameTest.h"
 #include "SceneStage1.h"
-
+#include "SceneTitile.h"
 
 // =============== –¼‘O‹óŠÔ ===================
 namespace DebugUI
@@ -44,6 +44,7 @@ namespace DebugUI
 	{
 		{"SceneGameTest", []() { SceneManager::ChangeScene<SceneGameTest>(); } },
 		{"SceneStage1", []() { SceneManager::ChangeScene<SceneStage1>(); } },
+		{"SceneTitile", []() { SceneManager::ChangeScene<SceneTitile>(); } },
 
 	};
 

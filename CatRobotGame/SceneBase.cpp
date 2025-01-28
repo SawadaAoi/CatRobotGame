@@ -108,9 +108,6 @@ void SceneBase::Uninit()
 =========================================== */
 void SceneBase::Update()
 {
-	UpdateObject();	// オブジェクト更新
-	UpdateUI();		// UI更新
-
 #ifdef _DEBUG
 	// リスト未選択時は選択オブジェクトをクリア
 	if (m_nObjectListSelectNo == -1) m_pSelectObj = nullptr;
@@ -120,6 +117,8 @@ void SceneBase::Update()
 	ReloadDebugObjectList();	// オブジェクトリスト再読み込み
 	ReloadDebugUIList();		// UIオブジェクトリスト再読み込み
 #endif // _DEBUG
+	UpdateObject();	// オブジェクト更新
+	UpdateUI();		// UI更新
 }
 
 /* ========================================

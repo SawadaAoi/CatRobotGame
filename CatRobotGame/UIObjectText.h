@@ -34,6 +34,7 @@ public:
 
 	// ゲッター
 	std::string GetText();
+	UIComponentText* GetCompText();
 
 	// セッター
 	void SetText(std::string sText);
