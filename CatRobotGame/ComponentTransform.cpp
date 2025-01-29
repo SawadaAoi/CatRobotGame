@@ -42,7 +42,7 @@ ComponentTransform::ComponentTransform(ObjectBase* pOwner)
 =========================================== */
 void ComponentTransform::Init()
 {
-	
+
 }
 
 /* ========================================
@@ -67,7 +67,7 @@ void ComponentTransform::Update()
 	内容：ワールド座標を更新する
 =========================================== */
 void ComponentTransform::UpdateWorldTransform()
-{	
+{
 	// 親オブジェクトがある場合
 	if (m_pOwnerObj->GetParentObject())
 	{
@@ -83,10 +83,10 @@ void ComponentTransform::UpdateWorldTransform()
 		DirectX::XMMATRIX parentMat =
 			pParentTran->GetRotation().ToDirectXMatrix() *		// 回転
 			DirectX::XMMatrixTranslation(							// 座標		
-				pParentTran->GetPosition().x, 
-				pParentTran->GetPosition().y, 
+				pParentTran->GetPosition().x,
+				pParentTran->GetPosition().y,
 				pParentTran->GetPosition().z);
-		
+
 		// ローカルと親の行列を掛け合わせてワールド行列(回転、座標)を生成
 		DirectX::XMMATRIX matrix = localMat * parentMat;
 
@@ -155,7 +155,7 @@ void ComponentTransform::RecalculateLocalTransform()
 	// 作成した行列から座標、回転を取得
 	m_vLocalPosition = Vector3<float>::FromMatrix_Translation(computedLocalMatrix);	// 座標取得
 	m_qLocalRotation = Quaternion::FromDirectXMatrix(computedLocalMatrix);			// 回転取得
-	
+
 
 	// 大きさの再計算(回転、座標と一緒に計算すると大きさが不正確になるため別で計算)
 	m_vLocalScale = m_vWorldScale / pParentTran->GetScale();
@@ -414,8 +414,8 @@ void ComponentTransform::LookAt(const Vector3<float>& target, const Vector3<floa
 
 	// 回転行列を生成(行方向)
 	DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixSet(
-		right.x, right.y, right.z, 0.0f,		
-		newUp.x, newUp.y, newUp.z, 0.0f,	
+		right.x, right.y, right.z, 0.0f,
+		newUp.x, newUp.y, newUp.z, 0.0f,
 		forward.x, forward.y, forward.z, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f
 	);
@@ -452,7 +452,7 @@ void ComponentTransform::MoveTo(const Vector3<float>& target, float fTime)
 	引数2：限界距離	float
 	引数3：移動速度	float
 =========================================== */
-void ComponentTransform::MoveToward(const Vector3<float>& target,  float fSpeed, float fDistance)
+void ComponentTransform::MoveToward(const Vector3<float>& target, float fSpeed, float fDistance)
 {
 	Vector3<float> fDirVec	= target - m_vWorldPosition;	// 目標までのベクトル
 	float fLength			= fDirVec.Length();				// ベクトルの長さ
@@ -686,14 +686,13 @@ void ComponentTransform::SetPosition(const Vector3<float>& position)
 
 		// 作成した行列から座標を取得
 		m_vLocalPosition = Vector3<float>::FromMatrix_Translation(localMatInv);
-
-		// ワールド座標の更新
-		UpdateWorldTransform();
 	}
 	else
 	{
 		m_vLocalPosition = position;
 	}
+	// ワールド座標の更新
+	UpdateWorldTransform();
 }
 
 /* ========================================
@@ -725,14 +724,13 @@ void ComponentTransform::SetRotation(const Quaternion& rotation)
 
 		// 作成した行列から回転を取得
 		m_qLocalRotation = Quaternion::FromDirectXMatrix(localMatInv);
-
-		// ワールド座標の更新
-		UpdateWorldTransform();
 	}
 	else
 	{
 		m_qLocalRotation = rotation;
 	}
+	// ワールド座標の更新
+	UpdateWorldTransform();
 }
 
 
@@ -777,13 +775,13 @@ void ComponentTransform::SetScale(const Vector3<float>& scale)
 		ComponentTransform* pParentTran = m_pOwnerObj->GetParentObject()->GetComponent<ComponentTransform>();
 		// ワールドスケールを計算
 		m_vLocalScale = scale / pParentTran->GetScale();
-		// ワールド座標の更新
-		UpdateWorldTransform();
 	}
 	else
 	{
 		m_vLocalScale = scale;
 	}
+	// ワールド座標の更新
+	UpdateWorldTransform();
 }
 
 /* ========================================
@@ -866,7 +864,7 @@ void ComponentTransform::Debug(DebugUI::Window& window)
 		// 回転
 		// 表示だけオイラー角に変換(クォータニオンは直接入力できないため)
 		pGroupTran->AddGroupItem(Item::CreateCallBack("Rotation", Item::Kind::Vector,
-		[this](bool isWrite, void* arg)	// isWrite:入力があるかどうか arg:入力値
+			[this](bool isWrite, void* arg)	// isWrite:入力があるかどうか arg:入力値
 		{
 			CallbackRotation(isWrite, arg, m_qWorldRotation);
 		}));

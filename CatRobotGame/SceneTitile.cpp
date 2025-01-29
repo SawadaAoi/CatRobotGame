@@ -119,7 +119,7 @@ void SceneTitile::InitLocal()
 	for (int i = 0; i < CAMERA_NUM; i++)
 	{
 		ObjectCamera* pCamera = AddSceneObject<ObjectCamera>("Camera_" + std::to_string(i));
-		pCamera->GetTransform()->SetLocalPosition(CAMERA_POS[i]);
+		pCamera->GetTransform()->SetPosition(CAMERA_POS[i]);
 		pCamera->GetTransform()->Rotate(CAMERA_ROT[i].x, CAMERA_ROT[i].y, CAMERA_ROT[i].z);
 		m_pCameras.push_back(pCamera);
 	}
@@ -193,16 +193,16 @@ void SceneTitile::Init3dOjbect()
 	ComponentModelAnime* pCompAnime = m_pCatRoboModel->AddComponent<ComponentModelAnime>();
 	pCompAnime->SetModel(GET_MODEL_ANIME(ANIME_BASE_KEY::AB_PLAYER));
 	pCompAnime->PlayAnime(ANIME_KEY_PLAYER::PLYR_WALK, true, 1.0f);
-	m_pCatRoboModel->GetTransform()->SetLocalPosition(CAT_ROBO_POS);
-	m_pCatRoboModel->GetTransform()->SetLocalScale(CAT_ROBO_SCALE);
+	m_pCatRoboModel->GetTransform()->SetPosition(CAT_ROBO_POS);
+	m_pCatRoboModel->GetTransform()->SetScale(CAT_ROBO_SCALE);
 	m_pCatRoboModel->GetTransform()->RotateY(CAT_ROBO_ROT_Y);
 	// 空
 	m_pSkyBox = AddSceneObject<ObjectSkyBox>("SkyBox");
 	m_pSkyBox->GetTransform()->ScaleY(SKY_BOX_SCALE_Y);	// 縦に潰す(雲を見えやすくする)
 	// 地面
 	m_pGround = AddSceneObject<ObjectGround>("Ground");
-	m_pGround->GetTransform()->SetLocalPosition(GROUND_POS);
-	m_pGround->GetTransform()->SetLocalScale(GROUND_SCALE);
+	m_pGround->GetTransform()->SetPosition(GROUND_POS);
+	m_pGround->GetTransform()->SetScale(GROUND_SCALE);
 	m_pCompGeometry = m_pGround->GetComponent<ComponentGeometry>();
 	m_pCompGeometry->SetTexture(GET_TEXTURE_DATA(TEX_KEY::GROUND_GRASS));
 	m_pCompGeometry->SetIsTex(true);
@@ -235,7 +235,7 @@ void SceneTitile::UpdateSelect()
 	SelectMenuAnim();	// 選択メニューアニメ
 
 	// スペースキーで選択
-	if (Input::IsKeyTrigger(VK_SPACE))
+	if (Input::IsKeyTrigger('K'))
 	{
 		(this->*m_MenuFunctions[m_nSelectNum])();
 	}

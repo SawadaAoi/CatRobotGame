@@ -64,6 +64,7 @@ public:
 	Quaternion GetRotation() const;
 	Vector3<float> GetRotationEuler() const;
 	Vector3<float> GetScale() const;
+
     Vector3<float> GetLocalPosition() const;
 	Quaternion GetLocalRotation() const;
 	Vector3<float> GetLocalRotationEuler() const;
