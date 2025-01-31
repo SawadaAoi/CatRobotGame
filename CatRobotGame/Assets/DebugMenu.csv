@@ -6,10 +6,10 @@ Bool,DebugWindowList/ObjectInfo,1
 Bool,DebugWindowList/UIList,0
 Bool,DebugWindowList/UIInfo,0
 Color,BasicSettings/BackColor,1.000000/1.000000/1.000000/0.000000
-Bool,BasicSettings/DispCollision,1
+Bool,BasicSettings/DispCollision,0
 Bool,BasicSettings/Grid/GridEnable,0
 Bool,BasicSettings/Grid/AxisEnable,0
 Float,BasicSettings/Grid/Size,10.000000
 Float,BasicSettings/Grid/Margin,1.000000
 Color,BasicSettings/Grid/Color,0.000000/0.000000/0.000000/0.000000
-List,SceneList/SceneLists,2
+List,SceneList/SceneLists,1

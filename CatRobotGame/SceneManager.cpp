@@ -22,7 +22,7 @@
 void SceneManager::Init()
 {
 #ifndef _DEBUG
-	ChangeScene<SceneStage1>();
+	ChangeScene<SceneTitile>();
 #endif
 }
 
