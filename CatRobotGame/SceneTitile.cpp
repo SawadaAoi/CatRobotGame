@@ -18,6 +18,7 @@
 #include "ComponentGeometry.h"
 #include "ComponentModelAnime.h"
 #include "ComponentTransform.h"
+#include "ComponentSmokeEffect.h"
 
 #include "UIObjectBase.h"
 #include "UIObjectText.h"
@@ -95,6 +96,7 @@ const Vector3<float> CAMERA_ROT[CAMERA_NUM] = {
 SceneTitile::SceneTitile()
 	: m_pTitleLogo(nullptr)
 	, m_pCatRoboModel(nullptr)
+	, m_pSmokeEffect(nullptr)
 	, m_pGround(nullptr)
 	, m_pCompGeometry(nullptr)
 	, m_pSkyBox(nullptr)
@@ -154,6 +156,11 @@ void SceneTitile::UpdateLocal()
 
 	// ëIëçXêV
 	UpdateSelect();
+
+	m_pSmokeEffect->SetMoveDir(Vector3<float>(0.0f, 0.0f, -1.0f));
+	m_pSmokeEffect->SetCreatePosDist({ 2.0f, 0.5f, 2.0f });
+	m_pSmokeEffect->SetScale(0.5f, 1.0f);
+	m_pSmokeEffect->SetPosAdjust(-0.5f, 0.5f);
 }
 
 
@@ -196,6 +203,11 @@ void SceneTitile::Init3dOjbect()
 	m_pCatRoboModel->GetTransform()->SetPosition(CAT_ROBO_POS);
 	m_pCatRoboModel->GetTransform()->SetScale(CAT_ROBO_SCALE);
 	m_pCatRoboModel->GetTransform()->RotateY(CAT_ROBO_ROT_Y);
+	m_pSmokeEffect = m_pCatRoboModel->AddComponent<ComponentSmokeEffect>();
+	m_pSmokeEffect->SetCreatePosDist({ 1.f, 1.0f, 1.0f });
+	m_pSmokeEffect->SetCreateInterval(0.01f);
+	m_pSmokeEffect->SetLifeTime(0.1f);
+
 	// ãÛ
 	m_pSkyBox = AddSceneObject<ObjectSkyBox>("SkyBox");
 	m_pSkyBox->GetTransform()->ScaleY(SKY_BOX_SCALE_Y);	// ècÇ…í◊Ç∑(â_Çå©Ç¶Ç‚Ç∑Ç≠Ç∑ÇÈ)

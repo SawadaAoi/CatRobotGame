@@ -182,6 +182,7 @@
     <ClCompile Include="ComponentEnemyMoveLinear.cpp" />
     <ClCompile Include="ComponentGroundBox.cpp" />
     <ClCompile Include="ComponentLightBase.cpp" />
+    <ClCompile Include="ComponentSmokeEffect.cpp" />
     <ClCompile Include="DirectWriteCustomFont.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="LightManager.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="ComponentGroundBox.h" />
     <ClInclude Include="ComponentLightBase.h" />
     <ClInclude Include="ComponentOrder.h" />
+    <ClInclude Include="ComponentSmokeEffect.h" />
     <ClInclude Include="DirectWriteCustomFont.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="LightManager.h" />

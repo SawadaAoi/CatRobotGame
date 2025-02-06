@@ -17,6 +17,7 @@ class ObjectCamera;
 class UIObjectText;
 class ObjectGround;
 class ComponentGeometry;
+class ComponentSmokeEffect;
 
 // =============== ƒNƒ‰ƒX’è‹` ===================
 class SceneTitile :
@@ -42,6 +43,7 @@ private:
 	std::vector<UIObjectText*> m_pSelectMenu;
 
 	ObjectBase* m_pCatRoboModel;
+	ComponentSmokeEffect* m_pSmokeEffect;
 
 	ObjectGround*		m_pGround;
 	ComponentGeometry*	m_pCompGeometry;

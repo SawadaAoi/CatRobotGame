@@ -17,7 +17,7 @@
 #include "ComponentPlayerController.h"
 #include "ComponentGroundRaycast.h"
 #include "ComponentModelAnime.h"
-#include "ComponentSmoke.h"
+#include "ComponentSmokeEffect.h"
 
 #include "ModelAnimeManager.h"
 
@@ -88,7 +88,7 @@ void ObjectPlayer::InitLocal()
 
 	SetLightMaterial(1.0f, 1.5f, 0.3f);
 
-	AddComponent<ComponentSmoke>();
+	AddComponent<ComponentSmokeEffect>();
 }
 
 /* ========================================
