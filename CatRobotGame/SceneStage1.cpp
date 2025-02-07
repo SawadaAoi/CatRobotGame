@@ -26,7 +26,7 @@
 ======================================= */
 void SceneStage1::InitLocal()
 {
-	FileManager::StageObjectInput("Assets/Save/Stage/Stage1_0131.stg");
+	FileManager::StageObjectInput("Assets/Save/Stage/Stage1.stg");
 
 	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
 	
