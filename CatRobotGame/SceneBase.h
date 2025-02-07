@@ -89,6 +89,7 @@ public:
 
 private:
 	void UpdateCollision();	// 衝突判定更新関数
+	bool CheckUniqueName(std::string sName, std::vector<ObjectBase*> pObjects);	// 名前重複チェック
 
 #ifdef _DEBUG
 	void InitObjectList();

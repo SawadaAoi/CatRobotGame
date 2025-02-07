@@ -13,7 +13,6 @@
 #include "CameraManager.h"
 #include "ComponentCollisionBase.h"
 
-
 // =============== 定数定義 =======================
 const int OBJECT_LIST_LINE_NUM = 17;	// オブジェクトリストの行数
 
@@ -506,26 +505,30 @@ void SceneBase::UpdateCollision()
 =========================================== */
 std::string SceneBase::CreateUniqueName(std::string sName)
 {
-	// 名前が重複している場合は連番を付ける
-	int nDupCnt = 0;	// 重複回数
+	std::string sReName = sName;				// 返す名前
+	std::vector<ObjectBase*> pSelectObjects;	// 名前が含まれているオブジェクト配列
+
+	// 名前が含まれているオブジェクトを検索
+	// 例："Player"の場合、"CameraPlayer","PlayerStart","Player_1"など
 	for (auto& pObject : m_pObjects)
 	{
-		// 名前が含まれている場合(既に連番をつけている場合を想定して)
 		if (pObject->GetName().find(sName) != std::string::npos)
 		{
-			nDupCnt++;
+			pSelectObjects.push_back(pObject.get());
 		}
 	}
+	// 重複していない場合はそのまま返す
+	if (pSelectObjects.size() == 0) return sName;	
 
-	if (nDupCnt > 0)
+	int nDupCnt = 0;	// 重複回数
+	// 名前が重複している場合は連番を付ける(重複がなくなるまで)
+	while (!CheckUniqueName(sReName, pSelectObjects))
 	{
-		sName += "_" + std::to_string(nDupCnt);	
-		return sName = CreateUniqueName(sName);	// オブジェクト名と重複チェック
+		nDupCnt++;
+		sReName = sName + "_" + std::to_string(nDupCnt);
 	}
-	else
-	{
-		return sName;
-	}
+
+	return sReName;
 
 }
 
@@ -562,6 +565,32 @@ std::string SceneBase::CreateUniqueUIName(std::string sName)
 		return sName;
 	}
 }
+
+/* ========================================
+	名前重複チェック関数
+	-------------------------------------
+	内容：名前が重複しているかチェック
+		　名前が含まれているオブジェクトの配列を渡す
+	-------------------------------------
+	引数1：sName	名前
+	引数2：pObjects	オブジェクト配列
+	-------------------------------------
+	戻値：重複しているかどうか
+=========================================== */
+bool SceneBase::CheckUniqueName(std::string sName, std::vector<ObjectBase*> pObjects)
+{
+	for (auto& pObject : pObjects)
+	{
+		// 同じ名前がある場合
+		if (sName == pObject->GetName())
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 
 
 /* ========================================

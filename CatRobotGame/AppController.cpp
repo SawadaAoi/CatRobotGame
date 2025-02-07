@@ -10,7 +10,6 @@
 #include "AppController.h"
 #include "DirectXManager.h"		// DirectX管理			
 #include "Input.h"
-#include "DebugConsole.h"
 #include "ShaderManager.h"
 
 #include "SceneManager.h"
@@ -59,10 +58,6 @@ HRESULT AppController::Init()
 
 	SceneManager::Init();	// シーン管理初期化
 
-	//DebugConsole::Init();	// デバッグコンソール初期化
-
-
-
 	GridLine::Init();	// グリッド線初期化
 
 
@@ -81,8 +76,6 @@ void AppController::Uninit()
 	DebugUI::Menu::Uninit();
 #endif
 
-	DebugConsole::Uninit();	// デバッグコンソール終了
-
 	DirectXManager::UninitDirectX();	// DirectX終了
 }
 
@@ -97,13 +90,8 @@ void AppController::Update(float tick)
 {
 
 	TimeManager::Update(tick);	// 時間管理更新
-
-
-
-
 	SceneManager::Update();
 
-	//DebugConsole::Update();	// デバッグコンソール更新
 
 }
 
@@ -120,11 +108,16 @@ void AppController::Draw()
 #endif // _DEBUG
 	SceneManager::Draw();	// シーン描画
 
+
 #ifdef _DEBUG
 	DebugUI::Menu::Draw();
 #endif
 
 	DirectXManager::EndDrawDirectX();	// バックバッファをフロントバッファにコピー
+
+	// シーン再読み込みが指示されていたら
+	if (SceneManager::GetIsReloadScene())
+		SceneManager::ReloadScene();
 }
 
 
