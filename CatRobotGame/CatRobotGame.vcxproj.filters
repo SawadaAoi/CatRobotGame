@@ -240,6 +240,9 @@
     <Filter Include="ソース ファイル\App\GameObject\Effect">
       <UniqueIdentifier>{b47a302c-0d34-4b87-8b06-38a24f002e21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\Scene\Select">
+      <UniqueIdentifier>{66125a17-3406-4cf8-a11f-34a1bfd43ff2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -592,6 +595,9 @@
     </ClCompile>
     <ClCompile Include="ComponentSmokeEffect.cpp">
       <Filter>ソース ファイル\App\Component\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneStageSelect.cpp">
+      <Filter>ソース ファイル\App\Scene\Select</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -957,6 +963,9 @@
     </ClInclude>
     <ClInclude Include="ComponentSmokeEffect.h">
       <Filter>ソース ファイル\App\Component\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneStageSelect.h">
+      <Filter>ソース ファイル\App\Scene\Select</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

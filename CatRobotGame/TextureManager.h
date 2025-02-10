@@ -44,6 +44,7 @@ public:
 		TITLE_LOGO,			// タイトルロゴ
 		EFFECT_EXPLOSION,	// 爆発エフェクト
 		EFFECT_SMOKE,		// 煙エフェクト
+		STAGE_IMG_STAGE1,	// ステージ1画像
 		MAX,
 	};
 
@@ -67,6 +68,8 @@ public:
 		{TEX_KEY::TITLE_LOGO,			"Assets/Texture/Title_Logo.png"				},
 		{TEX_KEY::EFFECT_EXPLOSION,		"Assets/Texture/Effect_Explosion.png"		},
 		{TEX_KEY::EFFECT_SMOKE,			"Assets/Texture/Effect_Smoke.png"			},
+		{TEX_KEY::STAGE_IMG_STAGE1,		"Assets/Texture/StageImage/Stage1.png"		},
+
 
 	};
 

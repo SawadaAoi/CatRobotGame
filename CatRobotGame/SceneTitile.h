@@ -36,17 +36,21 @@ private:
 	void UpdateSelect();
 	void SelectMenuAnim();
 
+	// メニュー関数
 	void FuncStart();
 	void FuncEnd();
 private:
-	UIObjectBase* m_pTitleLogo;
-	std::vector<UIObjectText*> m_pSelectMenu;
+	// UI
+	UIObjectBase*				m_pTitleLogo;
+	std::vector<UIObjectText*>	m_pSelectMenu;
 
-	ObjectBase* m_pCatRoboModel;
-	ComponentSmokeEffect* m_pSmokeEffect;
+	// 3Dオブジェクト
+	ObjectBase*				m_pCatRoboModel;
+	ComponentSmokeEffect*	m_pSmokeEffect;
 
 	ObjectGround*		m_pGround;
 	ComponentGeometry*	m_pCompGeometry;
+
 	ObjectBase*			m_pSkyBox;
 
 	// カメラ
@@ -54,9 +58,8 @@ private:
 	int		m_nCameraSwitchNum;		// 0～3
 	float	m_fCameraSwitchTime;
 
-	int m_nSelectNum;	// 選択番号
+	int m_nSelectNum;		// 選択番号
 	float m_fTextAnimeCnt;	// テキストアニメーションカウント
-
 
 	std::vector<Function> m_MenuFunctions;
 };

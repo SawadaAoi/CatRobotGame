@@ -8,7 +8,7 @@
 
 // =============== インクルード ===================
 #include "SceneTitile.h"
-#include "SceneStage1.h"
+#include "SceneStageSelect.h"
 
 #include "ObjectBase.h"
 #include "ObjectCamera.h"
@@ -65,7 +65,7 @@ const float				CAT_ROBO_ROT_Y = 180.0f;
 // 地面
 const Vector3<float>	GROUND_POS = Vector3<float>(0.0f, -1.0f, 0.0f);
 const Vector3<float>	GROUND_SCALE = Vector3<float>(200.0f, 1.0f, 200.0f);
-const float				MOVE_UV_SPEED = 0.05f;
+const float				MOVE_UV_SPEED = -50.0f;
 // スカイボックス
 const float				SKY_BOX_SCALE_Y = 0.5f;
 
@@ -131,6 +131,12 @@ void SceneTitile::InitLocal()
 	m_MenuFunctions.push_back(&SceneTitile::FuncStart);
 	m_MenuFunctions.push_back(&SceneTitile::FuncEnd);
 
+
+	m_pSmokeEffect->SetMoveDir(Vector3<float>(0.0f, 0.0f, -1.0f));
+	m_pSmokeEffect->SetCreatePosDist({ 2.0f, 0.5f, 2.0f });
+	m_pSmokeEffect->SetScale(0.5f, 1.0f);
+	m_pSmokeEffect->SetPosAdjust(-0.5f, 0.5f);
+
 }
 
 /* ========================================
@@ -157,10 +163,6 @@ void SceneTitile::UpdateLocal()
 	// 選択更新
 	UpdateSelect();
 
-	m_pSmokeEffect->SetMoveDir(Vector3<float>(0.0f, 0.0f, -1.0f));
-	m_pSmokeEffect->SetCreatePosDist({ 2.0f, 0.5f, 2.0f });
-	m_pSmokeEffect->SetScale(0.5f, 1.0f);
-	m_pSmokeEffect->SetPosAdjust(-0.5f, 0.5f);
 }
 
 
@@ -203,10 +205,12 @@ void SceneTitile::Init3dOjbect()
 	m_pCatRoboModel->GetTransform()->SetPosition(CAT_ROBO_POS);
 	m_pCatRoboModel->GetTransform()->SetScale(CAT_ROBO_SCALE);
 	m_pCatRoboModel->GetTransform()->RotateY(CAT_ROBO_ROT_Y);
+	// 煙エフェクト
 	m_pSmokeEffect = m_pCatRoboModel->AddComponent<ComponentSmokeEffect>();
-	m_pSmokeEffect->SetCreatePosDist({ 1.f, 1.0f, 1.0f });
+	m_pSmokeEffect->SetCreatePosDist({ 1.0f, 1.0f, 1.0f });
 	m_pSmokeEffect->SetCreateInterval(0.01f);
-	m_pSmokeEffect->SetLifeTime(0.1f);
+	m_pSmokeEffect->SetLifeTime(0.3f);
+	m_pSmokeEffect->SetScale(0.5f, 2.0f);
 
 	// 空
 	m_pSkyBox = AddSceneObject<ObjectSkyBox>("SkyBox");
@@ -216,8 +220,9 @@ void SceneTitile::Init3dOjbect()
 	m_pGround->GetTransform()->SetPosition(GROUND_POS);
 	m_pGround->GetTransform()->SetScale(GROUND_SCALE);
 	m_pCompGeometry = m_pGround->GetComponent<ComponentGeometry>();
-	m_pCompGeometry->SetTexture(GET_TEXTURE_DATA(TEX_KEY::GROUND_GRASS));
+	m_pCompGeometry->SetTexture(GET_TEXTURE_DATA(TEX_KEY::GROUND_GRASS_TOP));
 	m_pCompGeometry->SetIsTex(true);
+	m_pCompGeometry->SetUvScale({ 100.0f, 100.0f });
 }
 
 /* ========================================
@@ -275,7 +280,7 @@ void SceneTitile::SelectMenuAnim()
 void SceneTitile::FuncStart()
 {
 	// シーン遷移
-	SceneManager::ChangeScene<SceneStage1>();
+	SceneManager::ChangeScene<SceneStageSelect>();
 }
 
 /* ========================================
