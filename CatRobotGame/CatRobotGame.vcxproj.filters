@@ -243,6 +243,12 @@
     <Filter Include="ソース ファイル\App\Scene\Select">
       <UniqueIdentifier>{66125a17-3406-4cf8-a11f-34a1bfd43ff2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\Component\StageGimmick">
+      <UniqueIdentifier>{9bf7d932-cdfd-40ad-8b96-e85ca8e54b3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\App\GameObject\StageGimmick">
+      <UniqueIdentifier>{ad5520f9-7a5b-4702-b680-20f37ee2767f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -598,6 +604,12 @@
     </ClCompile>
     <ClCompile Include="SceneStageSelect.cpp">
       <Filter>ソース ファイル\App\Scene\Select</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentGimmickMoveLinear.cpp">
+      <Filter>ソース ファイル\App\Component\StageGimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectMoveFloor.cpp">
+      <Filter>ソース ファイル\App\GameObject\StageGimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -966,6 +978,12 @@
     </ClInclude>
     <ClInclude Include="SceneStageSelect.h">
       <Filter>ソース ファイル\App\Scene\Select</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentGimmickMoveLinear.h">
+      <Filter>ソース ファイル\App\Component\StageGimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectMoveFloor.h">
+      <Filter>ソース ファイル\App\GameObject\StageGimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

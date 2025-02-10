@@ -180,6 +180,7 @@
     <ClCompile Include="ComponentEnemyMoveRandom.cpp" />
     <ClCompile Include="ComponentEnemyState.cpp" />
     <ClCompile Include="ComponentEnemyMoveLinear.cpp" />
+    <ClCompile Include="ComponentGimmickMoveLinear.cpp" />
     <ClCompile Include="ComponentGroundBox.cpp" />
     <ClCompile Include="ComponentLightBase.cpp" />
     <ClCompile Include="ComponentSmokeEffect.cpp" />
@@ -242,6 +243,7 @@
     <ClCompile Include="ObjectLightDirectional.cpp" />
     <ClCompile Include="ObjectLightPoint.cpp" />
     <ClCompile Include="ObjectLightSpot.cpp" />
+    <ClCompile Include="ObjectMoveFloor.cpp" />
     <ClCompile Include="ObjectPlayer.cpp" />
     <ClCompile Include="ObjectPlayerStart.cpp" />
     <ClCompile Include="ObjectRespawn.cpp" />
@@ -300,6 +302,7 @@
     <ClInclude Include="ComponentEnemyMoveRandom.h" />
     <ClInclude Include="ComponentEnemyState.h" />
     <ClInclude Include="ComponentEnemyMoveLinear.h" />
+    <ClInclude Include="ComponentGimmickMoveLinear.h" />
     <ClInclude Include="ComponentGroundBox.h" />
     <ClInclude Include="ComponentLightBase.h" />
     <ClInclude Include="ComponentOrder.h" />
@@ -365,6 +368,7 @@
     <ClInclude Include="ObjectLightDirectional.h" />
     <ClInclude Include="ObjectLightPoint.h" />
     <ClInclude Include="ObjectLightSpot.h" />
+    <ClInclude Include="ObjectMoveFloor.h" />
     <ClInclude Include="ObjectPlayer.h" />
     <ClInclude Include="ObjectPlayerStart.h" />
     <ClInclude Include="ObjectRespawn.h" />

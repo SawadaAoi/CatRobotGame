@@ -12,6 +12,7 @@
 #include "FileManager.h"
 #include "ObjectBlockGroundOBB.h"
 #include "ComponentTransform.h"
+#include "ObjectMoveFloor.h"
 
 /* ========================================
 	èâä˙âªä÷êî
@@ -24,5 +25,8 @@ void SceneGameTest::InitLocal()
 	FileManager::UIInput("Assets/Save/GameUI/PlayerHP.ui");
 
 	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
+
+	
+	AddSceneObject<ObjectMoveFloor>("moveFlr");
 }
 
