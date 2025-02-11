@@ -544,26 +544,30 @@ std::string SceneBase::CreateUniqueName(std::string sName)
 =========================================== */
 std::string SceneBase::CreateUniqueUIName(std::string sName)
 {
-	// 名前が重複している場合は連番を付ける
-	int nDupCnt = 0;	// 重複回数
-	for (auto& pUIObject : m_pUIObjects)
+	std::string sReName = sName;			// 返す名前
+	std::vector<UIObjectBase*> pSelectUIs;	// 名前が含まれているUIオブジェクト配列
+
+	// 名前が含まれているUIオブジェクトを検索
+	// 例："Player"の場合、"CameraPlayer","PlayerStart","Player_1"など
+	for (auto& pUI : m_pUIObjects)
 	{
-		// 名前が含まれている場合(既に連番をつけている場合を想定して)
-		if (pUIObject->GetName().find(sName) != std::string::npos)
+		if (pUI->GetName().find(sName) != std::string::npos)
 		{
-			nDupCnt++;
+			pSelectUIs.push_back(pUI.get());
 		}
 	}
+	// 重複していない場合はそのまま返す
+	if (pSelectUIs.size() == 0) return sName;
 
-	if (nDupCnt > 0)
+	int nDupCnt = 0;	// 重複回数
+	// 名前が重複している場合は連番を付ける(重複がなくなるまで)
+	while (!CheckUniqueUIName(sReName, pSelectUIs))
 	{
-		sName += "_" + std::to_string(nDupCnt);
-		return sName = CreateUniqueUIName(sName);	// UIオブジェクト名と重複チェック
+		nDupCnt++;
+		sReName = sName + "_" + std::to_string(nDupCnt);
 	}
-	else
-	{
-		return sName;
-	}
+
+	return sReName;
 }
 
 /* ========================================
@@ -591,7 +595,30 @@ bool SceneBase::CheckUniqueName(std::string sName, std::vector<ObjectBase*> pObj
 	return true;
 }
 
+/* ========================================
+	名前重複チェック(UI)関数
+	-------------------------------------
+	内容：名前が重複しているかチェック
+		　名前が含まれているオブジェクトの配列を渡す
+	-------------------------------------
+	引数1：sName	名前
+	引数2：pUIs	UI配列
+	-------------------------------------
+	戻値：重複しているかどうか
+=========================================== */
+bool SceneBase::CheckUniqueUIName(std::string sName, std::vector<UIObjectBase*> pUIs)
+{
+	for (auto& pUI : pUIs)
+	{
+		// 同じ名前がある場合
+		if (sName == pUI->GetName())
+		{
+			return false;
+		}
+	}
 
+	return true;
+}
 
 /* ========================================
 	全オブジェクト取得関数
