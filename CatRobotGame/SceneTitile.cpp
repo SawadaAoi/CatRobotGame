@@ -174,7 +174,7 @@ void SceneTitile::UpdateLocal()
 void SceneTitile::InitUI()
 {
 	m_pTitleLogo = AddSceneUI<UIObjectBase>("TitleLogo");
-	m_pTitleLogo->GetComponent<UIComponentSprite>()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::TITLE_LOGO));
+	m_pTitleLogo->GetComponent<UIComponentSprite>()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_TITLE_LOGO));
 	m_pTitleLogo->GetTransform()->SetLocalPosition(TITLE_LOGO_POS);
 	m_pTitleLogo->GetTransform()->SetLocalScale(TITLE_LOGO_SCALE);
 
@@ -220,7 +220,7 @@ void SceneTitile::Init3dOjbect()
 	m_pGround->GetTransform()->SetPosition(GROUND_POS);
 	m_pGround->GetTransform()->SetScale(GROUND_SCALE);
 	m_pCompGeometry = m_pGround->GetComponent<ComponentGeometry>();
-	m_pCompGeometry->SetTexture(GET_TEXTURE_DATA(TEX_KEY::GROUND_GRASS_TOP));
+	m_pCompGeometry->SetTexture(GET_TEXTURE_DATA(TEX_KEY::BLOCK_GRASS_TOP));
 	m_pCompGeometry->SetIsTex(true);
 	m_pCompGeometry->SetUvScale({ 100.0f, 100.0f });
 }

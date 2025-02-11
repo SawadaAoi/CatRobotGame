@@ -43,7 +43,7 @@ void ObjectLight::InitLocal()
 	m_pCompLightBase = AddComponent<ComponentLightBase>();
 #ifdef _DEBUG	// ライトアイコン表示
 	ComponentBillboard* pCompBillboard = AddComponent<ComponentBillboard>();
-	pCompBillboard->SetTexture(GET_TEXTURE_DATA(TEX_KEY::LIGHT_ICON));
+	pCompBillboard->SetTexture(GET_TEXTURE_DATA(TEX_KEY::DEBUG_LIGHT_ICON));
 #endif
 }
 

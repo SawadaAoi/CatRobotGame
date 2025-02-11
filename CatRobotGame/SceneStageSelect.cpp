@@ -41,7 +41,7 @@ const std::vector<std::string> SCENE_NAME =
 // ステージ画像
 const TextureManager::E_TEX_KEY SCENE_IMAGE[3] =
 {
-	TextureManager::E_TEX_KEY::CAMERA_ICON,
+	TextureManager::E_TEX_KEY::DEBUG_CAMERA_ICON,
 	TextureManager::E_TEX_KEY::BLOCK_SIMPLE,
 	TextureManager::E_TEX_KEY::STAGE_IMG_STAGE1,
 };
