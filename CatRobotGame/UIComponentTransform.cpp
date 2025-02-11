@@ -370,6 +370,8 @@ void UIComponentTransform::SetPosition(Vector2<float> vPos)
 	{
 		m_vLocalPosition = vPos;
 	}
+	// ワールド座標の更新
+	UpdateWorldTransform();
 }
 
 
@@ -408,6 +410,8 @@ void UIComponentTransform::SetRotation(float fRot)
 	{
 		m_fLocalRotation = fRot;
 	}
+	// ワールド座標の更新
+	UpdateWorldTransform();
 }
 
 /* ========================================
@@ -431,6 +435,8 @@ void UIComponentTransform::SetScale(Vector2<float> vScale)
 	{
 		m_vLocalScale = vScale;
 	}
+	// ワールド座標の更新
+	UpdateWorldTransform();
 }
 
 /* ========================================

@@ -264,9 +264,9 @@ void FileManager::UIInput(std::string sPath)
 
 			// 位置、回転、拡大の設定
 			UIComponentTransform* pTransform = pUI->GetComponent<UIComponentTransform>();
-			pTransform->SetLocalPosition(data.vPos);
-			pTransform->SetLocalRotation(data.fRot);
-			pTransform->SetLocalScale(data.vScale);
+			pTransform->SetPosition(data.vPos);
+			pTransform->SetRotation(data.fRot);
+			pTransform->SetScale(data.vScale);
 
 			// シーンに追加
 			pScene->AddSceneUI(pUI);

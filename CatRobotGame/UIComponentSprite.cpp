@@ -35,6 +35,7 @@ UIComponentSprite::UIComponentSprite(UIObjectBase* owner)
 	, m_vUvScale(1.0f, 1.0f)
 	, m_vColor(1.0f, 1.0f, 1.0f)
 	, m_fAlpha(1.0f)
+	, m_bIsVisible(true)
 {
 }
 

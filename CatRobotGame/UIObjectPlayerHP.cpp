@@ -18,8 +18,9 @@
 // =============== 定数定義 =======================
 const Vector2<float> DEFAULT_SCALE = Vector2<float>(100.0f, 100.0f);
 
-const std::string HEART_OBJECT_NAME			= "Heart_";
-const Vector2<float> HEART_TEXTURE_RATIO	= Vector2<float>(140.0f, 100.0f);
+const std::string		HEART_OBJECT_NAME = "Heart_";							// HPオブジェクト名
+const Vector2<float>	HEART_TEXTURE_SCALE = Vector2<float>(100.0f, 100.0f);	// HPテクスチャのスケール
+const float				HEART_TEXTURE_SPACE = 70.0f;							// HPテクスチャの間隔
 
 /* ========================================
 	コンストラクタ関数
@@ -30,6 +31,7 @@ const Vector2<float> HEART_TEXTURE_RATIO	= Vector2<float>(140.0f, 100.0f);
 ========================================== */
 UIObjectPlayerHP::UIObjectPlayerHP(SceneBase* pScene)
 	: UIObjectBase(pScene)
+	, m_pPlayerIcon(nullptr)
 	, m_pPlayer(nullptr)
 {
 }
@@ -44,8 +46,16 @@ void UIObjectPlayerHP::InitLocal()
 {
 	m_pPlayer = static_cast<ObjectPlayer*>(m_pOwnerScene->GetSceneObjectTag(E_ObjectTag::Player));
 
-	m_pCompTransform->SetLocalScale(DEFAULT_SCALE);
+	// 初期パラメータ設定
+	m_pCompTransform->SetScale(DEFAULT_SCALE);
 	m_pCompSprite->SetIsVisible(false);
+
+	// プレイヤーアイコンを設定(一番左)
+	m_pPlayerIcon = m_pOwnerScene->AddSceneUI<UIObjectBase>("0_PlayerIcon");
+	m_pPlayerIcon->GetTransform()->SetPosition(GetTransform()->GetPosition());
+	m_pPlayerIcon->GetTransform()->SetScale(DEFAULT_SCALE);
+	m_pPlayerIcon->GetComponent<UIComponentSprite>()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_PLAYER_ICON));
+	AddChildUI(m_pPlayerIcon);
 
 	// プレイヤーが存在する場合はHPを生成
 	if (m_pPlayer) CreateHP();
@@ -59,6 +69,7 @@ void UIObjectPlayerHP::InitLocal()
 ========================================== */
 void UIObjectPlayerHP::UpdateLocal()
 {
+
 	// プレイヤーが存在しない場合は取得する
 	if (!m_pPlayer)
 	{
@@ -88,19 +99,19 @@ void UIObjectPlayerHP::CreateHP()
 	int nHP = m_pPlayer->GetHp();		// TODO: プレイヤーのHPを取得する
 
 	// HP数分のハートを生成
-	for (int i = 0; i < nHP; i++)
+	for (int i = 1; i <= nHP; i++)
 	{
 		// ハートオブジェクトを生成(名前は"Heart_" + i)
 		UIObjectBase* pUIObject = m_pOwnerScene->AddSceneUI<UIObjectBase>(HEART_OBJECT_NAME + std::to_string(i));
 
 		// トランスフォーム
-		UIComponentTransform* pCompTrans = pUIObject->GetComponent<UIComponentTransform>();
-		Vector2<float> vPos = GetTransform()->GetPosition() + Vector2<float>(i * DEFAULT_SCALE.x, 0.0f);
-		pCompTrans->SetLocalPosition(vPos);
-		pCompTrans->SetLocalScale(HEART_TEXTURE_RATIO);
+		UIComponentTransform* pCompTrans = pUIObject->GetTransform();
+		Vector2<float> vPos = GetTransform()->GetPosition() + Vector2<float>(i * HEART_TEXTURE_SPACE, 0.0f);
+		pCompTrans->SetPosition(vPos);
+		pCompTrans->SetScale(HEART_TEXTURE_SCALE);
 		// スプライト
 		UIComponentSprite* pCompSprite = pUIObject->GetComponent<UIComponentSprite>();
-		pCompSprite->SetTexture(GET_TEXTURE_DATA(TEX_KEY::PLAYER_HP));
+		pCompSprite->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_HP_HEART));
 
 		AddChildUI(pUIObject);
 		m_pUIObjectHP.push_back(pUIObject);

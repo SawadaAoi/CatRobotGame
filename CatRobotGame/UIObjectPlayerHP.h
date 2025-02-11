@@ -29,6 +29,7 @@ public:
 private:
 	void CreateHP();
 private:
+	UIObjectBase* m_pPlayerIcon;
 	std::vector<UIObjectBase*> m_pUIObjectHP;
 	ObjectPlayer* m_pPlayer;
 };
