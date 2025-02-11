@@ -15,7 +15,7 @@
 
 // =============== クラス定義 =====================
 class UIComponentTransform :
-    public UIComponentBase
+	public UIComponentBase
 {
 public:
 	UIComponentTransform(UIObjectBase* pOwner);
@@ -42,26 +42,28 @@ public:
 	void ScaleY(float y);						// Y軸スケール
 
 	// ゲッター
+	Vector2<float> GetPosition();	// ワールド座標の取得
+	float GetRotation();			// ワールド回転の取得
+	Vector2<float> GetScale();		// ワールドスケールの取得
+
 	Vector2<float> GetLocalPosition();	// ローカル座標の取得	
-	Vector2<float> GetWorldPosition();	// ワールド座標の取得
 	float GetLocalRotation();			// ローカル回転の取得
-	float GetWorldRotation();			// ワールド回転の取得
 	Vector2<float> GetLocalScale();		// ローカルスケールの取得
-	Vector2<float> GetWorldScale();		// ワールドスケールの取得
 
 	// セッター
+	void SetPosition(Vector2<float> vPos);	// ワールド座標の設定
+	void SetRotation(float fRot);			// ワールド回転の設定
+	void SetScale(Vector2<float> vScale);	// ワールドスケールの設定
 	void SetLocalPosition(Vector2<float> vPos);	// ローカル座標の設定
-	void SetWorldPosition(Vector2<float> vPos);	// ワールド座標の設定
 	void SetLocalRotation(float fRot);			// ローカル回転の設定
-	void SetWorldRotation(float fRot);			// ワールド回転の設定
 	void SetLocalScale(Vector2<float> vScale);	// ローカルスケールの設定
-	void SetWorldScale(Vector2<float> vScale);	// ワールドスケールの設定
 
-	DEFINE_UI_COMPONENT_TYPE	// コンポーネントの種類ID取得関数
 
 #ifdef _DEBUG
 	void Debug(DebugUI::Window& window) override;
 #endif // _DEBUG
+
+	DEFINE_UI_COMPONENT_TYPE	// コンポーネントの種類ID取得関数
 private:
 	// ローカル変換
 	Vector2<float>	m_vLocalPosition;	// 位置

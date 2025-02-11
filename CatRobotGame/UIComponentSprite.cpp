@@ -71,7 +71,7 @@ void UIComponentSprite::Draw()
 	// プロジェクション行列
 	matWVP[2] = CAMERA_MNG_INST.GetActiveCamera()->GetProjectionMatrixUI();
 
-	Vector2<float> vScale = m_pCompTran->GetWorldScale();
+	Vector2<float> vScale = m_pCompTran->GetScale();
 	// 頂点シェーダに渡すパラメータ
 	DirectX::XMFLOAT4 param[3];
 	param[0] = { m_vOffset.x, m_vOffset.y, vScale.x, vScale.y };		// オフセット、スケール
@@ -131,8 +131,8 @@ DirectX::XMFLOAT4X4 UIComponentSprite::CreateWorldMatrix()
 {
 	DirectX::XMFLOAT4X4 mat;
 
-	Vector2<float>	vPos	= m_pCompTran->GetWorldPosition();
-	float			fRot	= m_pCompTran->GetWorldRotation();
+	Vector2<float>	vPos	= m_pCompTran->GetPosition();
+	float			fRot	= m_pCompTran->GetRotation();
 
 	DirectX::XMStoreFloat4x4(&mat,								// Float4x4に変換して格納
 		DirectX::XMMatrixTranspose(								// 転地

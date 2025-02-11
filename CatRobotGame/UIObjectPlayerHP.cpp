@@ -95,7 +95,7 @@ void UIObjectPlayerHP::CreateHP()
 
 		// トランスフォーム
 		UIComponentTransform* pCompTrans = pUIObject->GetComponent<UIComponentTransform>();
-		Vector2<float> vPos = GetTransform()->GetWorldPosition() + Vector2<float>(i * DEFAULT_SCALE.x, 0.0f);
+		Vector2<float> vPos = GetTransform()->GetPosition() + Vector2<float>(i * DEFAULT_SCALE.x, 0.0f);
 		pCompTrans->SetLocalPosition(vPos);
 		pCompTrans->SetLocalScale(HEART_TEXTURE_RATIO);
 		// スプライト

@@ -191,9 +191,9 @@ void FileManager::UIOutput(std::string sPath)
 
 		// 位置、回転、拡大
 		UIComponentTransform* pTransform = uiObj->GetComponent<UIComponentTransform>();
-		data.vPos = pTransform->GetWorldPosition();
-		data.fRot = pTransform->GetWorldRotation();
-		data.vScale = pTransform->GetWorldScale();
+		data.vPos = pTransform->GetPosition();
+		data.fRot = pTransform->GetRotation();
+		data.vScale = pTransform->GetScale();
 
 		// オブジェクト名
 		strncpy(data.cUIName, uiObj->GetName().c_str(), sizeof(data.cUIName) - 1);

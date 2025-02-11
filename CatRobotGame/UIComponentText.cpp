@@ -77,7 +77,7 @@ void UIComponentText::Draw()
 	TEXT_WRITE.SetFontColor(m_Color);
 	TEXT_WRITE.SetFontWeight(m_Weight);
 
-	TEXT_WRITE.DrawWriteText(m_sText, m_pCompTransform->GetWorldPosition(), m_ePivot, m_bScreenOutCheck);
+	TEXT_WRITE.DrawWriteText(m_sText, m_pCompTransform->GetPosition(), m_ePivot, m_bScreenOutCheck);
 }
 
 /* ========================================

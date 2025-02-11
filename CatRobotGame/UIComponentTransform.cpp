@@ -68,31 +68,31 @@ void UIComponentTransform::UpdateWorldTransform()
 
 		// 親オブジェクトのワールド行列(回転、座標)を生成
 		DirectX::XMMATRIX parentMat =
-			DirectX::XMMatrixRotationZ(pParentTran->GetWorldRotation()) *
+			DirectX::XMMatrixRotationZ(pParentTran->GetRotation()) *
 			DirectX::XMMatrixTranslation(
-				pParentTran->GetWorldPosition().x, 
-				pParentTran->GetWorldPosition().y,
+				pParentTran->GetPosition().x,
+				pParentTran->GetPosition().y,
 				0.0f);
 
 		// 自身のローカル行列(回転、座標)と親オブジェクトのワールド行列(回転、座標)を合成
 		DirectX::XMMATRIX matrix = localMat * parentMat;
 
 		// 合成行列から座標、回転を取得
-		Vector3<float> vPos	= Vector3<float>::FromMatrix_Translation(matrix);	// 座標取得
-		Vector3<float> vRot	= Vector3<float>::FromMatrix_RotationEuler(matrix);	// 回転取得
-		m_vWorldPosition.x	= vPos.x;
-		m_vWorldPosition.y	= vPos.y;
-		m_fWorldRotation	= vRot.z;
+		Vector3<float> vPos = Vector3<float>::FromMatrix_Translation(matrix);	// 座標取得
+		Vector3<float> vRot = Vector3<float>::FromMatrix_RotationEuler(matrix);	// 回転取得
+		m_vWorldPosition.x = vPos.x;
+		m_vWorldPosition.y = vPos.y;
+		m_fWorldRotation = vRot.z;
 
 		// ワールドスケールを計算(回転、座標と一緒に計算すると大きさが不正確になるため別で計算)
-		m_vWorldScale = m_vLocalScale * pParentTran->GetWorldScale();
+		m_vWorldScale = m_vLocalScale * pParentTran->GetScale();
 	}
 	else
 	{
 		// 親オブジェクトがない場合はローカル座標をワールド座標に設定
-		m_vWorldPosition	= m_vLocalPosition;
-		m_fWorldRotation	= m_fLocalRotation;
-		m_vWorldScale		= m_vLocalScale;
+		m_vWorldPosition = m_vLocalPosition;
+		m_fWorldRotation = m_fLocalRotation;
+		m_vWorldScale = m_vLocalScale;
 	}
 }
 
@@ -104,9 +104,9 @@ void UIComponentTransform::UpdateWorldTransform()
 void UIComponentTransform::ClearParent()
 {
 	// ワールド座標をローカル座標に設定(現在の状態を保持するため)
-	m_vLocalPosition	= m_vWorldPosition;
-	m_fLocalRotation	= m_fWorldRotation;
-	m_vLocalScale		= m_vWorldScale;
+	m_vLocalPosition = m_vWorldPosition;
+	m_fLocalRotation = m_fWorldRotation;
+	m_vLocalScale = m_vWorldScale;
 }
 
 /* ========================================
@@ -125,15 +125,15 @@ void UIComponentTransform::RecalculateLocalTransform()
 	UIComponentTransform* pParentTran = m_pOwnerObj->GetParentUI()->GetComponent<UIComponentTransform>();
 	// 親オブジェクトのワールド行列(回転、座標)を生成
 	DirectX::XMMATRIX parentMat =
-		DirectX::XMMatrixRotationZ(pParentTran->GetWorldRotation()) *		// 回転
+		DirectX::XMMatrixRotationZ(pParentTran->GetRotation()) *		// 回転
 		DirectX::XMMatrixTranslation(							// 座標		
-			pParentTran->GetWorldPosition().x,
-			pParentTran->GetWorldPosition().y,
+			pParentTran->GetPosition().x,
+			pParentTran->GetPosition().y,
 			0.0f);
 
 	// ローカル行列(回転、座標)を生成
 	DirectX::XMMATRIX localMat =
-		DirectX::XMMatrixRotationZ(m_fWorldRotation)*
+		DirectX::XMMatrixRotationZ(m_fWorldRotation) *
 		DirectX::XMMatrixTranslation(m_vWorldPosition.x, m_vWorldPosition.y, 0.0f);
 
 	// 親のワールド行列の逆行列を取得
@@ -145,12 +145,12 @@ void UIComponentTransform::RecalculateLocalTransform()
 	// 作成した行列から座標、回転を取得
 	Vector3<float> vPos = Vector3<float>::FromMatrix_Translation(computedLocalMatrix);		// 座標取得
 	Vector3<float> vRot = Vector3<float>::FromMatrix_RotationEuler(computedLocalMatrix);	// 回転取得
-	m_vLocalPosition.x	= vPos.x;
-	m_vLocalPosition.y	= vPos.y;
-	m_fLocalRotation	= vRot.z;
+	m_vLocalPosition.x = vPos.x;
+	m_vLocalPosition.y = vPos.y;
+	m_fLocalRotation = vRot.z;
 
 	// 大きさの再計算(回転、座標と一緒に計算すると大きさが不正確になるため別で計算)
-	m_vLocalScale = m_vWorldScale / pParentTran->GetWorldScale();
+	m_vLocalScale = m_vWorldScale / pParentTran->GetScale();
 }
 
 /* ========================================
@@ -269,6 +269,35 @@ void UIComponentTransform::ScaleY(float y)
 	UpdateWorldTransform();
 }
 
+/* ========================================
+	ゲッター(ワールド座標)関数
+	-------------------------------------
+	戻値：座標	Vector3<float>
+=========================================== */
+Vector2<float> UIComponentTransform::GetPosition()
+{
+	return m_vWorldPosition;
+}
+
+/* ========================================
+	ゲッター(ワールド回転)関数
+	-------------------------------------
+	戻値：回転	float
+=========================================== */
+float UIComponentTransform::GetRotation()
+{
+	return m_fWorldRotation;
+}
+
+/* ========================================
+	ゲッター(ワールドスケール)関数
+	-------------------------------------
+	戻値：スケール	Vector3<float>
+=========================================== */
+Vector2<float> UIComponentTransform::GetScale()
+{
+	return m_vWorldScale;
+}
 
 /* ========================================
 	ゲッター(ローカル座標)関数
@@ -281,16 +310,6 @@ Vector2<float> UIComponentTransform::GetLocalPosition()
 }
 
 /* ========================================
-	ゲッター(ワールド座標)関数
-	-------------------------------------
-	戻値：座標	Vector3<float>
-=========================================== */
-Vector2<float> UIComponentTransform::GetWorldPosition()
-{
-	return m_vWorldPosition;
-}
-
-/* ========================================
 	ゲッター(ローカル回転)関数
 	-------------------------------------
 	戻値：回転	float
@@ -300,15 +319,6 @@ float UIComponentTransform::GetLocalRotation()
 	return m_fLocalRotation;
 }
 
-/* ========================================
-	ゲッター(ワールド回転)関数
-	-------------------------------------
-	戻値：回転	float
-=========================================== */
-float UIComponentTransform::GetWorldRotation()
-{
-	return m_fWorldRotation;
-}
 
 /* ========================================
 	ゲッター(ローカルスケール)関数
@@ -320,14 +330,107 @@ Vector2<float> UIComponentTransform::GetLocalScale()
 	return m_vLocalScale;
 }
 
+
 /* ========================================
-	ゲッター(ワールドスケール)関数
+	セッター(ワールド座標)関数
 	-------------------------------------
-	戻値：スケール	Vector3<float>
+	引数：座標	Vector3<float>
 =========================================== */
-Vector2<float> UIComponentTransform::GetWorldScale()
+void UIComponentTransform::SetPosition(Vector2<float> vPos)
 {
-	return m_vWorldScale;
+	m_vWorldPosition = vPos;
+
+	if (m_pOwnerObj->GetParentUI())
+	{
+		// 親オブジェクトのTransformコンポーネントを取得
+		UIComponentTransform* pParentTran = m_pOwnerObj->GetParentUI()->GetTransform();
+		// 親オブジェクトのワールド行列(座標)を生成
+		DirectX::XMMATRIX parentMat = DirectX::XMMatrixTranslation(
+			pParentTran->GetPosition().x, pParentTran->GetPosition().y, 0.0f);
+
+		// ローカル行列(座標)を生成
+		DirectX::XMMATRIX localMat = DirectX::XMMatrixTranslation(vPos.x, vPos.y, 0.0f);
+
+		// 親のワールド行列の逆行列を取得
+		DirectX::XMMATRIX parentMatInv = DirectX::XMMatrixInverse(nullptr, parentMat);
+
+		// ローカル行列と親の逆行列を掛け合わせてローカル行列を取得
+		DirectX::XMMATRIX localMatInv = localMat * parentMatInv;
+
+		// 作成した行列から座標を取得
+		Vector3<float> vPos = Vector3<float>::FromMatrix_Translation(localMatInv);	// 座標取得
+
+		m_vLocalPosition.x = vPos.x;
+		m_vLocalPosition.y = vPos.y;
+
+		// ワールド座標の更新
+		UpdateWorldTransform();
+	}
+	else
+	{
+		m_vLocalPosition = vPos;
+	}
+}
+
+
+/* ========================================
+	セッター(ワールド回転)関数
+	-------------------------------------
+	引数：回転	float
+=========================================== */
+void UIComponentTransform::SetRotation(float fRot)
+{
+	if (m_pOwnerObj->GetParentUI())
+	{
+		// 親オブジェクトのTransformコンポーネントを取得
+		UIComponentTransform* pParentTran = m_pOwnerObj->GetParentUI()->GetTransform();
+		// 親オブジェクトのワールド行列(回転)を生成
+		DirectX::XMMATRIX parentMat = DirectX::XMMatrixRotationZ(pParentTran->GetRotation());
+
+		// ローカル行列(回転)を生成
+		DirectX::XMMATRIX localMat = DirectX::XMMatrixRotationZ(fRot);
+
+		// 親のワールド行列の逆行列を取得
+		DirectX::XMMATRIX parentMatInv = DirectX::XMMatrixInverse(nullptr, parentMat);
+
+		// ローカル行列と親の逆行列を掛け合わせてローカル行列を取得
+		DirectX::XMMATRIX localMatInv = localMat * parentMatInv;
+
+		// 作成した行列から回転を取得
+		Vector3<float> vRot = Vector3<float>::FromMatrix_RotationEuler(localMatInv);	// 回転取得
+
+		m_fLocalRotation = vRot.z;
+
+		// ワールド座標の更新
+		UpdateWorldTransform();
+	}
+	else
+	{
+		m_fLocalRotation = fRot;
+	}
+}
+
+/* ========================================
+	セッター(ワールドスケール)関数
+	-------------------------------------
+	引数：スケール	Vector3<float>
+=========================================== */
+void UIComponentTransform::SetScale(Vector2<float> vScale)
+{
+	if (m_pOwnerObj->GetParentUI())
+	{
+		// 親オブジェクトのTransformコンポーネントを取得
+		UIComponentTransform* pParentTran = m_pOwnerObj->GetParentUI()->GetTransform();
+
+		m_vLocalScale = vScale / pParentTran->GetScale();
+
+		// ワールド座標の更新
+		UpdateWorldTransform();
+	}
+	else
+	{
+		m_vLocalScale = vScale;
+	}
 }
 
 /* ========================================
@@ -342,16 +445,6 @@ void UIComponentTransform::SetLocalPosition(Vector2<float> vPos)
 }
 
 /* ========================================
-	セッター(ワールド座標)関数
-	-------------------------------------
-	引数：座標	Vector3<float>
-=========================================== */
-void UIComponentTransform::SetWorldPosition(Vector2<float> vPos)
-{
-	m_vWorldPosition = vPos;
-}
-
-/* ========================================
 	セッター(ローカル回転)関数
 	-------------------------------------
 	引数：回転	float
@@ -363,16 +456,6 @@ void UIComponentTransform::SetLocalRotation(float fRot)
 }
 
 /* ========================================
-	セッター(ワールド回転)関数
-	-------------------------------------
-	引数：回転	float
-=========================================== */
-void UIComponentTransform::SetWorldRotation(float fRot)
-{
-	m_fWorldRotation = fRot;
-}
-
-/* ========================================
 	セッター(ローカルスケール)関数
 	-------------------------------------
 	引数：スケール	Vector3<float>
@@ -381,16 +464,6 @@ void UIComponentTransform::SetLocalScale(Vector2<float> vScale)
 {
 	m_vLocalScale = vScale;
 	UpdateWorldTransform();
-}
-
-/* ========================================
-	セッター(ワールドスケール)関数
-	-------------------------------------
-	引数：スケール	Vector3<float>
-=========================================== */
-void UIComponentTransform::SetWorldScale(Vector2<float> vScale)
-{
-	m_vWorldScale = vScale;
 }
 
 #ifdef _DEBUG
