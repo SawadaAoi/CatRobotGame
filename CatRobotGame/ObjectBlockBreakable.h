@@ -28,7 +28,5 @@ public:
 private:
 	int m_nHp;		// HP
 	int m_nHpOld;	// HP(‘O‰ñ)
-
-	bool m_bIsBreak;	// ‰ó‚ê‚½‚©‚Ç‚¤‚©
 };
 

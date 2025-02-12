@@ -37,6 +37,9 @@ ObjectBase::ObjectBase(SceneBase* pScene)
 	, m_sName("NoName")					// オブジェクト名をNoNameに設定
 	, m_tLightParam{ DEFAULT_LIGHT_DIFFUSE, DEFAULT_LIGHT_SPECULAR, DEFAULT_LIGHT_AMBIENT, true}	// ライトパラメータ初期化
 	, m_bIsFold(false)					// オブジェクト一覧折りたたみフラグをfalseに設定
+	, m_bIsDestroy(false)				// オブジェクト破棄フラグをfalseに設定
+	, m_fDestroyTime(0.0f)				// 破棄時間を0に設定
+	, m_fDestroyTimeCnt(0.0f)			// 破棄時間カウントを0に設定
 {
 	// 所有者オブジェクトがnullptrの場合はエラーを出力
 	if (pScene == nullptr)
@@ -96,6 +99,16 @@ void ObjectBase::Update()
 	}
 
 	UpdateLocal();	// 個別更新処理
+
+	if (m_bIsDestroy)
+	{
+		// 破棄時間経過で破棄
+		m_fDestroyTimeCnt += DELTA_TIME;
+		if (m_fDestroyTimeCnt >= m_fDestroyTime)
+		{
+			SetState(E_State::STATE_DEAD);	// 削除フラグが立っている場合は状態を死亡に変更
+		}
+	}
 }
 
 /* ========================================
@@ -125,6 +138,21 @@ void ObjectBase::Draw()
 void ObjectBase::InitDefaultComponent()
 {
 	m_pCompTransform = AddComponent<ComponentTransform>();	// Transformコンポーネントを追加	
+}
+
+/* ========================================
+	オブジェクト削除関数
+	-------------------------------------
+	内容：オブジェクトの削除フラグを立てる
+		　※直接削除状態にしない理由は、衝突処理後に削除するため
+	-------------------------------------
+	引数1：削除時間(何秒後に削除するか)
+		 　※デフォルトは0秒
+=========================================== */
+void ObjectBase::Destroy(float nTime)
+{
+	m_bIsDestroy = true;
+	m_fDestroyTime = nTime;	// 通常は即時削除
 }
 
 /* ========================================

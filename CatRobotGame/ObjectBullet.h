@@ -44,7 +44,5 @@ protected:
 
 	float m_fDelTime;		// Å‘å¶‘¶ŠÔ
 	float m_fMoveSpeed;		// ˆÚ“®‘¬“x
-
-	float m_fDelTimeCnt;	// Œo‰ßŠÔ
 };
 
