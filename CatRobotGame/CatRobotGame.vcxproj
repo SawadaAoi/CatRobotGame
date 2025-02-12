@@ -223,6 +223,7 @@
     <ClCompile Include="ModelStaticManager.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="ObjectBlock.cpp" />
+    <ClCompile Include="ObjectBlockBreakable.cpp" />
     <ClCompile Include="ObjectBlockGroundAABB.cpp" />
     <ClCompile Include="ObjectBlockGroundOBB.cpp" />
     <ClCompile Include="ObjectBullet.cpp" />
@@ -348,6 +349,7 @@
     <ClInclude Include="ModelStaticManager.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectBlock.h" />
+    <ClInclude Include="ObjectBlockBreakable.h" />
     <ClInclude Include="ObjectBlockGroundAABB.h" />
     <ClInclude Include="ObjectBlockGroundOBB.h" />
     <ClInclude Include="ObjectBullet.h" />

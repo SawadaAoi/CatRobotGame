@@ -12,7 +12,7 @@
 #include "FileManager.h"
 #include "ObjectBlockGroundOBB.h"
 #include "ComponentTransform.h"
-#include "ObjectMoveFloor.h"
+#include "ObjectBlockBreakable.h"
 
 /* ========================================
 	èâä˙âªä÷êî
@@ -27,6 +27,6 @@ void SceneGameTest::InitLocal()
 	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
 
 	
-	AddSceneObject<ObjectMoveFloor>("moveFlr");
+	AddSceneObject<ObjectBlockBreakable>("BlockBreak");
 }
 

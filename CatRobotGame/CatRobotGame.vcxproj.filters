@@ -246,7 +246,7 @@
     <Filter Include="ソース ファイル\App\Component\StageGimmick">
       <UniqueIdentifier>{9bf7d932-cdfd-40ad-8b96-e85ca8e54b3c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\App\GameObject\StageGimmick">
+    <Filter Include="ソース ファイル\App\GameObject\StageObject\Gimmick">
       <UniqueIdentifier>{ad5520f9-7a5b-4702-b680-20f37ee2767f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -609,7 +609,10 @@
       <Filter>ソース ファイル\App\Component\StageGimmick</Filter>
     </ClCompile>
     <ClCompile Include="ObjectMoveFloor.cpp">
-      <Filter>ソース ファイル\App\GameObject\StageGimmick</Filter>
+      <Filter>ソース ファイル\App\GameObject\StageObject\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectBlockBreakable.cpp">
+      <Filter>ソース ファイル\App\GameObject\StageObject\Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -983,7 +986,10 @@
       <Filter>ソース ファイル\App\Component\StageGimmick</Filter>
     </ClInclude>
     <ClInclude Include="ObjectMoveFloor.h">
-      <Filter>ソース ファイル\App\GameObject\StageGimmick</Filter>
+      <Filter>ソース ファイル\App\GameObject\StageObject\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectBlockBreakable.h">
+      <Filter>ソース ファイル\App\GameObject\StageObject\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
