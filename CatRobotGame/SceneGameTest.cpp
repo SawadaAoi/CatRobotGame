@@ -12,7 +12,7 @@
 #include "FileManager.h"
 #include "ObjectBlockGroundOBB.h"
 #include "ComponentTransform.h"
-#include "ObjectBlockBreakable.h"
+#include "ObjectCoin.h"
 
 /* ========================================
 	èâä˙âªä÷êî
@@ -27,6 +27,6 @@ void SceneGameTest::InitLocal()
 	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
 
 	
-	AddSceneObject<ObjectBlockBreakable>("BlockBreak");
+	AddSceneObject<ObjectCoin>("ObjectCoin")->GetTransform()->SetPosition(Vector3<float>(3.0f, 4.0f, 0.0f));
 }
 

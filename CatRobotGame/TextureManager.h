@@ -46,6 +46,7 @@ public:
 		EFFECT_EXPLOSION,	// 爆発エフェクト
 		EFFECT_SMOKE,		// 煙エフェクト
 		STAGE_IMG_STAGE1,	// ステージ1画像
+		ITEM_COIN,			// コイン
 		MAX,
 	};
 
@@ -71,7 +72,7 @@ public:
 		{TEX_KEY::EFFECT_EXPLOSION,		"Assets/Texture/Effect_Explosion.png"			},
 		{TEX_KEY::EFFECT_SMOKE,			"Assets/Texture/Effect_Smoke.png"				},
 		{TEX_KEY::STAGE_IMG_STAGE1,		"Assets/Texture/StageImage/Stage1.png"			},
-
+		{TEX_KEY::ITEM_COIN,			"Assets/Texture/Item_Coin.png"					},
 
 	};
 
