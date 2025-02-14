@@ -17,7 +17,7 @@
 namespace MathUtils
 {
 	// =============== 定数 =====================
-	constexpr float PI		= 3.14159265358979323846f;	// 円周率
+	constexpr float PI = 3.14159265358979323846f;	// 円周率
 	constexpr float EPSILON = 1.0e-5f;					// 許容誤差
 
 	// =============== 関数 =====================
@@ -46,5 +46,14 @@ namespace MathUtils
 			std::uniform_real_distribution<T> dist(min, max);
 			return dist(gen);
 		}
+	}
+
+	inline double ConvertTo0To2Pi(double value) {
+		// 負の値の場合、2πを加えて正の範囲に移す
+		while (value < 0)
+			value += 2 * PI;
+
+		// 2πを超える値の場合、2πで割った余りを取る
+		return fmod(value, 2 * PI);
 	}
 }
