@@ -36,6 +36,7 @@ ObjectBase::ObjectBase(SceneBase* pScene)
 	, m_eTag(E_ObjectTag::None)			// タグをNoneに設定
 	, m_sName("NoName")					// オブジェクト名をNoNameに設定
 	, m_tLightParam{ DEFAULT_LIGHT_DIFFUSE, DEFAULT_LIGHT_SPECULAR, DEFAULT_LIGHT_AMBIENT, true}	// ライトパラメータ初期化
+	, m_bIsSave(true)					// セーブフラグをtrueに設定
 	, m_bIsFold(false)					// オブジェクト一覧折りたたみフラグをfalseに設定
 	, m_bIsDestroy(false)				// オブジェクト破棄フラグをfalseに設定
 	, m_fDestroyTime(0.0f)				// 破棄時間を0に設定
@@ -451,6 +452,17 @@ ObjectBase::T_LightParam ObjectBase::GetLightMaterial() const
 }
 
 /* ========================================
+	ゲッター(セーブフラグ)関数
+	-------------------------------------
+	戻値：セーブフラグ
+=========================================== */
+bool ObjectBase::GetIsSave() const
+{
+	return m_bIsSave;
+}
+
+
+/* ========================================
 	ゲッター(オブジェクト一覧折りたたみフラグ)関数
 	-------------------------------------
 	戻値：オブジェクト一覧折りたたみフラグ
@@ -513,6 +525,16 @@ void ObjectBase::SetLightMaterial(float fDiffuse, float fSpecular, float fAmbien
 void ObjectBase::SetLightUse(bool bUse)
 {
 	m_tLightParam.bLightUse = bUse;
+}
+
+/* ========================================
+	セッター(セーブフラグ)関数
+	-------------------------------------
+	引数1：セーブフラグ
+=========================================== */
+void ObjectBase::SetIsSave(bool bIsSave)
+{
+	m_bIsSave = bIsSave;
 }
 
 /* ========================================

@@ -114,6 +114,7 @@ public:
 	E_ObjectTag GetTag() const;							// タグの取得
 	std::string GetName() const;						// オブジェクト名の取得
 	T_LightParam GetLightMaterial() const;				// ライトパラメータの取得
+	bool GetIsSave() const;								// セーブするかどうかの取得
 	bool GetIsFold() const;								// オブジェクト一覧折りたたみフラグの取得
 
 	// セッター
@@ -122,6 +123,7 @@ public:
 	void SetName(std::string sName);	// オブジェクト名の設定
 	void SetLightMaterial(float fDiffuse = 1.0f, float fSpecular = 0.0f, float fAmbient = 0.3f);	// ライトパラメータの設定
 	void SetLightUse(bool bUse);		// ライト使用の設定
+	void SetIsSave(bool bIsSave);		// セーブするかどうかの設定
 	void SetIsFold(bool bIsFold);		// オブジェクト一覧折りたたみフラグの設定
 
 	// コンポーネント関連
@@ -164,6 +166,9 @@ protected:
 	std::vector<ObjectBase*>	m_pChildObjs;	// 子オブジェクト
 
 	T_LightParam m_tLightParam;	// ライトパラメータ
+
+	// セーブするかどうか(実行中に自身の子クラスを作成したオブジェクトの保存時に、子クラスを保存しないようにするため)
+	bool m_bIsSave;
 
 	// オブジェクト一覧折りたたみフラグ(true:折りたたむ, false:展開)
 	bool m_bIsFold;

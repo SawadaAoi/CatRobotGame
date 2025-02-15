@@ -12,7 +12,7 @@
 #include "FileManager.h"
 #include "ObjectBlockGroundOBB.h"
 #include "ComponentTransform.h"
-#include "ObjectCoin.h"
+#include "ObjectCoinGroupCircle.h"
 
 /* ========================================
 	èâä˙âªä÷êî
@@ -27,6 +27,8 @@ void SceneGameTest::InitLocal()
 	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
 
 	
-	AddSceneObject<ObjectCoin>("ObjectCoin")->GetTransform()->SetPosition(Vector3<float>(3.0f, 4.0f, 0.0f));
+	AddSceneObject<ObjectCoinGroupCircle>("ObjectCoinGroupCircle")->GetTransform()->SetPosition(Vector3<float>(3.0f, 1.0f, -5.0f));
+
+	
 }
 

@@ -57,8 +57,6 @@ private:
 
 	Vector3<float> GetGroundCenterPos(ComponentGround* pPlaneGround);	// 地面の座標を取得
 private:
-	ComponentTransform* m_pOwnerTransform;	// 座標、回転、スケール
-
 	Vector3<float>		m_vStartPos;		// レイの始点
 	Vector3<float>		m_vStartPosOffset;	// レイの始点のオフセット
 	Vector3<float>		m_vDirection;		// レイの方向
