@@ -26,6 +26,8 @@ public:
 	{
 		int nTextureID;	// テクスチャID
 		bool bUseTex;	// テクスチャ使用フラグ
+		Vector2<float> vUvScale;		// テクスチャスケール
+		Vector2<float> vUvOffset;	// テクスチャオフセット
 	};
 public:
 	ObjectGround(SceneBase* pScene);
