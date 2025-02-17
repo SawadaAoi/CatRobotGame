@@ -629,6 +629,9 @@
     <ClCompile Include="UIObjectPlayerCoin.cpp">
       <Filter>ソース ファイル\App\UI\Object\Game\Player</Filter>
     </ClCompile>
+    <ClCompile Include="SceneStage2.cpp">
+      <Filter>ソース ファイル\App\Scene\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -1017,6 +1020,9 @@
     </ClInclude>
     <ClInclude Include="UIObjectPlayerCoin.h">
       <Filter>ソース ファイル\App\UI\Object\Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneStage2.h">
+      <Filter>ソース ファイル\App\Scene\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

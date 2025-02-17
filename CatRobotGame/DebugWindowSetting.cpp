@@ -18,9 +18,10 @@
 // ÉVÅ[Éì
 #include <type_traits>
 #include "SceneGameTest.h"
-#include "SceneStage1.h"
 #include "SceneTitile.h"
 #include "SceneStageSelect.h"
+#include "SceneStage1.h"
+#include "SceneStage2.h"
 
 // =============== ñºëOãÛä‘ ===================
 namespace DebugUI
@@ -44,9 +45,10 @@ namespace DebugUI
 	const std::map< std::string, std::function<void()>> SCENE_MAP =
 	{
 		{"SceneGameTest", []() { SceneManager::ChangeScene<SceneGameTest>(); } },
-		{"SceneStage1", []() { SceneManager::ChangeScene<SceneStage1>(); } },
 		{"SceneTitile", []() { SceneManager::ChangeScene<SceneTitile>(); } },
 		{"SceneStageSelect", []() { SceneManager::ChangeScene<SceneStageSelect>(); } },
+		{"SceneStage1", []() { SceneManager::ChangeScene<SceneStage1>(); } },
+		{"SceneStage2", []() { SceneManager::ChangeScene<SceneStage2>(); } },
 
 	};
 
