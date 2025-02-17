@@ -111,12 +111,15 @@ private:
 
 #endif // _DEBUG
 private:
-	std::vector<std::unique_ptr<ObjectBase>>	m_pObjects;			// シーンに所属するオブジェクト一覧
-	std::vector<std::unique_ptr<ObjectBase>>	m_pStandbyObjects;	// オブジェクトを一時的に保存しておく配列
-	std::vector<ComponentCollisionBase*>		m_pObjectCollision;	// 各オブジェクトが持つ衝突判定コンポーネント
-	std::vector<std::unique_ptr<UIObjectBase>>	m_pUIObjects;		// シーンに所属するUIオブジェクト一覧
+	std::vector<std::unique_ptr<ObjectBase>>	m_pObjects;				// シーンに所属するオブジェクト一覧
+	std::vector<std::unique_ptr<ObjectBase>>	m_pStandbyObjects;		// オブジェクトを一時的に保存しておく配列
+	std::vector<ComponentCollisionBase*>		m_pObjectCollision;		// 各オブジェクトが持つ衝突判定コンポーネント
+
+	std::vector<std::unique_ptr<UIObjectBase>>	m_pUIObjects;			// シーンに所属するUIオブジェクト一覧
+	std::vector<std::unique_ptr<UIObjectBase>>	m_pStandbyUIObjects;	// UIオブジェクトを一時的に保存しておく配列
 
 	bool m_bIsUpdating;	// 更新中かどうか
+	bool m_bIsUpdatingUI;	// UI更新中かどうか
 
 #ifdef _DEBUG
 	ObjectBase*		m_pSelectObj;			// 一覧で選択中のオブジェクト

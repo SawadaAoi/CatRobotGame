@@ -13,6 +13,7 @@
 #include "UIObjectBase.h"
 #include "UIObjectText.h"
 #include "UIObjectPlayerHP.h"
+#include "UIObjectPlayerCoin.h"
 
 /* ========================================
 	ëSUIìoò^ä÷êî
@@ -24,5 +25,6 @@ void UITypeRegistry::RegisterAllUITypes()
 	REGISTER_UI_TYPE(UIObjectBase);
 	REGISTER_UI_TYPE(UIObjectText);
 	REGISTER_UI_TYPE(UIObjectPlayerHP);
+	REGISTER_UI_TYPE(UIObjectPlayerCoin);
 
 }

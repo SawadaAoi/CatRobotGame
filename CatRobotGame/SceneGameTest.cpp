@@ -14,6 +14,8 @@
 #include "ComponentTransform.h"
 #include "ObjectCoinGroupCircle.h"
 
+#include "UIObjectPlayerCoin.h"
+
 /* ========================================
 	èâä˙âªä÷êî
 	-------------------------------------
@@ -22,7 +24,7 @@
 void SceneGameTest::InitLocal()
 {
 	FileManager::StageObjectInput("Assets/Save/Stage/TestScene.stg");
-	FileManager::UIInput("Assets/Save/GameUI/PlayerHP.ui");
+	FileManager::UIInput("Assets/Save/GameUI/GameSceneUI.ui");
 
 	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
 

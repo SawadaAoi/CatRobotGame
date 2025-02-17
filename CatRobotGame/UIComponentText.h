@@ -21,34 +21,38 @@ class UIComponentTransform;
 
 // =============== クラス定義 =====================
 class UIComponentText :
-    public UIComponentBase
+	public UIComponentBase
 {
 public:
-    UIComponentText(UIObjectBase* pOwner);
-    virtual void Init() override;
-    virtual void Draw() override;
+	UIComponentText(UIObjectBase* pOwner);
+	virtual void Init() override;
+	virtual void Draw() override;
 
-    // セッター
-    void SetText(const std::string& text);
+	// セッター
+	void SetText(const std::string& text);
 	void SetFontSize(int size);
 	void SetFontType(FontType type);
 	void SetFontColor(D2D1::ColorF color);
 	void SetFontWeight(DWRITE_FONT_WEIGHT weight);
+	void SetPivot(E_Pivot pivot);
+	void SetScreenOutCheck(bool check);
 
 	// ゲッター
-    std::string GetText() const;
+	std::string GetText() const;
 	int GetFontSize() const;
 	FontType GetFontType() const;
 	D2D1::ColorF GetFontColor() const;
 	DWRITE_FONT_WEIGHT GetFontWeight() const;
+	E_Pivot GetPivot() const;
+	bool GetScreenOutCheck() const;
 
 
 	DEFINE_UI_COMPONENT_TYPE
 #ifdef _DEBUG
-	void Debug(DebugUI::Window& window) override;
+		void Debug(DebugUI::Window& window) override;
 #endif // _DEBUG
 private:
-    UIComponentTransform* m_pCompTransform;
+	UIComponentTransform* m_pCompTransform;
 
 	std::string			m_sText;			// 表示する文字列
 	int					m_nFontSize;		// フォントサイズ

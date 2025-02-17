@@ -22,16 +22,18 @@ const int OBJECT_LIST_LINE_NUM = 17;	// オブジェクトリストの行数
 	内容：初期化
 ========================================== */
 SceneBase::SceneBase()
-	: m_bIsUpdating(false)	// 更新中フラグを初期化
-	, m_pObjects()			// シーンに所属するオブジェクト一覧
-	, m_pStandbyObjects()	// オブジェクトを一時的に保存しておく配列
-	, m_pUIObjects()		// シーンに所属するUIオブジェクト一覧
-	, m_pObjectCollision()	// 各オブジェクトが持つ衝突判定コンポーネント
+	: m_bIsUpdating(false)		// 更新中フラグを初期化
+	, m_bIsUpdatingUI(false)	// UI更新中フラグを初期化
+	, m_pObjects()				// シーンに所属するオブジェクト一覧
+	, m_pStandbyObjects()		// オブジェクトを一時的に保存しておく配列
+	, m_pUIObjects()			// シーンに所属するUIオブジェクト一覧
+	, m_pStandbyUIObjects()		// UIオブジェクトを一時的に保存しておく配列
+	, m_pObjectCollision()		// 各オブジェクトが持つ衝突判定コンポーネント
 #ifdef _DEBUG
-	, m_pSelectObj(nullptr)	// 一覧で選択中のオブジェクト
-	, m_nObjectListSelectNo(-1)
-	, m_pSelectUI(nullptr)	// 一覧で選択中のUIオブジェクト
-	, m_nUISelectNo(-1)
+	, m_pSelectObj(nullptr)		// 一覧で選択中のオブジェクト
+	, m_nObjectListSelectNo(-1)	// オブジェクトリストの番号
+	, m_pSelectUI(nullptr)		// 一覧で選択中のUIオブジェクト
+	, m_nUISelectNo(-1)			// UIオブジェクトリストの番号
 #endif // _DEBUG
 
 {
@@ -53,6 +55,7 @@ void SceneBase::Init()
 	m_pObjects.clear();			// シーンに所属するオブジェクト一覧
 	m_pStandbyObjects.clear();	// オブジェクトを一時的に保存しておく配列
 	m_pUIObjects.clear();		// シーンに所属するUIオブジェクト一覧
+	m_pStandbyUIObjects.clear();	// UIオブジェクトを一時的に保存しておく配列
 	m_bIsUpdating = false;		// 更新中フラグを初期化
 	InitLocal();				// 個別初期化処理
 
@@ -97,6 +100,13 @@ void SceneBase::Uninit()
 		pObject->Uninit();
 	}
 	m_pStandbyObjects.clear();	// クリア
+	
+	// 一時保存していたUIオブジェクト配列の全要素を削除
+	for (auto& pObject : m_pStandbyUIObjects)
+	{
+		pObject->Uninit();
+	}
+	m_pStandbyUIObjects.clear();	// クリア
 
 }
 
@@ -179,11 +189,24 @@ void SceneBase::UpdateObject()
 =========================================== */
 void SceneBase::UpdateUI()
 {
+	m_bIsUpdatingUI = true;	// 更新中フラグを立てる
+
 	// 所持UIオブジェクト配列の全要素を更新
 	for (auto& pObject : m_pUIObjects)
 	{
 		pObject->Update();
 	}
+
+	m_bIsUpdatingUI = false;	// 更新中フラグを解除
+
+	// 一時保存UIオブジェクト配列
+	for (auto& pObject : m_pStandbyUIObjects)
+	{
+		pObject->Update();
+		m_pUIObjects.emplace_back(std::move(pObject));	// UIオブジェクト配列に移動
+	}
+	m_pStandbyUIObjects.clear();	// クリア
+
 	RemoveDeadUIObjects();	// 死亡状態のUIオブジェクトを削除
 	UpdateLocal();			// 個別更新処理
 }
@@ -329,8 +352,18 @@ void SceneBase::AddSceneObjectBase(ObjectBase* pObject)
 	戻値：追加したオブジェクトポインタ
 =========================================== */
 void SceneBase::AddSceneUI(UIObjectBase* pUIObject)
-{	// シーンのUIオブジェクト配列にユニークポインタを移動します
-	m_pUIObjects.push_back(std::unique_ptr<UIObjectBase>(pUIObject));
+{
+	// シーンが更新中かどうかをチェックします
+	if (m_bIsUpdatingUI)
+	{
+		// 一時保存用の配列にユニークポインタを移動します
+		m_pStandbyUIObjects.push_back(std::unique_ptr<UIObjectBase>(pUIObject));
+	}
+	else
+	{
+		// シーンのUIオブジェクト配列にユニークポインタを移動します
+		m_pUIObjects.push_back(std::unique_ptr<UIObjectBase>(pUIObject));
+	}
 }
 
 /* ========================================

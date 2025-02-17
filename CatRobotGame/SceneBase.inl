@@ -167,11 +167,20 @@ inline T* SceneBase::AddSceneUI(std::string sName)
 	// 初期化処理(
 	pUIObject->Init(sName);
 
-	// シーンのオブジェクト配列にユニークポインタを移動します
-	m_pUIObjects.push_back(std::move(pUIObject));
+	// シーンが更新中かどうかをチェックします
+	if (m_bIsUpdatingUI)
+	{
+		// 一時保存用の配列にユニークポインタを移動します
+		m_pStandbyUIObjects.push_back(std::move(pUIObject));
+	}
+	else
+	{
+		// シーンのUIオブジェクト配列にユニークポインタを移動します
+		m_pUIObjects.push_back(std::move(pUIObject));
+	}
 
 	// 追加したオブジェクトのポインタを返します(更新中の場合は一時保存用配列から取得)
-	return static_cast<T*>(m_pUIObjects.back().get());
+	return static_cast<T*>((m_bIsUpdatingUI ? m_pStandbyUIObjects : m_pUIObjects).back().get());
 }
 
 /* ========================================

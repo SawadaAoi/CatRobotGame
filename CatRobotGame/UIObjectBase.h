@@ -97,15 +97,17 @@ public:
 	E_State GetState() const;							// UIの状態の取得
 	virtual size_t GetTypeID() const;					// コンポーネントの種類IDの取得
 	static size_t GetStaticTypeID();					// コンポーネントの種類IDの取得
-	virtual std::string GetUIClassName() const;		// オブジェクトクラス名の取得
-	UIObjectBase* GetParentUI() const;				// 親オブジェクトの取得
-	std::vector<UIObjectBase*> GetChildUIs() const;	// 子オブジェクトの取得
+	virtual std::string GetUIClassName() const;			// オブジェクトクラス名の取得
+	UIObjectBase* GetParentUI() const;					// 親オブジェクトの取得
+	std::vector<UIObjectBase*> GetChildUIs() const;		// 子オブジェクトの取得
 	std::string GetName() const;						// オブジェクト名の取得
+	bool GetIsSave() const;								// セーブするかどうかの取得
 	bool GetIsFold() const;								// オブジェクト一覧折りたたみフラグの取得
 
 	// セッター
-	void SetState(E_State eState);	// UIの状態の設定
+	void SetState(E_State eState);		// UIの状態の設定
 	void SetName(std::string sName);	// オブジェクト名の設定
+	void SetIsSave(bool bIsSave);		// セーブするかどうかの設定
 	void SetIsFold(bool bIsFold);		// オブジェクト一覧折りたたみフラグの設定
 
 	// コンポーネント関連
@@ -146,6 +148,9 @@ protected:
 	// 親子関係
 	UIObjectBase*				m_pParentUI;	// 親UI
 	std::vector<UIObjectBase*>	m_pChildUIs;	// 子UI
+
+	// セーブするかどうか(実行中に自身の子クラスを作成したオブジェクトの保存時に、子クラスを保存しないようにするため)
+	bool m_bIsSave;
 
 	// オブジェクト一覧折りたたみフラグ(true:折りたたむ, false:展開)
 	bool m_bIsFold;

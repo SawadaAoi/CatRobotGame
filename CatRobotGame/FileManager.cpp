@@ -20,10 +20,11 @@
 #include "ObjectTypeRegistry.h"
 
 #include "UIComponentTransform.h"
+#include "UIComponentSprite.h"
 #include "UITypeRegistry.h"
 
-
 #include <unordered_map>	// 親子関係の設定用
+#include "TextureManager.h"
 
 /* ========================================
 	ファイル出力(シーンオブジェクト)関数
@@ -195,6 +196,12 @@ void FileManager::UIOutput(std::string sPath)
 		data.fRot = pTransform->GetRotation();
 		data.vScale = pTransform->GetScale();
 
+		UIComponentSprite* pSprite = uiObj->GetComponent<UIComponentSprite>();
+		// テクスチャID
+		data.nTextureID = TEXTURE_MNG_INST.GetTextureKey(pSprite->GetTexture());
+		// 表示フラグ
+		data.bIsVisible = pSprite->GetIsVisible();
+
 		// オブジェクト名
 		strncpy(data.cUIName, uiObj->GetName().c_str(), sizeof(data.cUIName) - 1);
 		data.cUIName[sizeof(data.cUIName) - 1] = '\0';
@@ -267,6 +274,13 @@ void FileManager::UIInput(std::string sPath)
 			pTransform->SetPosition(data.vPos);
 			pTransform->SetRotation(data.fRot);
 			pTransform->SetScale(data.vScale);
+
+			// テクスチャの設定
+			UIComponentSprite* pSprite = pUI->GetComponent<UIComponentSprite>();
+			// テクスチャ設定
+			pSprite->SetTexture(GET_TEXTURE_DATA((TextureManager::E_TEX_KEY)data.nTextureID));
+			// テクスチャ表示フラグ設定
+			pSprite->SetIsVisible(data.bIsVisible);
 
 			// シーンに追加
 			pScene->AddSceneUI(pUI);

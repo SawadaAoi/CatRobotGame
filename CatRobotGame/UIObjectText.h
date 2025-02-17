@@ -22,7 +22,13 @@ class UIObjectText :
 public:
 	struct S_SaveData
 	{
-		char sText[256];	// テキスト
+		char	sText[256];			// テキスト
+		int		nFontSize;			// フォントサイズ
+		int		eFontType;			// フォントタイプ
+		int     nFontColor[4];		// フォントカラー
+		int		nWeight;			// フォントウェイト
+		int		ePivot;				// ピボット
+		bool	bScreenOutCheck;	// 画面外チェック
 	};
 public:
 	UIObjectText(SceneBase* pScene);

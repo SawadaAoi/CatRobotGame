@@ -290,6 +290,7 @@
     <ClCompile Include="UIComponentText.cpp" />
     <ClCompile Include="UIComponentTransform.cpp" />
     <ClCompile Include="UIObjectBase.cpp" />
+    <ClCompile Include="UIObjectPlayerCoin.cpp" />
     <ClCompile Include="UIObjectPlayerHP.cpp" />
     <ClCompile Include="UIObjectText.cpp" />
     <ClCompile Include="UITypeRegistry.cpp" />
@@ -419,6 +420,7 @@
     <ClInclude Include="UIComponentText.h" />
     <ClInclude Include="UIComponentTransform.h" />
     <ClInclude Include="UIObjectBase.h" />
+    <ClInclude Include="UIObjectPlayerCoin.h" />
     <ClInclude Include="UIObjectPlayerHP.h" />
     <ClInclude Include="UIObjectText.h" />
     <ClInclude Include="UITypeRegistry.h" />

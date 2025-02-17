@@ -53,7 +53,6 @@ void UIComponentText::Init()
 =========================================== */
 void UIComponentText::Draw()
 {
-#ifdef DEBUG
 	if (CHECK_DISP_COMPUI("UI_Text"))
 	{
 		if (WIN_UI_INFO["UI_Text"]["UseTextBox"].GetBool())
@@ -67,9 +66,6 @@ void UIComponentText::Draw()
 
 
 	}
-#endif // DEBUG
-
-
 
 
 	TEXT_WRITE.SetFontType(m_eFontType);
@@ -78,6 +74,78 @@ void UIComponentText::Draw()
 	TEXT_WRITE.SetFontWeight(m_Weight);
 
 	TEXT_WRITE.DrawWriteText(m_sText, m_pCompTransform->GetPosition(), m_ePivot, m_bScreenOutCheck);
+}
+
+
+
+/* ========================================
+	ゲッター(文字列)関数
+	-------------------------------------
+	戻り値：std::string 文字列
+=========================================== */
+std::string UIComponentText::GetText() const
+{
+	return m_sText;
+}
+
+/* ========================================
+	ゲッター(フォントサイズ)関数
+	-------------------------------------
+	戻り値：int サイズ
+=========================================== */
+int UIComponentText::GetFontSize() const
+{
+	return m_nFontSize;
+}
+
+/* ========================================
+	ゲッター(フォントタイプ)関数
+	-------------------------------------
+	戻り値：FontType フォントタイプ
+=========================================== */
+FontType UIComponentText::GetFontType() const
+{
+	return m_eFontType;
+}
+
+/* ========================================
+	ゲッター(フォントカラー)関数
+	-------------------------------------
+	戻り値：D2D1::ColorF カラー
+=========================================== */
+D2D1::ColorF UIComponentText::GetFontColor() const
+{
+	return m_Color;
+}
+
+/* ========================================
+	ゲッター(フォントウェイト)関数
+	-------------------------------------
+	戻り値：DWRITE_FONT_WEIGHT ウェイト
+=========================================== */
+DWRITE_FONT_WEIGHT UIComponentText::GetFontWeight() const
+{
+	return m_Weight;
+}
+
+/* ========================================
+	ゲッター(ピボット)関数
+	-------------------------------------
+	戻り値：E_Pivot ピボット
+=========================================== */
+E_Pivot UIComponentText::GetPivot() const
+{
+	return m_ePivot;
+}
+
+/* ========================================
+	ゲッター(画面外チェック)関数
+	-------------------------------------
+	戻り値：bool チェック
+=========================================== */
+bool UIComponentText::GetScreenOutCheck() const
+{
+	return m_bScreenOutCheck;
 }
 
 /* ========================================
@@ -132,53 +200,23 @@ void UIComponentText::SetFontWeight(DWRITE_FONT_WEIGHT weight)
 }
 
 /* ========================================
-	ゲッター(文字列)関数
+	セッター(ピボット)関数
 	-------------------------------------
-	戻り値：std::string 文字列
+	引数：E_Pivot ピボット
 =========================================== */
-std::string UIComponentText::GetText() const
+void UIComponentText::SetPivot(E_Pivot pivot)
 {
-	return m_sText;
+	m_ePivot = pivot;
 }
 
 /* ========================================
-	ゲッター(フォントサイズ)関数
+	セッター(画面外チェック)関数
 	-------------------------------------
-	戻り値：int サイズ
+	引数：bool チェック
 =========================================== */
-int UIComponentText::GetFontSize() const
+void UIComponentText::SetScreenOutCheck(bool check)
 {
-	return m_nFontSize;
-}
-
-/* ========================================
-	ゲッター(フォントタイプ)関数
-	-------------------------------------
-	戻り値：FontType フォントタイプ
-=========================================== */
-FontType UIComponentText::GetFontType() const
-{
-	return m_eFontType;
-}
-
-/* ========================================
-	ゲッター(フォントカラー)関数
-	-------------------------------------
-	戻り値：D2D1::ColorF カラー
-=========================================== */
-D2D1::ColorF UIComponentText::GetFontColor() const
-{
-	return m_Color;
-}
-
-/* ========================================
-	ゲッター(フォントウェイト)関数
-	-------------------------------------
-	戻り値：DWRITE_FONT_WEIGHT ウェイト
-=========================================== */
-DWRITE_FONT_WEIGHT UIComponentText::GetFontWeight() const
-{
-	return m_Weight;
+	m_bScreenOutCheck = check;
 }
 
 
@@ -213,7 +251,7 @@ void UIComponentText::Debug(DebugUI::Window& window)
 	}, false, true));
 
 	// フォントカラー
-	pGroupUIText->AddGroupItem(Item::CreateBind("FontColor", Item::Kind::Color, &m_Color));
+	pGroupUIText->AddGroupItem(Item::CreateBind("FontColor",Item::Kind::Color, &m_Color));
 
 	// 画面内調整フラグ
 	pGroupUIText->AddGroupItem(Item::CreateBind("ScreenOutCheck", Item::Kind::Bool, &m_bScreenOutCheck));
@@ -252,7 +290,7 @@ void UIComponentText::Debug(DebugUI::Window& window)
 	WIN_UI_INFO["UI_Text"]["Pivot"].AddListItem("LEFT_CENTER");
 	WIN_UI_INFO["UI_Text"]["Pivot"].AddListItem("RIGHT_CENTER");
 
-
+	WIN_UI_INFO["UI_Text"]["Pivot"].SetListNo(m_ePivot);
 
 }
 

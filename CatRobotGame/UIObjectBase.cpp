@@ -255,15 +255,6 @@ void UIObjectBase::InitDefaultComponent()
 =========================================== */
 void UIObjectBase::OutPutLocalData(std::ofstream& file)
 {
-	S_SaveData data;
-
-	// テクスチャID
-	data.nTextureID = TEXTURE_MNG_INST.GetTextureKey(m_pCompSprite->GetTexture());
-	// テクスチャ表示フラグ
-	data.bIsVisible = m_pCompSprite->GetIsVisible();
-
-	// ファイルに書き込む
-	file.write((char*)&data, sizeof(S_SaveData));
 }
 
 /* ========================================
@@ -275,15 +266,6 @@ void UIObjectBase::OutPutLocalData(std::ofstream& file)
 =========================================== */
 void UIObjectBase::InputLocalData(std::ifstream& file)
 {
-	S_SaveData data;
-
-	// ファイルから読み込む
-	file.read((char*)&data, sizeof(S_SaveData));
-
-	// テクスチャ設定
-	m_pCompSprite->SetTexture(GET_TEXTURE_DATA((TextureManager::E_TEX_KEY)data.nTextureID));
-	// テクスチャ表示フラグ設定
-	m_pCompSprite->SetIsVisible(data.bIsVisible);
 }
 
 /* ========================================
@@ -358,6 +340,16 @@ std::string UIObjectBase::GetName() const
 }
 
 /* ========================================
+	ゲッター(セーブフラグ)関数
+	-------------------------------------
+	戻値：セーブフラグ
+=========================================== */
+bool UIObjectBase::GetIsSave() const
+{
+	return m_bIsSave;
+}
+
+/* ========================================
 	ゲッター(オブジェクト一覧折りたたみフラグ)関数
 	-------------------------------------
 	戻値：オブジェクト一覧折りたたみフラグ
@@ -405,6 +397,16 @@ void UIObjectBase::SetState(E_State eState)
 void UIObjectBase::SetName(std::string sName)
 {
 	m_sName = sName;
+}
+
+/* ========================================
+	セッター(セーブフラグ)関数
+	-------------------------------------
+	引数1：セーブフラグ
+=========================================== */
+void UIObjectBase::SetIsSave(bool bIsSave)
+{
+	m_bIsSave = bIsSave;
 }
 
 /* ========================================

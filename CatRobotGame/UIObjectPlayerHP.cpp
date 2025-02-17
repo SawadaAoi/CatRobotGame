@@ -55,6 +55,7 @@ void UIObjectPlayerHP::InitLocal()
 	m_pPlayerIcon->GetTransform()->SetPosition(GetTransform()->GetPosition());
 	m_pPlayerIcon->GetTransform()->SetScale(DEFAULT_SCALE);
 	m_pPlayerIcon->GetComponent<UIComponentSprite>()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_PLAYER_ICON));
+	m_pPlayerIcon->SetIsSave(false);
 	AddChildUI(m_pPlayerIcon);
 
 	// プレイヤーが存在する場合はHPを生成
@@ -103,6 +104,8 @@ void UIObjectPlayerHP::CreateHP()
 	{
 		// ハートオブジェクトを生成(名前は"Heart_" + i)
 		UIObjectBase* pUIObject = m_pOwnerScene->AddSceneUI<UIObjectBase>(HEART_OBJECT_NAME + std::to_string(i));
+
+		pUIObject->SetIsSave(false);
 
 		// トランスフォーム
 		UIComponentTransform* pCompTrans = pUIObject->GetTransform();

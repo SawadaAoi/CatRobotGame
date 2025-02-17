@@ -40,6 +40,8 @@ public:
 		Vector2<float>	vPos;
 		float			fRot;
 		Vector2<float>	vScale;
+		int				nTextureID;
+		bool			bIsVisible;
 		char			cUIName[MAX_TEXT_SIZE];
 		char			cParentName[MAX_TEXT_SIZE];
 	};

@@ -626,6 +626,9 @@
     <ClCompile Include="ObjectCoinGroupCircle.cpp">
       <Filter>ソース ファイル\App\GameObject\StageObject\Item</Filter>
     </ClCompile>
+    <ClCompile Include="UIObjectPlayerCoin.cpp">
+      <Filter>ソース ファイル\App\UI\Object\Game\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -1011,6 +1014,9 @@
     </ClInclude>
     <ClInclude Include="ObjectCoinGroupCircle.h">
       <Filter>ソース ファイル\App\GameObject\StageObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObjectPlayerCoin.h">
+      <Filter>ソース ファイル\App\UI\Object\Game\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
