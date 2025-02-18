@@ -252,6 +252,7 @@
     <ClCompile Include="ObjectPlayerStart.cpp" />
     <ClCompile Include="ObjectRespawn.cpp" />
     <ClCompile Include="ObjectSkyBox.cpp" />
+    <ClCompile Include="ObjectStageSampleParent.cpp" />
     <ClCompile Include="ObjectTypeRegistry.cpp" />
     <ClCompile Include="ObjectWall.cpp" />
     <ClCompile Include="Quaternion.cpp" />
@@ -383,6 +384,7 @@
     <ClInclude Include="ObjectPlayerStart.h" />
     <ClInclude Include="ObjectRespawn.h" />
     <ClInclude Include="ObjectSkyBox.h" />
+    <ClInclude Include="ObjectStageSampleParent.h" />
     <ClInclude Include="ObjectTag.h" />
     <ClInclude Include="ObjectTypeRegistry.h" />
     <ClInclude Include="ObjectWall.h" />

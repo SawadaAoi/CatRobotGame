@@ -252,6 +252,9 @@
     <Filter Include="ソース ファイル\App\GameObject\StageObject\Item">
       <UniqueIdentifier>{24fb90a5-bf68-45fd-8e36-71643e4d74d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\GameObject\Other\StageSelect">
+      <UniqueIdentifier>{9ea4109d-672e-4023-9590-de97ee4b56f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -631,6 +634,9 @@
     </ClCompile>
     <ClCompile Include="SceneStage2.cpp">
       <Filter>ソース ファイル\App\Scene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectStageSampleParent.cpp">
+      <Filter>ソース ファイル\App\GameObject\Other\StageSelect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1023,6 +1029,9 @@
     </ClInclude>
     <ClInclude Include="SceneStage2.h">
       <Filter>ソース ファイル\App\Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectStageSampleParent.h">
+      <Filter>ソース ファイル\App\GameObject\Other\StageSelect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
