@@ -780,6 +780,16 @@ void SceneBase::InitObjectList()
 
 	}, false, true));
 
+	// オブジェクト複製ボタン
+	WIN_OBJ_LIST.AddItem(Item::CreateCallBack("Copy", Item::Kind::Command, [this](bool isWrite, void* arg)
+	{
+		// 選択されていない場合は処理しない
+		if (m_nObjectListSelectNo == -1) return;
+		// オブジェクトを複製
+		m_pSelectObj->Copy();
+
+	}, false, true));
+
 	// オブジェクト選択時のコールバック関数
 	Item::ConstCallback  FuncListClick = [this](const void* arg)
 	{
