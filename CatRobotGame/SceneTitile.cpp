@@ -81,7 +81,7 @@ const Vector3<float> CAMERA_POS[CAMERA_NUM] = {
 };
 
 // âÒì]
-const Vector3<float> CAMERA_ROT[CAMERA_NUM] = {
+const Vector3<float> CAMERA_ROT_X[CAMERA_NUM] = {
 	Vector3<float>(-5.0f, -8.0f, 0.0f),		// ê≥ñ 
 	Vector3<float>(180.0f, 80.0f, -180.0f),	// âE
 	Vector3<float>(-110.0f, 1.0f, 180.0f),	// è„
@@ -122,7 +122,7 @@ void SceneTitile::InitLocal()
 	{
 		ObjectCamera* pCamera = AddSceneObject<ObjectCamera>("Camera_" + std::to_string(i));
 		pCamera->GetTransform()->SetPosition(CAMERA_POS[i]);
-		pCamera->GetTransform()->Rotate(CAMERA_ROT[i].x, CAMERA_ROT[i].y, CAMERA_ROT[i].z);
+		pCamera->GetTransform()->Rotate(CAMERA_ROT_X[i].x, CAMERA_ROT_X[i].y, CAMERA_ROT_X[i].z);
 		m_pCameras.push_back(pCamera);
 	}
 

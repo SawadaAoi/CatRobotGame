@@ -15,21 +15,27 @@
 // =============== 前方宣言 ===================
 class UIObjectText;
 class UIComponentSprite;
+class ObjectCamera;
 
 // =============== クラス定義 ===================
 class SceneStageSelect :
     public SceneBase
 {
 public:
+	SceneStageSelect();
 	void InitLocal() override;
 	void UpdateLocal() override;
 private:
+	void StageChangeInput();
+private:
+	ObjectCamera* m_pCamera;
+
 	UIObjectText* m_pStageName;
 	UIObjectText* m_pScreenName;
 
-	UIObjectBase* m_pStageImage;
-	UIComponentSprite* m_pCompSpriteStgImg;
-
 	int m_nSelectStageNum;
+	int m_nSelectStageNumOld;
+
+	bool m_bChangeStageModel;
 };
 

@@ -19,7 +19,7 @@
 =========================================== */
 ObjectStageSampleParent::ObjectStageSampleParent(SceneBase* pScene)
 	:ObjectBase(pScene)
-	, m_fRotateSpeed(10.0f)
+	, m_fRotateSpeed(20.0f)
 	, m_bIsRotate(true)
 {
 	SetTag(E_ObjectTag::StageSampleParent);

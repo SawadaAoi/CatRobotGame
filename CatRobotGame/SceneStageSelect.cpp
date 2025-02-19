@@ -9,16 +9,21 @@
 // =============== インクルード ===================
 #include "SceneStageSelect.h"
 #include "SceneGameTest.h"
-#include "SceneManager.h"
-#include "SceneStage1.h"
 #include "SceneTitile.h"
+#include "SceneStage1.h"
+#include "SceneStage2.h"
 
+#include "SceneManager.h"
 #include "FileManager.h"
 #include "Input.h"
-#include "TextureManager.h"
-#include "UIComponentSprite.h"
-#include "UIComponentText.h"
+
 #include "UIObjectText.h"
+#include "UIComponentText.h"
+
+#include "ObjectLightDirectional.h"
+#include "ObjectCamera.h"
+#include "ComponentTransform.h"
+
 
 // =============== 定数 ===================
 // シーン名、シーン変更関数のマップ
@@ -27,6 +32,7 @@ const std::vector<std::function<void()>> SCENE_CALL =
 	[]() { SceneManager::ChangeScene<SceneGameTest>(); } ,
 	[]() { SceneManager::ChangeScene<SceneTitile>(); } ,
 	[]() { SceneManager::ChangeScene<SceneStage1>(); }, 
+	[]() { SceneManager::ChangeScene<SceneStage2>(); },
 
 };
 
@@ -36,16 +42,42 @@ const std::vector<std::string> SCENE_NAME =
 	"テストステージ",
 	"タイトル",
 	"ステージ１",
+	"ステージ２",
 };
 
-// ステージ画像
-const TextureManager::E_TEX_KEY SCENE_IMAGE[3] =
+
+// ステージモデルデータ
+// ファイル保存位置
+const std::string MODEL_DATA_PATH = "Assets/Save/StageSelect/";
+// ファイル名
+const std::vector<std::string> MODEL_DATA_NAME =
 {
-	TextureManager::E_TEX_KEY::DEBUG_CAMERA_ICON,
-	TextureManager::E_TEX_KEY::BLOCK_SIMPLE,
-	TextureManager::E_TEX_KEY::STAGE_IMG_STAGE1,
+	"Stage2_Select.slc",
+	"Stage2_Select.slc",
+	"Stage2_Select.slc",
+	"Stage2_Select.slc",
 };
 
+// カメラ位置
+const Vector3<float> CAMERA_POS_ZOOMIN	= { 0.0f, 30.0f, -40.0f };
+const Vector3<float> CAMERA_POS_ZOOMOUT = { 0.0f, 120.0f, -150.0f };
+const float CAMERA_ROT_X = 40.0f;	// カメラ回転角度
+
+
+/* ========================================
+	コンストラクタ
+	-------------------------------------
+	内容：コンストラクタ
+========================================== */
+SceneStageSelect::SceneStageSelect()
+	: m_bChangeStageModel(false)
+	, m_nSelectStageNum(0)
+	, m_nSelectStageNumOld(-1)
+	, m_pCamera(nullptr)
+	, m_pStageName(nullptr)
+	, m_pScreenName(nullptr)
+{
+}
 
 /* ========================================
 	初期化関数
@@ -54,15 +86,24 @@ const TextureManager::E_TEX_KEY SCENE_IMAGE[3] =
 ========================================== */
 void SceneStageSelect::InitLocal()
 {
+	AddSceneObject<ObjectLightDirectional>("Light");
+
+	// カメラ追加
+	m_pCamera = AddSceneObject<ObjectCamera>("Camera");
+	m_pCamera->GetTransform()->SetPosition(CAMERA_POS_ZOOMIN);
+	m_pCamera->GetTransform()->RotateX(CAMERA_ROT_X);
+
+	// UI読み込み
 	FileManager::UIInput("Assets/Save/GameUI/StageSelect.ui");
 
-	m_pStageName = GetSceneUI<UIObjectText>("StageName");
+	// ステージ名、画面名取得
+	m_pStageName = GetSceneUI<UIObjectText>("StageName");			
 	m_pStageName->GetCompText()->SetFontType(FontType::Letrogo);
-
 	m_pScreenName = GetSceneUI<UIObjectText>("ScreenName");
 
-	m_pStageImage = GetSceneUI<UIObjectBase>("StageImage");
-	m_pCompSpriteStgImg = m_pStageImage->GetComponent<UIComponentSprite>();
+
+	// ステージモデル読み込み
+	FileManager::StageObjectInput(MODEL_DATA_PATH + MODEL_DATA_NAME[m_nSelectStageNum]);
 }
 
 
@@ -73,6 +114,46 @@ void SceneStageSelect::InitLocal()
 ========================================== */
 void SceneStageSelect::UpdateLocal()
 {
+	// ステージモデルが変更中なら
+	if (m_bChangeStageModel) 
+	{
+		// ステージモデルが完全に削除されたら
+		if (!GetSceneObjectTag(E_ObjectTag::StageSampleParent))
+		{
+			FileManager::StageObjectInput(MODEL_DATA_PATH + MODEL_DATA_NAME[m_nSelectStageNum]);	// ステージモデルを読み込み
+
+			m_pCamera->GetTransform()->MoveTo(CAMERA_POS_ZOOMIN, 0.3f);	// カメラ位置を変更(モデルが拡大されるように見える位置に)
+			m_bChangeStageModel = false;
+		}	
+	}
+	else
+	{
+		StageChangeInput();	// ステージ変更入力
+
+		// ステージが変更されたら
+		if (m_nSelectStageNum != m_nSelectStageNumOld)
+		{
+			m_pStageName->SetText(SCENE_NAME[m_nSelectStageNum]);			// ステージ名を変更
+			GetSceneObjectTag(E_ObjectTag::StageSampleParent)->Destroy();	// 現在表示されているステージモデルを削除
+			m_pCamera->GetTransform()->SetPosition(CAMERA_POS_ZOOMOUT);			// カメラ位置を変更(モデルが縮小されるように見える位置に)
+
+			m_bChangeStageModel = true;
+
+		}
+	}
+	
+	m_nSelectStageNumOld = m_nSelectStageNum;
+}
+
+
+
+/* ========================================
+	ステージ変更入力関数
+	-------------------------------------
+	内容：ステージ変更入力処理
+========================================== */
+void SceneStageSelect::StageChangeInput()
+{
 	if (Input::IsKeyTrigger(VK_LEFT))
 	{
 		m_nSelectStageNum = (m_nSelectStageNum + 2) % 3;
@@ -82,11 +163,10 @@ void SceneStageSelect::UpdateLocal()
 		m_nSelectStageNum = (m_nSelectStageNum + 1) % 3;
 	}
 
-	m_pStageName->SetText(SCENE_NAME[m_nSelectStageNum]);
-	m_pCompSpriteStgImg->SetTexture(GET_TEXTURE_DATA(SCENE_IMAGE[m_nSelectStageNum]));
 
-	if (Input::IsKeyTrigger(VK_RETURN))
+	if (Input::IsKeyTrigger('K'))
 	{
 		SCENE_CALL[m_nSelectStageNum]();
 	}
 }
+
