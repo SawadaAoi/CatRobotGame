@@ -33,7 +33,7 @@ void SceneStage2::InitLocal()
 
 	AddSceneObject<ObjectCameraPlayer>("PlayerCamera");
 
-	FileManager::UIInput("Assets/Save/GameUI/GameSceneUI.ui");
+	FileManager::UIInput("Assets/Save/UI/GameScene.ui");
 
 
 	AddSceneObject<ObjectGameStateManager>("GameStateManager");

@@ -42,6 +42,7 @@ public:
 		Vector2<float>	vScale;
 		int				nTextureID;
 		bool			bIsVisible;
+		int				nDrawPriority;
 		char			cUIName[MAX_TEXT_SIZE];
 		char			cParentName[MAX_TEXT_SIZE];
 	};

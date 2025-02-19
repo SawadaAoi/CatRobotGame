@@ -45,8 +45,8 @@ public:
 		UI_HP_HEART,		// HPハート
 		EFFECT_EXPLOSION,	// 爆発エフェクト
 		EFFECT_SMOKE,		// 煙エフェクト
-		STAGE_IMG_STAGE1,	// ステージ1画像
 		ITEM_COIN,			// コイン
+		BG_STAGE_SELECT,	// ステージセレクト背景
 		MAX,
 	};
 
@@ -71,8 +71,8 @@ public:
 		{TEX_KEY::UI_HP_HEART,			"Assets/Texture/UI/UI_HpHeart.png"				},
 		{TEX_KEY::EFFECT_EXPLOSION,		"Assets/Texture/Effect_Explosion.png"			},
 		{TEX_KEY::EFFECT_SMOKE,			"Assets/Texture/Effect_Smoke.png"				},
-		{TEX_KEY::STAGE_IMG_STAGE1,		"Assets/Texture/StageImage/Stage1.png"			},
 		{TEX_KEY::ITEM_COIN,			"Assets/Texture/Item_Coin.png"					},
+		{TEX_KEY::BG_STAGE_SELECT,		"Assets/Texture/UI/BG_StageSelect.png"			},
 
 	};
 

@@ -45,6 +45,10 @@ public:
 
 	void UpdateObject();
 	void UpdateUI();
+
+	// UI•`‰æ‡•À‚Ñ‘Ö‚¦
+	void SortUIObjects();
+
 	void RemoveDeadObjects();
 	void RemoveDeadUIObjects();
 

@@ -19,6 +19,7 @@
 
 #include "UIObjectText.h"
 #include "UIComponentText.h"
+#include "UIComponentSprite.h"
 
 #include "ObjectLightDirectional.h"
 #include "ObjectCamera.h"
@@ -63,6 +64,8 @@ const Vector3<float> CAMERA_POS_ZOOMIN	= { 0.0f, 30.0f, -40.0f };
 const Vector3<float> CAMERA_POS_ZOOMOUT = { 0.0f, 120.0f, -150.0f };
 const float CAMERA_ROT_X = 40.0f;	// カメラ回転角度
 
+// UVスクロール速度
+const float UV_SCROLL_SPEED = 0.1f;
 
 /* ========================================
 	コンストラクタ
@@ -76,6 +79,7 @@ SceneStageSelect::SceneStageSelect()
 	, m_pCamera(nullptr)
 	, m_pStageName(nullptr)
 	, m_pScreenName(nullptr)
+	, m_pBG_Image(nullptr)
 {
 }
 
@@ -94,16 +98,20 @@ void SceneStageSelect::InitLocal()
 	m_pCamera->GetTransform()->RotateX(CAMERA_ROT_X);
 
 	// UI読み込み
-	FileManager::UIInput("Assets/Save/GameUI/StageSelect.ui");
+	FileManager::UIInput("Assets/Save/UI/StageSelect.ui");
 
 	// ステージ名、画面名取得
-	m_pStageName = GetSceneUI<UIObjectText>("StageName");			
+	m_pStageName = GetSceneUI<UIObjectText>("StageNameText");			
 	m_pStageName->GetCompText()->SetFontType(FontType::Letrogo);
-	m_pScreenName = GetSceneUI<UIObjectText>("ScreenName");
+	m_pScreenName = GetSceneUI<UIObjectText>("ScreenNameText");
 
+	// 背景画像取得
+	m_pBG_Image = GetSceneUI<UIObjectBase>("BG_Image");
+	m_pBG_Image->SetIs3DObjBackDraw(true);
 
 	// ステージモデル読み込み
 	FileManager::StageObjectInput(MODEL_DATA_PATH + MODEL_DATA_NAME[m_nSelectStageNum]);
+
 }
 
 
@@ -142,6 +150,12 @@ void SceneStageSelect::UpdateLocal()
 		}
 	}
 	
+	// UVスクロール
+	Vector2<float> vUvPos = m_pBG_Image->GetSprite()->GetUvPos();
+	vUvPos.x -= UV_SCROLL_SPEED * DELTA_TIME;
+	vUvPos.y -= UV_SCROLL_SPEED * DELTA_TIME;
+	m_pBG_Image->GetSprite()->SetUvPos(vUvPos);
+
 	m_nSelectStageNumOld = m_nSelectStageNum;
 }
 
@@ -162,7 +176,6 @@ void SceneStageSelect::StageChangeInput()
 	{
 		m_nSelectStageNum = (m_nSelectStageNum + 1) % 3;
 	}
-
 
 	if (Input::IsKeyTrigger('K'))
 	{

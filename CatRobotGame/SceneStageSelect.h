@@ -32,6 +32,7 @@ private:
 
 	UIObjectText* m_pStageName;
 	UIObjectText* m_pScreenName;
+	UIObjectBase* m_pBG_Image;
 
 	int m_nSelectStageNum;
 	int m_nSelectStageNumOld;

@@ -24,7 +24,7 @@
 void SceneGameTest::InitLocal()
 {
 	FileManager::StageObjectInput("Assets/Save/Stage/TestScene.stg");
-	FileManager::UIInput("Assets/Save/GameUI/GameSceneUI.ui");
+	FileManager::UIInput("Assets/Save/UI/GameScene.ui");
 
 	static_cast<ObjectPlayerStart*>(GetSceneObjectTag(E_ObjectTag::PlayerStart))->SetIsPlayerStart(true);
 

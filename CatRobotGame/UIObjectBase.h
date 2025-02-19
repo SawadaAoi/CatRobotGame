@@ -87,12 +87,16 @@ public:
 	void RemoveAllChildUIs();						// 全ての子オブジェクトの削除
 	int GetGenerationCount();						// 子オブジェクトの数を取得
 
+	// コピー関数
+	UIObjectBase* Copy();								// オブジェクトのコピー
+
 	// ファイル入出力
 	virtual void OutPutLocalData(std::ofstream& file);	// オブジェクトのデータ出力
 	virtual void InputLocalData(std::ifstream& file);	// オブジェクトのデータ入力
 
 	// ゲッター
 	UIComponentTransform* GetTransform() const;			// トランスフォームコンポーネントの取得
+	UIComponentSprite* GetSprite() const;				// スプライトコンポーネントの取得
 	SceneBase* GetOwnerScene() const;					// 所有シーンの取得
 	E_State GetState() const;							// UIの状態の取得
 	virtual size_t GetTypeID() const;					// コンポーネントの種類IDの取得
@@ -103,12 +107,16 @@ public:
 	std::string GetName() const;						// オブジェクト名の取得
 	bool GetIsSave() const;								// セーブするかどうかの取得
 	bool GetIsFold() const;								// オブジェクト一覧折りたたみフラグの取得
+	int GetDrawPriority() const;						// 描画優先度の取得
+	bool GetIs3DObjBackDraw() const;					// 3Dオブジェクトの後ろに描画するかどうかの取得
 
 	// セッター
-	void SetState(E_State eState);		// UIの状態の設定
-	void SetName(std::string sName);	// オブジェクト名の設定
-	void SetIsSave(bool bIsSave);		// セーブするかどうかの設定
-	void SetIsFold(bool bIsFold);		// オブジェクト一覧折りたたみフラグの設定
+	void SetState(E_State eState);				// UIの状態の設定
+	void SetName(std::string sName);			// オブジェクト名の設定
+	void SetIsSave(bool bIsSave);				// セーブするかどうかの設定
+	void SetIsFold(bool bIsFold);				// オブジェクト一覧折りたたみフラグの設定
+	void SetDrawPriority(int nPriority);		// 描画優先度の設定
+	void SetIs3DObjBackDraw(bool bIsBackDraw);	// 3Dオブジェクトの後ろに描画するかどうかの設定
 
 	// コンポーネント関連
 	template<typename T>
@@ -142,8 +150,9 @@ protected:
 	UIComponentTransform*	m_pCompTransform;	// トランスフォームコンポーネント
 	UIComponentSprite*		m_pCompSprite;		// スプライトコンポーネント
 
-	std::string m_sName;	// UI名
-	E_State		m_eState;	// UIの状態
+	std::string m_sName;			// UI名
+	E_State		m_eState;			// UIの状態
+	int			m_nDrawPriority;	// 描画優先度
 	
 	// 親子関係
 	UIObjectBase*				m_pParentUI;	// 親UI
@@ -154,6 +163,9 @@ protected:
 
 	// オブジェクト一覧折りたたみフラグ(true:折りたたむ, false:展開)
 	bool m_bIsFold;
+
+	// 3Dオブジェクトの後ろに描画するかどうか
+	bool m_bIs3DObjBackDraw;
 };
 
 #include "UIObjectBase.inl"	// コンポーネント関連のテンプレート関数の実装

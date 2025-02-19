@@ -201,6 +201,8 @@ void FileManager::UIOutput(std::string sPath)
 		data.nTextureID = TEXTURE_MNG_INST.GetTextureKey(pSprite->GetTexture());
 		// 表示フラグ
 		data.bIsVisible = pSprite->GetIsVisible();
+		// 描画優先度
+		data.nDrawPriority = uiObj->GetDrawPriority();
 
 		// オブジェクト名
 		strncpy(data.cUIName, uiObj->GetName().c_str(), sizeof(data.cUIName) - 1);
@@ -281,6 +283,8 @@ void FileManager::UIInput(std::string sPath)
 			pSprite->SetTexture(GET_TEXTURE_DATA((TextureManager::E_TEX_KEY)data.nTextureID));
 			// テクスチャ表示フラグ設定
 			pSprite->SetIsVisible(data.bIsVisible);
+			// 描画優先度設定
+			pUI->SetDrawPriority(data.nDrawPriority);
 
 			// シーンに追加
 			pScene->AddSceneUI(pUI);

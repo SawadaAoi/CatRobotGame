@@ -17,6 +17,8 @@
 #include "SceneManager.h"
 #include "TextureManager.h"
 
+#include "UITypeRegistry.h"
+
 /* ========================================
 	コンストラクタ関数
 	-------------------------------------
@@ -34,6 +36,9 @@ UIObjectBase::UIObjectBase(SceneBase* pScene)
 	, m_pParentUI(nullptr)
 	, m_pChildUIs()
 	, m_bIsFold(false)					// オブジェクト一覧折りたたみフラグをfalseに設定
+	, m_nDrawPriority(0)				// 描画優先度を0に設定
+	, m_bIsSave(true)					// セーブフラグをtrueに設定
+	, m_bIs3DObjBackDraw(false)			// 3Dオブジェクト後ろ描画フラグをfalseに設定
 {
 	// 所有シーンがnullptrの場合はエラーを出力
 	if (pScene == nullptr)
@@ -233,6 +238,55 @@ int UIObjectBase::GetGenerationCount()
 	}
 }
 
+/* ========================================
+	コピー関数
+	-------------------------------------
+	内容：オブジェクトをコピーする
+	-------------------------------------
+	戻り値：コピーされたオブジェクト
+=========================================== */
+UIObjectBase* UIObjectBase::Copy()
+{
+	// Transformを取得
+	UIComponentTransform* pTransform = this->GetComponent<UIComponentTransform>();
+
+	UIObjectBase* pCopyUI = UI_TYPE_REGISTRY_INST.CreateUI(this->GetUIClassName());	// コピー用オブジェクト生成
+	pCopyUI->Init(m_pOwnerScene->CreateUniqueUIName(this->GetName()));				// 初期化
+	pCopyUI->SetDrawPriority(this->GetDrawPriority());								// 描画優先度を設定
+
+	// Transformコンポーネントのコピー
+	UIComponentTransform* pCopyTrans = pCopyUI->GetComponent<UIComponentTransform>();
+	pCopyTrans->SetPosition(GetTransform()->GetPosition());
+	pCopyTrans->SetRotation(GetTransform()->GetRotation());
+	pCopyTrans->SetScale(GetTransform()->GetScale());
+
+	// Spriteコンポーネントのコピー
+	UIComponentSprite* pCopySprite = pCopyUI->GetComponent<UIComponentSprite>();
+	pCopySprite->SetTexture(m_pCompSprite->GetTexture());
+	pCopySprite->SetIsVisible(m_pCompSprite->GetIsVisible());
+
+	m_pOwnerScene->AddSceneUI(pCopyUI);	// シーンにオブジェクトを追加
+
+	// 親子関係を再現
+	// 親オブジェクトがある場合
+	if (this->GetParentUI())
+	{
+		pCopyUI->SetParentUI(this->GetParentUI());
+	}
+
+	// 子オブジェクトがある場合
+	if (this->GetChildUIs().size() > 0)
+	{
+		for (auto& pChild : this->GetChildUIs())
+		{
+			UIObjectBase* pCopyChild = pChild->Copy();
+			pCopyUI->AddChildUI(pCopyChild);
+		}
+	}
+
+	return pCopyUI;
+}
+
 
 /* ========================================
 	デフォルトコンポーネント追加関数
@@ -276,6 +330,16 @@ void UIObjectBase::InputLocalData(std::ifstream& file)
 UIComponentTransform* UIObjectBase::GetTransform() const
 {
 	return m_pCompTransform;
+}
+
+/* ========================================
+	ゲッター(スプライト)関数
+	-------------------------------------
+	戻値：ComponentSprite* スプライトコンポーネントのポインタ
+=========================================== */
+UIComponentSprite* UIObjectBase::GetSprite() const
+{
+	return m_pCompSprite;
 }
 
 /* ========================================
@@ -360,6 +424,26 @@ bool UIObjectBase::GetIsFold() const
 }
 
 /* ========================================
+	ゲッター(描画優先度)関数
+	-------------------------------------
+	戻値：描画優先度
+=========================================== */
+int UIObjectBase::GetDrawPriority() const
+{
+	return m_nDrawPriority;
+}
+
+/* ========================================
+	ゲッター(3Dオブジェクト後ろ描画フラグ)関数
+	-------------------------------------
+	戻値：3Dオブジェクト後ろ描画フラグ
+=========================================== */
+bool UIObjectBase::GetIs3DObjBackDraw() const
+{
+	return m_bIs3DObjBackDraw;
+}
+
+/* ========================================
 	ゲッター(親オブジェクト)関数
 	-------------------------------------
 	戻値：親オブジェクト
@@ -419,6 +503,26 @@ void UIObjectBase::SetIsFold(bool bIsFold)
 	m_bIsFold = bIsFold;
 }
 
+/* ========================================
+	セッター(描画優先度)関数
+	-------------------------------------
+	引数1：描画優先度
+=========================================== */
+void UIObjectBase::SetDrawPriority(int nPriority)
+{
+	m_nDrawPriority = nPriority;
+}
+
+/* ========================================
+	セッター(3Dオブジェクト後ろ描画フラグ)関数
+	-------------------------------------
+	引数1：3Dオブジェクト後ろ描画フラグ
+=========================================== */
+void UIObjectBase::SetIs3DObjBackDraw(bool bIsBackDraw)
+{
+	m_bIs3DObjBackDraw = bIsBackDraw;
+}
+
 #ifdef _DEBUG
 /* ========================================
 	デバッグ用関数
@@ -446,6 +550,8 @@ void UIObjectBase::Debug()
 	pGroupUIBase->AddGroupItem(Item::CreateValue("UIReName", Item::Path, false, true));	// 変更後の名前
 
 	pGroupUIBase->AddGroupItem(InitParentList());	// 親オブジェクトリスト
+
+	pGroupUIBase->AddGroupItem(Item::CreateBind("DrawPriority", Item::Int, &m_nDrawPriority, false));	// 描画優先度
 
 	pUIInfo.AddItem(pGroupUIBase);	// グループを追加
 

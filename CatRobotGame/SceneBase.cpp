@@ -126,8 +126,9 @@ void SceneBase::Update()
 	ReloadDebugObjectList();	// オブジェクトリスト再読み込み
 	ReloadDebugUIList();		// UIオブジェクトリスト再読み込み
 #endif // _DEBUG
-	UpdateObject();	// オブジェクト更新
-	UpdateUI();		// UI更新
+	UpdateObject();		// オブジェクト更新
+	UpdateUI();			// UI更新
+	SortUIObjects();	// UIオブジェクトを描画順に並び替え
 }
 
 /* ========================================
@@ -137,18 +138,29 @@ void SceneBase::Update()
 =========================================== */
 void SceneBase::Draw()
 {
+	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_DISABLE);	// 深度テスト無効
+	// 3Dオブジェクトの背景に描画するUIを描画
+	for (auto& pUIObject : m_pUIObjects)
+	{
+		if (!pUIObject->GetIs3DObjBackDraw()) continue;
+		pUIObject->Draw();
+	}
+	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_ENABLE_WRITE_TEST);	// 元に戻す
+
 	// 所持オブジェクト配列の全要素を描画
 	for (auto& pObject : m_pObjects)
 	{
 		pObject->Draw();	
 	}
 
+	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_DISABLE);	// 深度テスト無効
 	// 所持UIオブジェクト配列の全要素を描画
 	for (auto& pUIObject : m_pUIObjects)
 	{
+		if (pUIObject->GetIs3DObjBackDraw()) continue;
 		pUIObject->Draw();
 	}
-
+	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_ENABLE_WRITE_TEST);	// 元に戻す
 	DrawLocal();	// 個別描画処理
 }
 
@@ -209,6 +221,21 @@ void SceneBase::UpdateUI()
 
 	RemoveDeadUIObjects();	// 死亡状態のUIオブジェクトを削除
 	UpdateLocal();			// 個別更新処理
+}
+
+/* ========================================
+	UI並び替え関数
+	-------------------------------------
+	内容：優先順位に従ってUIオブジェクトを並び替え
+=========================================== */
+void SceneBase::SortUIObjects()
+{
+	// UIオブジェクトを描画順に並び替え
+	std::sort(m_pUIObjects.begin(), m_pUIObjects.end(),
+		[](const std::unique_ptr<UIObjectBase>& pUI1, const std::unique_ptr<UIObjectBase>& pUI2)
+	{
+		return pUI1->GetDrawPriority() < pUI2->GetDrawPriority();
+	});
 }
 
 /* ========================================
@@ -879,6 +906,14 @@ void SceneBase::InitUIList()
 
 	}));
 
+	// UI複製ボタン
+	WIN_UI_LIST.AddItem(Item::CreateCallBack("Copy", Item::Kind::Command, [this](bool isWrite, void* arg)
+	{
+		if (m_nUISelectNo == -1) return;	// 選択されていない場合は処理しない
+
+		UIObjectBase* pUI = m_pSelectUI->Copy();	// 選択中のUIオブジェクトを複製
+	}, false, true));
+
 	// オブジェクト選択時のコールバック関数
 	Item::ConstCallback  FuncListClick = [this](const void* arg)
 	{
@@ -1052,6 +1087,19 @@ void SceneBase::ReloadDebugUIList()
 		// 折りたたみ状態ではない場合は子オブジェクトを表示する
 		if (!pUI->GetIsFold())
 			AddUIListChild(pUI);
+	}	
+	
+	// 名前変更や、親変更などで、オブジェクト一覧の位置がずれるため、選択中のオブジェクトを再選択する
+	// 選択中のオブジェクトがある場合
+	if (m_pSelectUI)
+	{
+		int nSelectNo = ITEM_UI_LIST.GetListNo(m_pSelectUI->GetListName().c_str());	// 選択中のオブジェクト番号を取得
+
+		if (m_nUISelectNo != nSelectNo)
+		{
+			ITEM_UI_LIST.SetListNo(nSelectNo);	// 選択中のオブジェクトを選択状態にする
+			m_nUISelectNo = nSelectNo;			// 選択中のオブジェクト番号を保持
+		}
 	}
 }
 
