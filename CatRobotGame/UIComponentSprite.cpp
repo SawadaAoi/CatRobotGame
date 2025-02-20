@@ -145,6 +145,16 @@ DirectX::XMFLOAT4X4 UIComponentSprite::CreateWorldMatrix()
 }
 
 /* ========================================
+	ゲッター(ピクセルシェーダ)関数
+	-------------------------------------
+	戻値：ピクセルシェーダ
+=========================================== */
+PixelShader* UIComponentSprite::GetPixelShader()
+{
+	return m_pPS;
+}
+
+/* ========================================
 	ゲッター(テクスチャ)関数
 	-------------------------------------
 	戻値：テクスチャ
@@ -212,6 +222,16 @@ Vector3<float> UIComponentSprite::GetColor()
 float UIComponentSprite::GetAlpha()
 {
 	return m_fAlpha;
+}
+
+/* ========================================
+	セッター(ピクセルシェーダ)関数
+	-------------------------------------
+	引数1：ピクセルシェーダ
+=========================================== */
+void UIComponentSprite::SetPixelShader(PixelShader* pPS)
+{
+	m_pPS = pPS;
 }
 
 /* ========================================

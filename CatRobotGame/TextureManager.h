@@ -47,6 +47,7 @@ public:
 		EFFECT_SMOKE,		// 煙エフェクト
 		ITEM_COIN,			// コイン
 		BG_STAGE_SELECT,	// ステージセレクト背景
+		FADE_IRIS_OUT,		// アイリスアウト
 		MAX,
 	};
 
@@ -73,6 +74,7 @@ public:
 		{TEX_KEY::EFFECT_SMOKE,			"Assets/Texture/Effect_Smoke.png"				},
 		{TEX_KEY::ITEM_COIN,			"Assets/Texture/Item_Coin.png"					},
 		{TEX_KEY::BG_STAGE_SELECT,		"Assets/Texture/UI/BG_StageSelect.png"			},
+		{TEX_KEY::FADE_IRIS_OUT,		"Assets/Texture/UI/Fade_IrisOut.png"			},
 
 	};
 

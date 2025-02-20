@@ -56,6 +56,7 @@ void SceneBase::Init()
 	m_pStandbyObjects.clear();	// オブジェクトを一時的に保存しておく配列
 	m_pUIObjects.clear();		// シーンに所属するUIオブジェクト一覧
 	m_pStandbyUIObjects.clear();	// UIオブジェクトを一時的に保存しておく配列
+
 	m_bIsUpdating = false;		// 更新中フラグを初期化
 	InitLocal();				// 個別初期化処理
 
@@ -126,9 +127,10 @@ void SceneBase::Update()
 	ReloadDebugObjectList();	// オブジェクトリスト再読み込み
 	ReloadDebugUIList();		// UIオブジェクトリスト再読み込み
 #endif // _DEBUG
+
+	SortUIObjects();	// UIオブジェクトを描画順に並び替え
 	UpdateObject();		// オブジェクト更新
 	UpdateUI();			// UI更新
-	SortUIObjects();	// UIオブジェクトを描画順に並び替え
 }
 
 /* ========================================
@@ -138,6 +140,7 @@ void SceneBase::Update()
 =========================================== */
 void SceneBase::Draw()
 {
+	DirectXManager::SetBlendMode(DirectXManager::BlendMode::BLEND_UI);			// ブレンドモード変更(透明度0.0～1.0)
 	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_DISABLE);	// 深度テスト無効
 	// 3Dオブジェクトの背景に描画するUIを描画
 	for (auto& pUIObject : m_pUIObjects)
@@ -145,7 +148,9 @@ void SceneBase::Draw()
 		if (!pUIObject->GetIs3DObjBackDraw()) continue;
 		pUIObject->Draw();
 	}
-	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_ENABLE_WRITE_TEST);	// 元に戻す
+	DirectXManager::SetBlendMode(DirectXManager::BlendMode::BLEND_ALPHA);				// ブレンドモード元に戻す
+	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_ENABLE_WRITE_TEST);	// 深度テスト元に戻す
+
 
 	// 所持オブジェクト配列の全要素を描画
 	for (auto& pObject : m_pObjects)
@@ -153,6 +158,7 @@ void SceneBase::Draw()
 		pObject->Draw();	
 	}
 
+	DirectXManager::SetBlendMode(DirectXManager::BlendMode::BLEND_UI);			// ブレンドモード変更(透明度0.0～1.0)
 	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_DISABLE);	// 深度テスト無効
 	// 所持UIオブジェクト配列の全要素を描画
 	for (auto& pUIObject : m_pUIObjects)
@@ -160,7 +166,8 @@ void SceneBase::Draw()
 		if (pUIObject->GetIs3DObjBackDraw()) continue;
 		pUIObject->Draw();
 	}
-	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_ENABLE_WRITE_TEST);	// 元に戻す
+	DirectXManager::SetBlendMode(DirectXManager::BlendMode::BLEND_ALPHA);				// ブレンドモード元に戻す
+	DirectXManager::SetDepthTest(DirectXManager::DepthState::DEPTH_ENABLE_WRITE_TEST);	// 深度テスト元に戻す
 	DrawLocal();	// 個別描画処理
 }
 
@@ -686,6 +693,16 @@ bool SceneBase::CheckUniqueUIName(std::string sName, std::vector<UIObjectBase*> 
 	}
 
 	return true;
+}
+
+/* ========================================
+	シーン名取得関数
+	-------------------------------------
+	戻値：シーン名
+=========================================== */
+std::string SceneBase::GetSceneName()
+{
+	return "SceneBase";
 }
 
 /* ========================================

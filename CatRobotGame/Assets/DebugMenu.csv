@@ -3,8 +3,8 @@ Bool,DebugWindowList/CameraInfo,1
 Bool,DebugWindowList/SceneList,1
 Bool,DebugWindowList/ObjectList,1
 Bool,DebugWindowList/ObjectInfo,1
-Bool,DebugWindowList/UIList,1
-Bool,DebugWindowList/UIInfo,1
+Bool,DebugWindowList/UIList,0
+Bool,DebugWindowList/UIInfo,0
 Color,BasicSettings/BackColor,1.000000/1.000000/1.000000/0.000000
 Bool,BasicSettings/DispCollision,0
 Bool,BasicSettings/Grid/GridEnable,0

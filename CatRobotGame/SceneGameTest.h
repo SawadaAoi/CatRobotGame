@@ -18,5 +18,5 @@ class SceneGameTest :
 {
 public:
 	void InitLocal() override;
-
+	DEFINE_SCENE_TYPE(SceneGameTest)
 };

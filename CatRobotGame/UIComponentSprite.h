@@ -36,6 +36,7 @@ public:
 	void Draw();
 
 	// ゲッター
+	PixelShader* GetPixelShader();
 	Texture* GetTexture();
 	bool GetIsVisible();
 	Vector2<float> GetOffset();
@@ -45,6 +46,7 @@ public:
 	float GetAlpha();
 
 	// セッター
+	void SetPixelShader(PixelShader* pPS);
 	void SetTexture(Texture* pTexture);
 	void SetIsVisible(bool visible);
 	void SetOffset(Vector2<float> offset);

@@ -255,6 +255,18 @@
     <Filter Include="ソース ファイル\App\GameObject\Other\StageSelect">
       <UniqueIdentifier>{9ea4109d-672e-4023-9590-de97ee4b56f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\GameObject\System\Fade">
+      <UniqueIdentifier>{7d74a39b-ba1f-46d8-abae-7de6921b9c2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\App\UI\Object\System">
+      <UniqueIdentifier>{de89f915-01b3-4375-bfe6-f12018483530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\PixelShader\Fade">
+      <UniqueIdentifier>{8486a5c7-9f86-4d14-80f0-485f1574bafd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\App\UI\Object\System\Fade">
+      <UniqueIdentifier>{8e1a2982-4f97-489b-9755-ac7fdc8fbb23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -637,6 +649,12 @@
     </ClCompile>
     <ClCompile Include="ObjectStageSampleParent.cpp">
       <Filter>ソース ファイル\App\GameObject\Other\StageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObjectFade.cpp">
+      <Filter>ソース ファイル\App\UI\Object\System\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObjectFadeIrisOut.cpp">
+      <Filter>ソース ファイル\App\UI\Object\System\Fade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1033,6 +1051,15 @@
     <ClInclude Include="ObjectStageSampleParent.h">
       <Filter>ソース ファイル\App\GameObject\Other\StageSelect</Filter>
     </ClInclude>
+    <ClInclude Include="RegisterAllScene.h">
+      <Filter>ソース ファイル\App\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObjectFade.h">
+      <Filter>ソース ファイル\App\UI\Object\System\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObjectFadeIrisOut.h">
+      <Filter>ソース ファイル\App\UI\Object\System\Fade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VS_Sprite.hlsl">
@@ -1064,6 +1091,12 @@
     </FxCompile>
     <FxCompile Include="VS_Line.hlsl">
       <Filter>リソース ファイル\VertexShader\Shape</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_FadeIrisOutCircle.hlsl">
+      <Filter>リソース ファイル\PixelShader\Fade</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_FadeIrisOutTexture.hlsl">
+      <Filter>リソース ファイル\PixelShader\Fade</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

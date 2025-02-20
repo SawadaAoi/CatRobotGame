@@ -40,11 +40,13 @@ public:
 	// ピクセルシェーダー種類
 	enum E_PS_KEY
 	{
-		PS_SHAPE,				// 図形描画用
-		PS_LINE,				// ライン描画用
-		PS_SPRITE,				// スプライト描画用
-		PS_MODEL_STATIC,	// 静的モデル用デフォルト
-		PS_MODEL_ANIME,		// アニメーションモデル用デフォルト
+		PS_SHAPE,					// 図形描画用
+		PS_LINE,					// ライン描画用
+		PS_SPRITE,					// スプライト描画用
+		PS_MODEL_STATIC,			// 静的モデル用デフォルト
+		PS_MODEL_ANIME,				// アニメーションモデル用デフォルト
+		PS_FADE_IRIS_OUT_CIRCLE,	// アイリスアウトサークル
+		PS_FADE_IRIS_OUT_TEXTURE,	// アイリスアウトテクスチャ
 	};
 
 public:

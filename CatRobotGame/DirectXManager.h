@@ -34,6 +34,7 @@ public:
 		BLEND_ADDALPHA,		// 加算アルファブレンド
 		BLEND_SUB,			// 減算ブレンド
 		BLEND_SCREEN,		// スクリーンブレンド
+		BLEND_UI,			// UIブレンド
 		BLEND_MAX
 	};
 

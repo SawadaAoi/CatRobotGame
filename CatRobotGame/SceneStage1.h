@@ -18,6 +18,6 @@ class SceneStage1 :
 {
 public:
 	void InitLocal() override;
-
+	DEFINE_SCENE_TYPE(SceneStage1)
 };
 

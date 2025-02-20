@@ -8,7 +8,6 @@
 
 // =============== インクルード ===================
 #include "SceneTitile.h"
-#include "SceneStageSelect.h"
 
 #include "ObjectBase.h"
 #include "ObjectCamera.h"
@@ -280,7 +279,7 @@ void SceneTitile::SelectMenuAnim()
 void SceneTitile::FuncStart()
 {
 	// シーン遷移
-	SceneManager::ChangeScene<SceneStageSelect>();
+	SceneManager::ChangeScene("SceneStageSelect");
 }
 
 /* ========================================

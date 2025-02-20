@@ -39,6 +39,8 @@ private:
 	// ƒƒjƒ…[ŠÖ”
 	void FuncStart();
 	void FuncEnd();
+
+	DEFINE_SCENE_TYPE(SceneTitile)
 private:
 	// UI
 	UIObjectBase*				m_pTitleLogo;

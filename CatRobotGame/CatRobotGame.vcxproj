@@ -292,6 +292,8 @@
     <ClCompile Include="UIComponentText.cpp" />
     <ClCompile Include="UIComponentTransform.cpp" />
     <ClCompile Include="UIObjectBase.cpp" />
+    <ClCompile Include="UIObjectFade.cpp" />
+    <ClCompile Include="UIObjectFadeIrisOut.cpp" />
     <ClCompile Include="UIObjectPlayerCoin.cpp" />
     <ClCompile Include="UIObjectPlayerHP.cpp" />
     <ClCompile Include="UIObjectText.cpp" />
@@ -391,6 +393,7 @@
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneGameTest.h" />
+    <ClInclude Include="RegisterAllScene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneStage1.h" />
     <ClInclude Include="SceneStage2.h" />
@@ -424,6 +427,8 @@
     <ClInclude Include="UIComponentText.h" />
     <ClInclude Include="UIComponentTransform.h" />
     <ClInclude Include="UIObjectBase.h" />
+    <ClInclude Include="UIObjectFade.h" />
+    <ClInclude Include="UIObjectFadeIrisOut.h" />
     <ClInclude Include="UIObjectPlayerCoin.h" />
     <ClInclude Include="UIObjectPlayerHP.h" />
     <ClInclude Include="UIObjectText.h" />
@@ -434,6 +439,18 @@
     <ClInclude Include="WindowAPI.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="PS_FadeIrisOutCircle.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="PS_FadeIrisOutTexture.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="PS_Line.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

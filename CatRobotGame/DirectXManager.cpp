@@ -36,6 +36,18 @@ D3D11_BLEND BLEND_MODE[DirectXManager::BlendMode::BLEND_MAX][2] = {
 		{D3D11_BLEND_SRC_ALPHA,			D3D11_BLEND_ONE				},	// 加算アルファブレンド
 		{D3D11_BLEND_ZERO,				D3D11_BLEND_INV_SRC_COLOR	},	// 減算ブレンド
 		{D3D11_BLEND_INV_DEST_COLOR,	D3D11_BLEND_ONE				},	// スクリーンブレンド
+		{D3D11_BLEND_SRC_ALPHA,			D3D11_BLEND_INV_SRC_ALPHA	},	// UI用ブレンド
+};
+
+// Alpha-to-Coverage
+bool ALPHA_TO_COVERAGE[DirectXManager::BlendMode::BLEND_MAX] = {
+	false,	// ブレンド無し
+	true,	// アルファブレンド
+	false,	// 加算ブレンド
+	false,	// 加算アルファブレンド
+	false,	// 減算ブレンド
+	false,	// スクリーンブレンド
+	false,	// 乗算ブレンド
 };
 
 // 深度ステート設定
@@ -422,7 +434,6 @@ HRESULT DirectXManager::InitBlendState()
 	// ブレンドステートの設定
 	D3D11_BLEND_DESC bd = {};
 	ZeroMemory(&bd, sizeof(bd));
-	bd.AlphaToCoverageEnable	= TRUE;		// アルファ・カバレッジ(透過画像の重なり等)　←重要
 	bd.IndependentBlendEnable	= FALSE;	// 独立ブレンド有効(先頭の設定を全てのレンダーターゲットに適用)
 	
 
@@ -431,7 +442,8 @@ HRESULT DirectXManager::InitBlendState()
 	{
 		rtbd.SrcBlend	= BLEND_MODE[i][0];	// ソースブレンド
 		rtbd.DestBlend	= BLEND_MODE[i][1];	// デスティネーションブレンド
-		bd.RenderTarget[0] = rtbd;		// レンダーターゲットを設定
+		bd.AlphaToCoverageEnable	= ALPHA_TO_COVERAGE[i];	// アルファ・カバレッジ(透過画像の重なり等)　←重要
+		bd.RenderTarget[0]			= rtbd;					// レンダーターゲットを設定
 
 		// ブレンドステートの作成
 		hr = m_pDevice->CreateBlendState(&bd, &m_pBlendState[i]);

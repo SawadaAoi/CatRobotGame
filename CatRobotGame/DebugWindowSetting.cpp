@@ -15,13 +15,6 @@
 #include "SceneManager.h"
 #include "CameraManager.h"	// カメラマネージャ
 
-// シーン
-#include <type_traits>
-#include "SceneGameTest.h"
-#include "SceneTitile.h"
-#include "SceneStageSelect.h"
-#include "SceneStage1.h"
-#include "SceneStage2.h"
 
 // =============== 名前空間 ===================
 namespace DebugUI
@@ -41,16 +34,6 @@ namespace DebugUI
 		"UIInfo",
 	};
 
-	// シーン名、シーン変更関数のマップ
-	const std::map< std::string, std::function<void()>> SCENE_MAP =
-	{
-		{"SceneGameTest", []() { SceneManager::ChangeScene<SceneGameTest>(); } },
-		{"SceneTitile", []() { SceneManager::ChangeScene<SceneTitile>(); } },
-		{"SceneStageSelect", []() { SceneManager::ChangeScene<SceneStageSelect>(); } },
-		{"SceneStage1", []() { SceneManager::ChangeScene<SceneStage1>(); } },
-		{"SceneStage2", []() { SceneManager::ChangeScene<SceneStage2>(); } },
-
-	};
 
 /* ========================================
 	デバッグ用ウィンドウ初期化関数
@@ -145,13 +128,13 @@ void InitSceneList()
 	{
 		// 選択したらシーン変更
 		std::string sSceneName = reinterpret_cast<const char*>(arg);	// リスト項目名
-		SCENE_MAP.at(sSceneName)();	// シーン変更
+		SceneManager::ChangeScene(sSceneName, 0.0f);	// シーン変更
 	}, true);
 
 	// シーン名をリストに追加
-	for (auto& scene : SCENE_MAP)
+	for (auto& scene : SceneManager::GetSceneNameList())
 	{
-		pSceneList->AddListItem(scene.first.c_str());
+		pSceneList->AddListItem(scene.c_str());
 	}
 
 	WIN_SCENE_LIST.AddItem(pSceneList);

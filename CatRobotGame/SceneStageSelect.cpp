@@ -8,10 +8,6 @@
 
 // =============== インクルード ===================
 #include "SceneStageSelect.h"
-#include "SceneGameTest.h"
-#include "SceneTitile.h"
-#include "SceneStage1.h"
-#include "SceneStage2.h"
 
 #include "SceneManager.h"
 #include "FileManager.h"
@@ -30,11 +26,10 @@
 // シーン名、シーン変更関数のマップ
 const std::vector<std::function<void()>> SCENE_CALL =
 {
-	[]() { SceneManager::ChangeScene<SceneGameTest>(); } ,
-	[]() { SceneManager::ChangeScene<SceneTitile>(); } ,
-	[]() { SceneManager::ChangeScene<SceneStage1>(); }, 
-	[]() { SceneManager::ChangeScene<SceneStage2>(); },
-
+	[]() { SceneManager::ChangeScene("SceneGameTest"); } ,
+	[]() { SceneManager::ChangeScene("SceneTitile"); } ,
+	[]() { SceneManager::ChangeScene("SceneStage1"); },
+	[]() { SceneManager::ChangeScene("SceneStage2"); },
 };
 
 // ステージ名
@@ -58,6 +53,8 @@ const std::vector<std::string> MODEL_DATA_NAME =
 	"Stage2_Select.slc",
 	"Stage2_Select.slc",
 };
+
+const int STAGE_NUM_MAX = SCENE_NAME.size();	// ステージ数
 
 // カメラ位置
 const Vector3<float> CAMERA_POS_ZOOMIN	= { 0.0f, 30.0f, -40.0f };
@@ -112,6 +109,8 @@ void SceneStageSelect::InitLocal()
 	// ステージモデル読み込み
 	FileManager::StageObjectInput(MODEL_DATA_PATH + MODEL_DATA_NAME[m_nSelectStageNum]);
 
+	SceneManager::SetFadeInKind(FADE_KIND_NORMAL);
+	SceneManager::SetFadeTime(1.0f);
 }
 
 
@@ -122,6 +121,12 @@ void SceneStageSelect::InitLocal()
 ========================================== */
 void SceneStageSelect::UpdateLocal()
 {
+	// UVスクロール
+	Vector2<float> vUvPos = m_pBG_Image->GetSprite()->GetUvPos();
+	vUvPos.x -= UV_SCROLL_SPEED * DELTA_TIME;
+	vUvPos.y -= UV_SCROLL_SPEED * DELTA_TIME;
+	m_pBG_Image->GetSprite()->SetUvPos(vUvPos);
+
 	// ステージモデルが変更中なら
 	if (m_bChangeStageModel) 
 	{
@@ -149,12 +154,6 @@ void SceneStageSelect::UpdateLocal()
 
 		}
 	}
-	
-	// UVスクロール
-	Vector2<float> vUvPos = m_pBG_Image->GetSprite()->GetUvPos();
-	vUvPos.x -= UV_SCROLL_SPEED * DELTA_TIME;
-	vUvPos.y -= UV_SCROLL_SPEED * DELTA_TIME;
-	m_pBG_Image->GetSprite()->SetUvPos(vUvPos);
 
 	m_nSelectStageNumOld = m_nSelectStageNum;
 }
@@ -170,15 +169,16 @@ void SceneStageSelect::StageChangeInput()
 {
 	if (Input::IsKeyTrigger(VK_LEFT))
 	{
-		m_nSelectStageNum = (m_nSelectStageNum + 2) % 3;
+		m_nSelectStageNum = (m_nSelectStageNum + STAGE_NUM_MAX - 1) % STAGE_NUM_MAX;
 	}
 	else if (Input::IsKeyTrigger(VK_RIGHT))
 	{
-		m_nSelectStageNum = (m_nSelectStageNum + 1) % 3;
+		m_nSelectStageNum = (m_nSelectStageNum + 1) % STAGE_NUM_MAX;
 	}
 
 	if (Input::IsKeyTrigger('K'))
 	{
+		SceneManager::SetFadeOutKind(FADE_KIND_NORMAL);
 		SCENE_CALL[m_nSelectStageNum]();
 	}
 }

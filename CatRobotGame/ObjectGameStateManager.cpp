@@ -17,6 +17,11 @@
 #include "ComponentTransform.h"
 #include "ComponentRigidbody.h"
 
+#include "SceneManager.h"
+
+// =============== 定数定義 =======================
+const float WAIT_TIME = 3.0f;	// 待機時間
+
 /* ========================================
 	コンストラクタ関数
 	-------------------------------------
@@ -29,6 +34,7 @@ ObjectGameStateManager::ObjectGameStateManager(SceneBase* pScene)
 	, m_eGameState(E_GameState::GS_NORMAL)
 	, m_eClearType(E_ClearType::CT_GOAL)
 	, m_pPlayer(nullptr)
+	, m_fWaitTime(0.0f)
 {
 }
 
@@ -62,6 +68,17 @@ void ObjectGameStateManager::UpdateLocal()
 	{
 		CheckClear();
 		CheckGameOver();
+	}
+	// ゲームクリア、ゲームオーバー時の処理
+	else if (m_eGameState == E_GameState::GS_GAMECLEAR || m_eGameState == E_GameState::GS_GAMEOVER)
+	{
+		m_fWaitTime += DELTA_TIME;
+		if (m_fWaitTime >= WAIT_TIME)
+		{
+			// ステージセレクト画面へ遷移
+			SceneManager::SetFadeOutKind(FADE_KIND_IRIS_OUT_TEXTURE);
+			SceneManager::ChangeScene("SceneStageSelect", 3.0f);
+		}
 	}
 
 #ifdef _DEBUG

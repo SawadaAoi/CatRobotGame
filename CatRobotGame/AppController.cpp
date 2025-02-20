@@ -49,6 +49,7 @@ HRESULT AppController::Init()
 	MODEL_ANIME_MNG_INST.Init();	// アニメーションモデル管理初期化
 	TEXTURE_MNG_INST.Init();		// テクスチャ管理初期化
 
+	SceneManager::RegisterAllScene();	// シーン登録
 	ObjectTypeRegistry::RegisterAllObjectTypes();	// オブジェクトタイプ登録
 	UITypeRegistry::RegisterAllUITypes();			// UIタイプ登録
 #ifdef _DEBUG
@@ -115,9 +116,6 @@ void AppController::Draw()
 
 	DirectXManager::EndDrawDirectX();	// バックバッファをフロントバッファにコピー
 
-	// シーン再読み込みが指示されていたら
-	if (SceneManager::GetIsReloadScene())
-		SceneManager::ReloadScene();
 }
 
 

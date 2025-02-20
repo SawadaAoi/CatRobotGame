@@ -25,6 +25,8 @@ public:
 	SceneStageSelect();
 	void InitLocal() override;
 	void UpdateLocal() override;
+
+	DEFINE_SCENE_TYPE(SceneStageSelect)
 private:
 	void StageChangeInput();
 private:

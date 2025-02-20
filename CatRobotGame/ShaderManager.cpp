@@ -24,11 +24,13 @@ const std::unordered_map < CShaderManagaer::E_VS_KEY, std::string > VS_SHADER_PA
 // ピクセルシェーダー保存先パス
 const std::unordered_map < CShaderManagaer::E_PS_KEY, std::string > PS_SHADER_PATH
 {
-	{PS_KEY::PS_SHAPE,			"Assets/shader/PS_Shape.cso"		},
-	{PS_KEY::PS_LINE,			"Assets/shader/PS_Line.cso"			},
-	{PS_KEY::PS_SPRITE,			"Assets/shader/PS_Sprite.cso"		},
-	{PS_KEY::PS_MODEL_STATIC,	"Assets/shader/PS_ModelStatic.cso"	},
-	{PS_KEY::PS_MODEL_ANIME,	"Assets/shader/PS_ModelAnime.cso"	},
+	{PS_KEY::PS_SHAPE,				"Assets/shader/PS_Shape.cso"				},
+	{PS_KEY::PS_LINE,				"Assets/shader/PS_Line.cso"					},
+	{PS_KEY::PS_SPRITE,				"Assets/shader/PS_Sprite.cso"				},
+	{PS_KEY::PS_MODEL_STATIC,		"Assets/shader/PS_ModelStatic.cso"			},
+	{PS_KEY::PS_MODEL_ANIME,		"Assets/shader/PS_ModelAnime.cso"			},
+	{PS_KEY::PS_FADE_IRIS_OUT_CIRCLE,"Assets/shader/PS_FadeIrisOutCircle.cso"	},
+	{PS_KEY::PS_FADE_IRIS_OUT_TEXTURE,"Assets/shader/PS_FadeIrisOutTexture.cso"	},
 };
 
 
