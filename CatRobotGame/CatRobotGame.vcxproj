@@ -183,6 +183,7 @@
     <ClCompile Include="ComponentGimmickMoveLinear.cpp" />
     <ClCompile Include="ComponentGroundBox.cpp" />
     <ClCompile Include="ComponentLightBase.cpp" />
+    <ClCompile Include="ComponentShadow.cpp" />
     <ClCompile Include="ComponentSmokeEffect.cpp" />
     <ClCompile Include="DirectWriteCustomFont.cpp" />
     <ClCompile Include="FileManager.cpp" />
@@ -265,6 +266,7 @@
     <ClCompile Include="SceneStage2.cpp" />
     <ClCompile Include="SceneStageSelect.cpp" />
     <ClCompile Include="SceneTitile.cpp" />
+    <ClCompile Include="ShadowManager.cpp" />
     <ClCompile Include="ShapeBox.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="DebugConsole.cpp" />
@@ -315,6 +317,7 @@
     <ClInclude Include="ComponentGroundBox.h" />
     <ClInclude Include="ComponentLightBase.h" />
     <ClInclude Include="ComponentOrder.h" />
+    <ClInclude Include="ComponentShadow.h" />
     <ClInclude Include="ComponentSmokeEffect.h" />
     <ClInclude Include="DirectWriteCustomFont.h" />
     <ClInclude Include="FileManager.h" />
@@ -399,6 +402,7 @@
     <ClInclude Include="SceneStage2.h" />
     <ClInclude Include="SceneStageSelect.h" />
     <ClInclude Include="SceneTitile.h" />
+    <ClInclude Include="ShadowManager.h" />
     <ClInclude Include="ShapeBox.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="DebugConsole.h" />

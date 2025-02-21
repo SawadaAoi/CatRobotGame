@@ -19,6 +19,7 @@
 #include "ComponentRigidbody.h"
 #include "ComponentTransform.h"
 #include "ModelAnimeManager.h"
+#include "ComponentShadow.h"
 
 #include "ComponentEnemyMoveLinear.h"
 
@@ -80,6 +81,7 @@ void ObjectEnemy::InitLocal()
 
 	m_pCompEnemyState = AddComponent<ComponentEnemyState>();
 
+	AddComponent<ComponentShadow>();
 }
 
 /* ========================================

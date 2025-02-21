@@ -656,6 +656,12 @@
     <ClCompile Include="UIObjectFadeIrisOut.cpp">
       <Filter>ソース ファイル\App\UI\Object\System\Fade</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentShadow.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowManager.cpp">
+      <Filter>ソース ファイル\System\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -1059,6 +1065,10 @@
     </ClInclude>
     <ClInclude Include="UIObjectFadeIrisOut.h">
       <Filter>ソース ファイル\App\UI\Object\System\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentShadow.h" />
+    <ClInclude Include="ShadowManager.h">
+      <Filter>ソース ファイル\System\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
