@@ -267,6 +267,9 @@
     <Filter Include="ソース ファイル\App\UI\Object\System\Fade">
       <UniqueIdentifier>{8e1a2982-4f97-489b-9755-ac7fdc8fbb23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\System\Sound">
+      <UniqueIdentifier>{a401e145-76fa-436f-a7ae-cefe19cccc66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -661,6 +664,12 @@
     </ClCompile>
     <ClCompile Include="ShadowManager.cpp">
       <Filter>ソース ファイル\System\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>ソース ファイル\System\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>ソース ファイル\System\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1069,6 +1078,12 @@
     <ClInclude Include="ComponentShadow.h" />
     <ClInclude Include="ShadowManager.h">
       <Filter>ソース ファイル\System\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>ソース ファイル\System\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>ソース ファイル\System\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

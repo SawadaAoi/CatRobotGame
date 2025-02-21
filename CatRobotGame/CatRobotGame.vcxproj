@@ -285,6 +285,8 @@
     <ClCompile Include="ShapePlane.cpp" />
     <ClCompile Include="ShapeSphere.cpp" />
     <ClCompile Include="AppStart.cpp" />
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TextWrite.cpp" />
@@ -421,6 +423,8 @@
     <ClInclude Include="ShapeLine.h" />
     <ClInclude Include="ShapePlane.h" />
     <ClInclude Include="ShapeSphere.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TextWrite.h" />

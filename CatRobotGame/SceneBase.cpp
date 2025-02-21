@@ -12,6 +12,7 @@
 #include "ObjectCamera.h"
 #include "CameraManager.h"
 #include "ComponentCollisionBase.h"
+#include "SoundManager.h"
 
 // =============== 定数定義 =======================
 const int OBJECT_LIST_LINE_NUM = 17;	// オブジェクトリストの行数
@@ -109,6 +110,7 @@ void SceneBase::Uninit()
 	}
 	m_pStandbyUIObjects.clear();	// クリア
 
+	STOP_BGM();	// BGM停止
 }
 
 /* ========================================

@@ -29,6 +29,7 @@
 #include "ModelAnimeManager.h"
 #include "TextureManager.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 
 #include <vector>
 #include "Input.h"
@@ -136,6 +137,7 @@ void SceneTitile::InitLocal()
 	m_pSmokeEffect->SetScale(0.5f, 1.0f);
 	m_pSmokeEffect->SetPosAdjust(-0.5f, 0.5f);
 
+	PLAY_BGM(BGM_KEY::BGM_TITLE);
 }
 
 /* ========================================
