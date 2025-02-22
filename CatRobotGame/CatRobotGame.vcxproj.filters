@@ -671,6 +671,9 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>ソース ファイル\System\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectFireBar.cpp">
+      <Filter>ソース ファイル\App\GameObject\StageObject\Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -1084,6 +1087,9 @@
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>ソース ファイル\System\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFireBar.h">
+      <Filter>ソース ファイル\App\GameObject\StageObject\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -47,6 +47,7 @@ public:
 	// ÉXÉPÅ[Éãïœä∑
 	void Scale(const Vector3<float>& scale);
 	void Scale(float x, float y, float z);
+	void Scale(float scale);
 	void ScaleX(float x);	
 	void ScaleY(float y);
 	void ScaleZ(float z);

@@ -48,6 +48,7 @@ public:
 		ITEM_COIN,			// コイン
 		BG_STAGE_SELECT,	// ステージセレクト背景
 		FADE_IRIS_OUT,		// アイリスアウト
+		EFFECT_FIREBALL,	// 火の玉エフェクト
 		MAX,
 	};
 
@@ -75,6 +76,7 @@ public:
 		{TEX_KEY::ITEM_COIN,			"Assets/Texture/Item_Coin.png"					},
 		{TEX_KEY::BG_STAGE_SELECT,		"Assets/Texture/UI/BG_StageSelect.png"			},
 		{TEX_KEY::FADE_IRIS_OUT,		"Assets/Texture/UI/Fade_IrisOut.png"			},
+		{TEX_KEY::EFFECT_FIREBALL,		"Assets/Texture/Effect_Fireball.png"			},
 
 	};
 

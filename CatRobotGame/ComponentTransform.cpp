@@ -27,6 +27,9 @@ ComponentTransform::ComponentTransform(ObjectBase* pOwner)
 	, m_vLocalPosition(0.0f, 0.0f, 0.0f)
 	, m_qLocalRotation()
 	, m_vLocalScale(1.0f, 1.0f, 1.0f)
+	, m_vWorldPosition(0.0f, 0.0f, 0.0f)
+	, m_qWorldRotation()
+	, m_vWorldScale(1.0f, 1.0f, 1.0f)
 	, m_bMoveTo(false)
 	, m_vMoveStartPos(0.0f, 0.0f, 0.0f)
 	, m_vMoveEndPos(0.0f, 0.0f, 0.0f)
@@ -352,6 +355,18 @@ void ComponentTransform::Scale(const Vector3<float>& scale)
 void ComponentTransform::Scale(float x, float y, float z)
 {
 	this->Scale(Vector3<float>(x, y, z));
+}
+
+/* ========================================
+	スケール変更関数
+	-------------------------------------
+	内容：引数のスケールを加える
+	-------------------------------------
+	引数1：スケール	float
+=========================================== */
+void ComponentTransform::Scale(float scale)
+{
+	this->Scale(Vector3<float>(scale, scale, scale));
 }
 
 /* ========================================
