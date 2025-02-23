@@ -16,6 +16,7 @@
 
 #include "UIObjectPlayerCoin.h"
 #include "ObjectFireBar.h"
+#include "ObjectDropFloor.h"
 
 /* ========================================
 	èâä˙âªä÷êî
@@ -32,6 +33,6 @@ void SceneGameTest::InitLocal()
 	
 	AddSceneObject<ObjectCoinGroupCircle>("ObjectCoinGroupCircle")->GetTransform()->SetPosition(Vector3<float>(3.0f, 1.0f, -5.0f));
 
-	AddSceneObject<ObjectFireBar>("ObjectFireBar")->GetTransform()->SetPosition(Vector3<float>(0.0f, 0.5f, -5.0f));
+	AddSceneObject<ObjectDropFloor>("ObjectDropFloor")->GetTransform()->SetPosition(Vector3<float>(12.0f, 0.5f, 0.0f));
 }
 
