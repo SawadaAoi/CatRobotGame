@@ -266,6 +266,8 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneStage1.cpp" />
     <ClCompile Include="SceneStage2.cpp" />
+    <ClCompile Include="SceneStage3.cpp" />
+    <ClCompile Include="SceneStage4.cpp" />
     <ClCompile Include="SceneStageSelect.cpp" />
     <ClCompile Include="SceneTitile.cpp" />
     <ClCompile Include="ShadowManager.cpp" />
@@ -406,6 +408,8 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneStage1.h" />
     <ClInclude Include="SceneStage2.h" />
+    <ClInclude Include="SceneStage3.h" />
+    <ClInclude Include="SceneStage4.h" />
     <ClInclude Include="SceneStageSelect.h" />
     <ClInclude Include="SceneTitile.h" />
     <ClInclude Include="ShadowManager.h" />

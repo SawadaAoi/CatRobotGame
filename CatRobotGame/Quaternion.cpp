@@ -500,7 +500,7 @@ Quaternion Quaternion::FromEulerAngle(Vector3<float> fEulerAngle)
 	Quaternion 	qPitch = Quaternion::FromAxisAngleNormalized(Vector3<float>::Up(), fEulerAngle.y);		// ピッチ回転
 	Quaternion	qYaw = Quaternion::FromAxisAngleNormalized(Vector3<float>::Forward(), fEulerAngle.z);	// ヨー回転
 
-	Quaternion reQ = qYaw * qRoll * qPitch;// ヨー、ピッチ、ロールの順で掛ける
+	Quaternion reQ = qYaw * qRoll * qPitch;// ヨー、ロール、ピッチ(Z,X,Y)の順で掛ける
 
 	return reQ;
 }

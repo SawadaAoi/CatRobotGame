@@ -26,19 +26,19 @@
 // シーン名、シーン変更関数のマップ
 const std::vector<std::function<void()>> SCENE_CALL =
 {
-	[]() { SceneManager::ChangeScene("SceneGameTest"); } ,
-	[]() { SceneManager::ChangeScene("SceneTitile"); } ,
 	[]() { SceneManager::ChangeScene("SceneStage1"); },
 	[]() { SceneManager::ChangeScene("SceneStage2"); },
+	[]() { SceneManager::ChangeScene("SceneStage3"); },
+	[]() { SceneManager::ChangeScene("SceneStage4"); },
 };
 
 // ステージ名
 const std::vector<std::string> SCENE_NAME =
 {
-	"テストステージ",
-	"タイトル",
 	"ステージ１",
 	"ステージ２",
+	"ステージ３",
+	"ステージ４",
 };
 
 
@@ -48,10 +48,10 @@ const std::string MODEL_DATA_PATH = "Assets/Save/StageSelect/";
 // ファイル名
 const std::vector<std::string> MODEL_DATA_NAME =
 {
+	"Stage1_Select.slc",
 	"Stage2_Select.slc",
-	"Stage2_Select.slc",
-	"Stage2_Select.slc",
-	"Stage2_Select.slc",
+	"Stage3_Select.slc",
+	"Stage4_Select.slc",
 };
 
 const int STAGE_NUM_MAX = SCENE_NAME.size();	// ステージ数

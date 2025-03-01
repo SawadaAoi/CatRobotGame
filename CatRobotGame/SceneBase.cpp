@@ -133,6 +133,8 @@ void SceneBase::Update()
 	SortUIObjects();	// UIオブジェクトを描画順に並び替え
 	UpdateObject();		// オブジェクト更新
 	UpdateUI();			// UI更新
+
+	UpdateLocal();		// 個別更新処理
 }
 
 /* ========================================
@@ -229,7 +231,6 @@ void SceneBase::UpdateUI()
 	m_pStandbyUIObjects.clear();	// クリア
 
 	RemoveDeadUIObjects();	// 死亡状態のUIオブジェクトを削除
-	UpdateLocal();			// 個別更新処理
 }
 
 /* ========================================
@@ -819,6 +820,11 @@ void SceneBase::InitObjectList()
 
 		m_pSelectObj->Destroy();	// オブジェクト削除
 
+		// オブジェクトの選択を解除
+		m_nObjectListSelectNo = -1;								// 選択番号をリセット
+		m_pSelectObj = nullptr;									// 選択中のオブジェクトをクリア
+		WIN_OBJ_LIST[ITEM_OBJ_LIST_NAME.c_str()].SetListNo(-1);	// 選択番号をリセット
+		WIN_OBJ_INFO.Clear();									// 表示リセット
 	}));
 
 	// オブジェクトフォーカスボタン

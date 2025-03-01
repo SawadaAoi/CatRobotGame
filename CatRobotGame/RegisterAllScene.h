@@ -19,6 +19,8 @@
 
 #include "SceneStage1.h"
 #include "SceneStage2.h"
+#include "SceneStage3.h"
+#include "SceneStage4.h"
 
 /* ========================================
 	ÉVÅ[Éììoò^ä÷êî
@@ -32,4 +34,6 @@ void SceneManager::RegisterAllScene()
 	REGISTER_SCENE(SceneStageSelect);
 	REGISTER_SCENE(SceneStage1);
 	REGISTER_SCENE(SceneStage2);
+	REGISTER_SCENE(SceneStage3);
+	REGISTER_SCENE(SceneStage4);
 }

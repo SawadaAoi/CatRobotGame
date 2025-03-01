@@ -677,6 +677,12 @@
     <ClCompile Include="ComponentShadow.cpp">
       <Filter>ソース ファイル\App\Component\Light</Filter>
     </ClCompile>
+    <ClCompile Include="SceneStage3.cpp">
+      <Filter>ソース ファイル\App\Scene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneStage4.cpp">
+      <Filter>ソース ファイル\App\Scene\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppController.h">
@@ -1098,6 +1104,12 @@
     </ClInclude>
     <ClInclude Include="ComponentShadow.h">
       <Filter>ソース ファイル\App\Component\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneStage3.h">
+      <Filter>ソース ファイル\App\Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneStage4.h">
+      <Filter>ソース ファイル\App\Scene\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
