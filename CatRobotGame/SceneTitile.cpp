@@ -137,7 +137,7 @@ void SceneTitile::InitLocal()
 	m_pSmokeEffect->SetScale(0.5f, 1.0f);
 	m_pSmokeEffect->SetPosAdjust(-0.5f, 0.5f);
 
-	//PLAY_BGM(BGM_KEY::BGM_TITLE);
+	PLAY_BGM(BGM_KEY::BGM_TITLE);
 }
 
 /* ========================================
@@ -248,6 +248,7 @@ void SceneTitile::UpdateSelect()
 	{
 		m_fTextAnimeCnt = 0.0f;
 		m_pSelectMenu[nOldSelectNum]->GetCompText()->SetFontSize(TEXT_SIZE);
+		PLAY_SE(SE_KEY::SE_MENU_CURSOR);
 	}
 
 	SelectMenuAnim();	// 選択メニューアニメ
@@ -256,6 +257,7 @@ void SceneTitile::UpdateSelect()
 	if (Input::IsKeyTrigger('K'))
 	{
 		(this->*m_MenuFunctions[m_nSelectNum])();
+		PLAY_SE(SE_KEY::SE_MENU_DECIDE);
 	}
 }
 

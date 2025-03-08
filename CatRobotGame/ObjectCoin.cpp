@@ -16,6 +16,7 @@
 #include "ComponentTransform.h"
 
 #include "TextureManager.h"
+#include "SoundManager.h"
 
 // =============== 定数 =======================
 const int			ANIME_FRAME_MAX = 18;	// アニメーションフレーム数
@@ -97,6 +98,7 @@ void ObjectCoin::OnCollisionEnter(ObjectBase* pHit)
 	// プレイヤーと接触したら
 	if (pHit->GetTag() == E_ObjectTag::Player)
 	{
+		PLAY_SE(SE_KEY::SE_COIN_GET);	// コイン取得音再生
 		Destroy();	// コイン削除
 	}
 }

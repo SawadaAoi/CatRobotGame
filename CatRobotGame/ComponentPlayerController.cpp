@@ -21,6 +21,7 @@
 #include "SceneManager.h"
 #include "unordered_map"
 #include "ModelAnimeManager.h"
+#include "SoundManager.h"
 
 #include <cmath>
 
@@ -222,6 +223,7 @@ void ComponentPlayerController::Jump()
 	{
 		m_pCompRigidbody->AddForce(Vector3<float>::Up() * m_fJumpPower, E_ForceMode::IMPULSE);
 		m_pCompTran->TranslateY(0.1f);	// ­‚µ•‚‚©‚¹‚é(’n–Ê”»’è‚ÌˆÊ’uC³‚ğl—¶‚µ‚Ä)
+		PLAY_SE(SE_KEY::SE_PLAYER_JUMP);	// Œø‰Ê‰¹Ä¶
 	}
 }
 
@@ -252,6 +254,7 @@ void ComponentPlayerController::Shot()
 		pBullet->GetTransform()->SetPosition(m_pCompTran->GetPosition());
 		pBullet->GetTransform()->SetRotation(m_pCompTran->GetRotation());
 		m_bShot = false;	// ˜AË–h~
+		PLAY_SE(SE_KEY::SE_PLAYER_SHOT);	// Œø‰Ê‰¹Ä¶
 	}
 }
 

@@ -11,6 +11,7 @@
 
 #include "SceneManager.h"
 #include "FileManager.h"
+#include "SoundManager.h"
 #include "Input.h"
 
 #include "UIObjectText.h"
@@ -111,6 +112,8 @@ void SceneStageSelect::InitLocal()
 
 	SceneManager::SetFadeInKind(FADE_KIND_NORMAL);
 	SceneManager::SetFadeTime(1.0f);
+
+	PLAY_BGM(BGM_KEY::BGM_SELECT);
 }
 
 
@@ -170,16 +173,21 @@ void SceneStageSelect::StageChangeInput()
 	if (Input::IsKeyTrigger(VK_LEFT))
 	{
 		m_nSelectStageNum = (m_nSelectStageNum + STAGE_NUM_MAX - 1) % STAGE_NUM_MAX;
+
+		PLAY_SE(SE_KEY::SE_MENU_CURSOR);
 	}
 	else if (Input::IsKeyTrigger(VK_RIGHT))
 	{
 		m_nSelectStageNum = (m_nSelectStageNum + 1) % STAGE_NUM_MAX;
+		PLAY_SE(SE_KEY::SE_MENU_CURSOR);
 	}
 
 	if (Input::IsKeyTrigger('K'))
 	{
 		SceneManager::SetFadeOutKind(FADE_KIND_NORMAL);
 		SCENE_CALL[m_nSelectStageNum]();
+
+		PLAY_SE(SE_KEY::SE_MENU_DECIDE);
 	}
 }
 

@@ -17,6 +17,7 @@
 
 #include "SceneBase.h"
 #include "TextureManager.h"
+#include "SoundManager.h"
 
 /* ========================================
 	コンストラクタ関数
@@ -85,6 +86,8 @@ void ObjectBlockBreakable::OnCollisionEnter(ObjectBase* pHit)
 			// 爆発エフェクト生成(仮)
 			ObjectBase* pExplosion = m_pOwnerScene->AddSceneObject<ObjectExplosion>("Explosion_" + m_sName);
 			pExplosion->GetTransform()->SetPosition(m_pCompTransform->GetPosition());
+
+			PLAY_SE(SE_KEY::SE_BLOCK_BREAK);	// 破壊音再生
 		}
 	}
 }

@@ -19,6 +19,7 @@
 #include "ComponentShadow.h"
 
 #include "ModelAnimeManager.h"
+#include "SoundManager.h"
 
 // =============== 定数定義 =======================
 const int	MAX_HP				= 5;	// プレイヤーの最大HP
@@ -109,12 +110,14 @@ void ObjectPlayer::UpdateLocal()
 	if (m_ePlayerState == E_PlayerState::PS_GameClear
 		&& !m_pCompModelAnime->GetIsPlayAnime(ANIME_KEY_PLAYER::PLYR_GAMECLEAR))
 	{
-		GameClear();
+		// ゲームクリアアニメーション再生
+		m_pCompModelAnime->PlayAnime(ANIME_KEY_PLAYER::PLYR_GAMECLEAR, false, 1.0f);
 	}
 	if (m_ePlayerState == E_PlayerState::PS_Dead
 		&& !m_pCompModelAnime->GetIsPlayAnime(ANIME_KEY_PLAYER::PLYR_DIE))
 	{
-		Dead();
+		// 死亡アニメーション
+		m_pCompModelAnime->PlayAnime(ANIME_KEY_PLAYER::PLYR_DIE, false, 1.0f);
 	}
 
 }
@@ -137,6 +140,9 @@ void ObjectPlayer::GameClear()
 	m_pCompModelAnime->PlayAnime(ANIME_KEY_PLAYER::PLYR_GAMECLEAR, false, 1.0f);
 
 	m_ePlayerState = E_PlayerState::PS_GameClear;
+	PLAY_SE(SE_KEY::SE_GAME_CLEAR);
+
+	STOP_BGM();
 }
 
 /* ========================================
@@ -153,6 +159,7 @@ void ObjectPlayer::Dead()
 	m_pCompModelAnime->PlayAnime(ANIME_KEY_PLAYER::PLYR_DIE, false, 1.0f);
 
 	m_ePlayerState = E_PlayerState::PS_Dead;
+	PLAY_SE(SE_KEY::SE_GAME_OVER);
 }
 
 /* ========================================
@@ -224,6 +231,9 @@ void ObjectPlayer::Damage()
 
 	m_bInvincible = true;	// 無敵時間開始
 	m_nHp--;				// HP減少
+
+	// ダメージ音再生
+	PLAY_SE(SE_KEY::SE_PLAYER_DAMAGE);
 
 	if (m_nHp <= 0)
 	{

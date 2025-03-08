@@ -34,10 +34,9 @@ public:
 	// BGMキー
 	enum E_BGM_KEY
 	{
-		BGM_TITLE = 0,
+		BGM_TITLE,
 		BGM_SELECT,
-		BGM_GAME,
-		BGM_RESULT,
+		BGM_GAME_1,
 
 		BGM_MAX,
 	};
@@ -45,23 +44,15 @@ public:
 	// SEキー
 	enum E_SE_KEY
 	{
-		SE_PLYR_BLOCK_DEL,
-		SE_PLYR_BLOCK_PUT,
-		SE_PLYR_DAMAGE,
-		SE_PLYR_DIE,
-		SE_PLYR_PUSH,
-		SE_PLYR_SHOT,
-		SE_ENEY_STOP,
-		SE_ENEY_HOLE_DROP,
-		SE_ENEY_BLOCK_COL,
-		SE_STAGE_CLEAR,
-		SE_GAME_CLEAR,
-		SE_GAME_OVER,
-		SE_TIMER_ADD_SCORE,	
-		SE_UI_CURSOR,
-		SE_UI_SELECT,
-		SE_COL_BILLIARD_BALL,
-		SE_CALL_SAWADA_GAMES,
+		SE_MENU_CURSOR,		// メニューカーソル
+		SE_MENU_DECIDE,		// メニュー決定
+		SE_PLAYER_JUMP,		// プレイヤーのジャンプ
+		SE_PLAYER_SHOT,		// プレイヤーのショット
+		SE_PLAYER_DAMAGE,	// プレイヤーのダメージ
+		SE_COIN_GET,		// コイン取得
+		SE_BLOCK_BREAK,		// ブロック破壊
+		SE_GAME_CLEAR,		// ゲームクリア
+		SE_GAME_OVER,		// ゲームオーバー
 
 		SE_MAX,
 	};

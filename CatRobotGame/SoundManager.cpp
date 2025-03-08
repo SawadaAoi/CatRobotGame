@@ -14,31 +14,23 @@
 using std::string;
 const std::unordered_map < SE_KEY, string > SOUND_SE_PATH
 {
-	{SE_KEY::SE_PLYR_BLOCK_DEL,			"Assets/Sound/SE/SE_PlayerBlockDelete.mp3"		},
-	{SE_KEY::SE_PLYR_BLOCK_PUT,			"Assets/Sound/SE/SE_PlayerBlockPut.mp3"			},
-	{SE_KEY::SE_PLYR_DAMAGE,			"Assets/Sound/SE/SE_PlayerDamage.mp3"			},
-	{SE_KEY::SE_PLYR_DIE,				"Assets/Sound/SE/SE_PlayerDie.mp3"				},
-	{SE_KEY::SE_PLYR_PUSH,				"Assets/Sound/SE/SE_PlayerEnemyPush.mp3"		},
-	{SE_KEY::SE_PLYR_SHOT,				"Assets/Sound/SE/SE_PlayerShot.mp3"				},
-	{SE_KEY::SE_ENEY_STOP,				"Assets/Sound/SE/SE_EnemyStop.mp3"				},
-	{SE_KEY::SE_ENEY_HOLE_DROP,			"Assets/Sound/SE/SE_EnemyHoleDrop.mp3"			},
-	{SE_KEY::SE_ENEY_BLOCK_COL,			"Assets/Sound/SE/SE_EnemyBlockCollision.mp3"	},
-	{SE_KEY::SE_STAGE_CLEAR,			"Assets/Sound/SE/SE_StageClear.mp3"				},
-	{SE_KEY::SE_GAME_CLEAR,				"Assets/Sound/SE/SE_GameClear.mp3"				},
-	{SE_KEY::SE_GAME_OVER,				"Assets/Sound/SE/SE_GameOver.mp3"				},
-	{SE_KEY::SE_TIMER_ADD_SCORE,		"Assets/Sound/SE/SE_TimerAddScore.mp3"			},
-	{SE_KEY::SE_UI_CURSOR,				"Assets/Sound/SE/SE_UI_Cursor.mp3"				},
-	{SE_KEY::SE_UI_SELECT,				"Assets/Sound/SE/SE_UI_Select.mp3"				},
-	{SE_KEY::SE_COL_BILLIARD_BALL,		"Assets/Sound/SE/SE_Col_BilliardBall.mp3"		},
-	{SE_KEY::SE_CALL_SAWADA_GAMES,		"Assets/Sound/SE/SE_CallSawadaGames.wav"		}
+	{SE_KEY::SE_MENU_CURSOR,	"Assets/Sound/SE/SE_MenuCursor.mp3"		},
+	{SE_KEY::SE_MENU_DECIDE,	"Assets/Sound/SE/SE_MenuDecide.mp3"		},
+	{SE_KEY::SE_PLAYER_JUMP,	"Assets/Sound/SE/SE_PlayerJump.mp3"		},
+	{SE_KEY::SE_PLAYER_SHOT,	"Assets/Sound/SE/SE_PlayerShot.mp3"		},
+	{SE_KEY::SE_PLAYER_DAMAGE,	"Assets/Sound/SE/SE_PlayerDamage.mp3"	},
+	{SE_KEY::SE_COIN_GET,		"Assets/Sound/SE/SE_CoinGet.mp3"		},
+	{SE_KEY::SE_BLOCK_BREAK,	"Assets/Sound/SE/SE_BlockBreak.mp3"		},
+	{SE_KEY::SE_GAME_CLEAR,		"Assets/Sound/SE/SE_GameClear.mp3"		},
+	{SE_KEY::SE_GAME_OVER,		"Assets/Sound/SE/SE_GameOver.mp3"		},
+
 };
 
 const std::unordered_map < BGM_KEY, string > SOUND_BGM_PATH
 {
 	{BGM_KEY::BGM_TITLE,	"Assets/Sound/BGM/BGM_Title.mp3"	},
 	{BGM_KEY::BGM_SELECT,	"Assets/Sound/BGM/BGM_StageSelect.mp3"	},
-	{BGM_KEY::BGM_GAME,		"Assets/Sound/BGM/BGM_Game.mp3"	},
-	{BGM_KEY::BGM_RESULT,	"Assets/Sound/BGM/BGM_Result.mp3"	},
+	{BGM_KEY::BGM_GAME_1,	"Assets/Sound/BGM/BGM_Game_1.mp3"	},
 };
 
 

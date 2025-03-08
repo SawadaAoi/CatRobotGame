@@ -17,6 +17,7 @@
 
 #include "ComponentTransform.h"
 #include "ObjectGameStateManager.h"
+#include "SoundManager.h"
 
 
 /* ========================================
@@ -37,4 +38,7 @@ void SceneStage1::InitLocal()
 
 
 	AddSceneObject<ObjectGameStateManager>("GameStateManager");
+
+	PLAY_BGM(BGM_KEY::BGM_GAME_1);
+
 }
