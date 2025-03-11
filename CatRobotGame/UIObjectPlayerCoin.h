@@ -16,7 +16,6 @@
 class UIObjectText;
 class ObjectPlayer;
 
-
 // =============== クラス定義 =====================
 class UIObjectPlayerCoin :
     public UIObjectBase
@@ -28,7 +27,9 @@ public:
 
 	DEFINE_UI_OBJECT_TYPE(UIObjectPlayerCoin)
 private:
-	UIObjectText*	m_pTextCoin;
-	ObjectPlayer*		m_pPlayer;
+	UIObjectBase*	m_pBG;			// 背景
+	UIObjectBase*	m_pCoinIcon;	// コインアイコン
+	UIObjectText*	m_pTextCoin;	// コイン数テキスト
+	ObjectPlayer*	m_pPlayer;
 };
 

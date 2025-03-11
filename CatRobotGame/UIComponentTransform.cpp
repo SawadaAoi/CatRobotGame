@@ -25,7 +25,7 @@ UIComponentTransform::UIComponentTransform(UIObjectBase* pOwner)
 	, m_vLocalScale(100.0f, 100.0f)
 	, m_vWorldPosition(0.0f, 0.0f)
 	, m_fWorldRotation(0.0f)
-	, m_vWorldScale(1.0f, 1.0f)
+	, m_vWorldScale(100.0f, 100.0f)
 {
 
 }

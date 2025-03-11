@@ -18,9 +18,12 @@
 // =============== 定数定義 =======================
 const Vector2<float> DEFAULT_SCALE = Vector2<float>(100.0f, 100.0f);
 
+const Vector2<float> BG_SCALE		= { 400.0f, 85.0f };	// 背景スケール
+const Vector2<float> BG_POSITION	= { 150.0f, 0.0f };		// 背景位置
+
 const std::string		HEART_OBJECT_NAME = "Heart_";							// HPオブジェクト名
 const Vector2<float>	HEART_TEXTURE_SCALE = Vector2<float>(100.0f, 100.0f);	// HPテクスチャのスケール
-const float				HEART_TEXTURE_SPACE = 70.0f;							// HPテクスチャの間隔
+const float				HEART_TEXTURE_SPACE = 60.0f;							// HPテクスチャの間隔
 
 /* ========================================
 	コンストラクタ関数
@@ -31,6 +34,7 @@ const float				HEART_TEXTURE_SPACE = 70.0f;							// HPテクスチャの間隔
 ========================================== */
 UIObjectPlayerHP::UIObjectPlayerHP(SceneBase* pScene)
 	: UIObjectBase(pScene)
+	, m_pBG(nullptr)
 	, m_pPlayerIcon(nullptr)
 	, m_pPlayer(nullptr)
 {
@@ -50,13 +54,22 @@ void UIObjectPlayerHP::InitLocal()
 	m_pCompTransform->SetScale(DEFAULT_SCALE);
 	m_pCompSprite->SetIsVisible(false);
 
+	// 背景を設定
+	m_pBG = m_pOwnerScene->AddSceneUI<UIObjectBase>("HPBG");
+	m_pBG->GetComponent<UIComponentSprite>()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_FRAME_1));
+	m_pBG->GetTransform()->SetScale(BG_SCALE);
+	m_pBG->SetIsSave(false);
+
+	AddChildUI(m_pBG);
+
 	// プレイヤーアイコンを設定(一番左)
 	m_pPlayerIcon = m_pOwnerScene->AddSceneUI<UIObjectBase>("0_PlayerIcon");
-	m_pPlayerIcon->GetTransform()->SetPosition(GetTransform()->GetPosition());
 	m_pPlayerIcon->GetTransform()->SetScale(DEFAULT_SCALE);
 	m_pPlayerIcon->GetComponent<UIComponentSprite>()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_PLAYER_ICON));
 	m_pPlayerIcon->SetIsSave(false);
 	AddChildUI(m_pPlayerIcon);
+
+	m_pBG->GetTransform()->SetPosition(BG_POSITION);
 
 	// プレイヤーが存在する場合はHPを生成
 	if (m_pPlayer) CreateHP();
