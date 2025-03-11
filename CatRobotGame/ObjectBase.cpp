@@ -103,14 +103,22 @@ void ObjectBase::Update()
 
 	UpdateLocal();	// 個別更新処理
 
+	// 子オブジェクトの更新
+	for (auto& pChild : m_pChildObjs)
+	{
+		if (pChild->GetState() == OBJ_DEAD) continue;	// 死亡状態の場合は更新しない
+		pChild->Update();
+	}
+
+	// 削除処理
 	if (m_bIsDestroy)
 	{
 		// 破棄時間経過で破棄
 		m_fDestroyTimeCnt += DELTA_TIME;
 		if (m_fDestroyTimeCnt >= m_fDestroyTime)
 		{
-			SetState(E_State::STATE_DEAD);	// 削除フラグが立っている場合は状態を死亡に変更
-			DestroyChild();	// 子オブジェクトも破棄
+			SetState(OBJ_DEAD);	// 削除フラグが立っている場合は状態を死亡に変更
+			DestroyChild();		// 子オブジェクトも状態を死亡に変更
 		}
 	}
 }
@@ -448,10 +456,10 @@ void ObjectBase::InputLocalData(std::ifstream& file)
 =========================================== */
 void ObjectBase::DestroyChild()
 {
-	// 子オブジェクトを全て削除
+	// 子オブジェクト全ての削除フラグを立てる
 	for (auto& pChild : m_pChildObjs)
 	{
-		pChild->SetState(E_State::STATE_DEAD);
+		pChild->SetState(OBJ_DEAD);
 		pChild->DestroyChild();
 	}
 }

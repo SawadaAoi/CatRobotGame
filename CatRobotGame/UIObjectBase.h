@@ -79,6 +79,9 @@ public:
 	virtual void UpdateLocal() {};	// 個別更新処理
 	virtual void DrawLocal() {};	// 個別描画処理
 
+	// UIの破棄
+	void Destroy(float nTime = 0.0f);
+
 	// 親子関係
 	void SetParentUI(UIObjectBase* pParentObj);		// 親オブジェクトの設定
 	void AddChildUI(UIObjectBase* pChildObj);		// 子オブジェクトの追加
@@ -86,6 +89,7 @@ public:
 	void RemoveChildUI(UIObjectBase* pChildObj);	// 子オブジェクトの削除
 	void RemoveAllChildUIs();						// 全ての子オブジェクトの削除
 	int GetGenerationCount();						// 子オブジェクトの数を取得
+	bool CheckIsDescendant(UIObjectBase* pUI);		// 子孫かどうかの判定
 
 	// コピー関数
 	UIObjectBase* Copy();								// オブジェクトのコピー
@@ -142,7 +146,7 @@ public:
 
 private:
 	void InitDefaultComponent();	// デフォルトコンポーネント設定
-
+	void DestroyChild();
 protected:
 	SceneBase*										m_pOwnerScene;	// 所有シーン
 	std::vector<std::unique_ptr<UIComponentBase>>	m_pComponents;	// コンポーネント一覧
@@ -166,6 +170,10 @@ protected:
 
 	// 3Dオブジェクトの後ろに描画するかどうか
 	bool m_bIs3DObjBackDraw;
+
+	bool	m_bIsDestroy;		// オブジェクト破棄フラグ(true:破棄, false:未破棄)
+	float	m_fDestroyTime;		// 破棄時間
+	float	m_fDestroyTimeCnt;	// 破棄時間カウント
 };
 
 #include "UIObjectBase.inl"	// コンポーネント関連のテンプレート関数の実装

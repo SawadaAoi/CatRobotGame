@@ -39,6 +39,9 @@ UIObjectBase::UIObjectBase(SceneBase* pScene)
 	, m_nDrawPriority(0)				// 描画優先度を0に設定
 	, m_bIsSave(true)					// セーブフラグをtrueに設定
 	, m_bIs3DObjBackDraw(false)			// 3Dオブジェクト後ろ描画フラグをfalseに設定
+	, m_bIsDestroy(false)				// オブジェクト破棄フラグをfalseに設定
+	, m_fDestroyTime(0.0f)				// 破棄時間を0に設定
+	, m_fDestroyTimeCnt(0.0f)			// 破棄時間カウントを0に設定
 {
 	// 所有シーンがnullptrの場合はエラーを出力
 	if (pScene == nullptr)
@@ -96,6 +99,24 @@ void UIObjectBase::Update()
 		pComponent->Update();
 	}
 	UpdateLocal();	// 個別更新処理
+
+	// 子オブジェクトの更新
+	for (auto& pChild : m_pChildUIs)
+	{
+		if (pChild->GetState() != UI_DEAD)	// 死亡状態でない場合のみ更新
+		pChild->Update();
+	}
+
+	if (m_bIsDestroy)
+	{
+		// 破棄時間経過で破棄
+		m_fDestroyTimeCnt += DELTA_TIME;
+		if (m_fDestroyTimeCnt >= m_fDestroyTime)
+		{
+			SetState(UI_DEAD);	// 削除フラグが立っている場合は状態を死亡に変更
+			DestroyChild();					// 子オブジェクトも状態を死亡に変更
+		}
+	}
 }
 
 /* ========================================
@@ -112,6 +133,21 @@ void UIObjectBase::Draw()
 	}
 	DrawLocal();	// 個別描画処理
 
+}
+
+/* ========================================
+	UI削除関数
+	-------------------------------------
+	内容：UIに削除フラグを立てる
+		　※直接削除状態にしない理由は、衝突処理後に削除するため
+	-------------------------------------
+	引数1：削除時間(何秒後に削除するか)
+		 　※デフォルトは0秒
+=========================================== */
+void UIObjectBase::Destroy(float nTime)
+{
+	m_bIsDestroy = true;
+	m_fDestroyTime = nTime;	// 通常は即時削除
 }
 
 /* ========================================
@@ -239,6 +275,38 @@ int UIObjectBase::GetGenerationCount()
 }
 
 /* ========================================
+	子孫判定関数
+	-------------------------------------
+	内容：指定したUIが子孫かどうかを判定する
+	-------------------------------------
+	引数1：判定するUI
+	-------------------------------------
+	戻り値：子孫かどうか
+=========================================== */
+bool UIObjectBase::CheckIsDescendant(UIObjectBase* pUI)
+{
+	// 子オブジェクトがない場合は処理しない
+	if (m_pChildUIs.empty()) return false;
+
+	// 子オブジェクトを検索
+	for (auto pChild : m_pChildUIs)
+	{
+		// 子オブジェクトが対象のオブジェクトと一致した場合はtrueを返す
+		if (pChild == pUI) return true;
+
+		// 子オブジェクトの子孫を再帰的に検索
+		if (pChild->GetChildUIs().size() > 0)
+		{
+			// 子オブジェクトの子孫を再帰的に検索
+			if (pChild->CheckIsDescendant(pUI)) return true;
+		}
+	}
+
+	return false;
+}
+
+
+/* ========================================
 	コピー関数
 	-------------------------------------
 	内容：オブジェクトをコピーする
@@ -298,6 +366,21 @@ void UIObjectBase::InitDefaultComponent()
 {
 	m_pCompTransform = AddComponent<UIComponentTransform>();	// Transformコンポーネントを追加	
 	m_pCompSprite = AddComponent<UIComponentSprite>();		// Spriteコンポーネントを追加
+}
+
+/* ========================================
+	子オブジェクト死亡状態遷移関数
+	-------------------------------------
+	内容：子オブジェクトを全て死亡状態に遷移
+=========================================== */
+void UIObjectBase::DestroyChild()
+{
+	// 子オブジェクト全ての削除フラグを立てる
+	for (auto& pChild : m_pChildUIs)
+	{
+		pChild->SetState(UI_DEAD);
+		pChild->DestroyChild();
+	}
 }
 
 /* ========================================
@@ -494,9 +577,9 @@ void UIObjectBase::SetIsSave(bool bIsSave)
 }
 
 /* ========================================
-	セッター(オブジェクト一覧折りたたみフラグ)関数
+	セッター(UI一覧折りたたみフラグ)関数
 	-------------------------------------
-	引数1：オブジェクト一覧折りたたみフラグ
+	引数1：UI一覧折りたたみフラグ
 =========================================== */
 void UIObjectBase::SetIsFold(bool bIsFold)
 {
@@ -593,7 +676,9 @@ DebugUI::Item* UIObjectBase::InitParentList()
 	// シーン上のオブジェクトをリストに追加
 	for (const auto pObj : SceneManager::GetScene()->GetAllSceneUIObjects())
 	{
-		if (pObj == this) continue;	// 自身は追加しない
+		if (pObj == this) continue;				// 自身は追加しない
+		if (CheckIsDescendant(pObj)) continue;	// 子オブジェクトは除外(自身の子階層に存在する場合は除外
+
 		pParentList->AddListItem(pObj->GetName().c_str());	// シーン上のオブジェクト名を追加
 	}
 	// 親オブジェクトがある場合
@@ -623,11 +708,7 @@ void UIObjectBase::ChangeName()
 	sReName = SceneManager::GetScene()->CreateUniqueUIName(sReName);	// 重複しない名前に変更
 
 	// オブジェクト名変更
-	int listNo = ITEM_UI_LIST.GetListNo(this->GetListName().c_str());			// オブジェクト一覧の表示位置取得
-	ITEM_UI_LIST.RemoveListItem(sOldName.c_str());	// 変更前の名前をリストから削除
-
 	this->SetName(sReName);												// 内部の名前変更
-	ITEM_UI_LIST.InsertListItem(this->GetListName().c_str(), listNo);	// オブジェクト一覧に変更後の名前を追加
 
 	WIN_UI_INFO["UIName"].SetText(this->GetName().c_str());		// オブジェクト詳細の名前を変更
 }

@@ -187,7 +187,8 @@ void SceneBase::UpdateObject()
 	// 所持オブジェクト配列の全要素を更新
 	for (auto& pObject : m_pObjects)
 	{
-		if (pObject->GetState() == OBJ_PAUSE) continue;	// 一時停止中のオブジェクトは更新しない
+		if (pObject->GetState() == OBJ_PAUSE) continue;			// 一時停止中のオブジェクトは更新しない
+		if (pObject->GetParentObject() != nullptr) continue;	// 親オブジェクトがある場合は更新しない(親オブジェクトで更新するため
 
 		pObject->Update();
 	}
@@ -197,8 +198,9 @@ void SceneBase::UpdateObject()
 	// 一時保存オブジェクト配列
 	for (auto& pObject : m_pStandbyObjects)
 	{
-		if (pObject->GetState() == OBJ_PAUSE) continue;	// 一時停止中のオブジェクトは更新しない
-		pObject->Update();
+		if (pObject->GetState() == OBJ_PAUSE) continue;					// 一時停止中のオブジェクトは更新しない
+		if (pObject->GetParentObject() == nullptr)	pObject->Update();	// 親オブジェクトがない場合のみ更新
+
 		m_pObjects.emplace_back(std::move(pObject));	// オブジェクト配列に移動
 	}
 	m_pStandbyObjects.clear();	// クリア
@@ -220,6 +222,9 @@ void SceneBase::UpdateUI()
 	// 所持UIオブジェクト配列の全要素を更新
 	for (auto& pObject : m_pUIObjects)
 	{
+		if (pObject->GetState() == UI_PAUSE) continue;			// 一時停止中のUIオブジェクトは更新しない
+		if (pObject->GetParentUI() != nullptr) continue;		// 親UIオブジェクトがある場合は更新しない(親UIオブジェクトで更新するため
+
 		pObject->Update();
 	}
 
@@ -228,7 +233,9 @@ void SceneBase::UpdateUI()
 	// 一時保存UIオブジェクト配列
 	for (auto& pObject : m_pStandbyUIObjects)
 	{
-		pObject->Update();
+		if (pObject->GetState() == UI_PAUSE) continue;				// 一時停止中のUIオブジェクトは更新しない
+		if (pObject->GetParentUI() == nullptr)	pObject->Update();	// 親UIオブジェクトがない場合のみ更新
+		
 		m_pUIObjects.emplace_back(std::move(pObject));	// UIオブジェクト配列に移動
 	}
 	m_pStandbyUIObjects.clear();	// クリア
@@ -270,6 +277,14 @@ void SceneBase::RemoveDeadObjects()
 		// 死亡状態かどうか
 		if (pObjectStateMap.at(pObject) == OBJ_DEAD)
 		{
+			// 子オブジェクトがある場合はスキップ
+			// ※削除の順番を子→親にするため
+			if (pObject->GetChildObjects().size() > 0)
+			{
+				++it;	// 次の要素へ
+				continue;
+			}
+
 #ifdef _DEBUG
 			// 削除対象オブジェクトが一覧で選択中の場合
 			if(m_nObjectListSelectNo == ITEM_OBJ_LIST.GetListNo(pObject->GetListName().c_str()))
@@ -279,15 +294,7 @@ void SceneBase::RemoveDeadObjects()
 				m_nObjectListSelectNo = -1;								// 選択番号をリセット
 				ITEM_OBJ_LIST.SetListNo(-1);	// 選択番号をリセット
 			}
-#endif
-			// 子オブジェクトがある場合
-			if (pObject->GetChildObjects().size() > 0)
-			{
-				for (auto& pChild : pObject->GetChildObjects())
-				{
-					this->RemoveSceneObject(pChild);	// 子オブジェクトを削除
-				}
-			}
+#endif // _DEBUG
 			// 親オブジェクトがある場合
 			if (pObject->GetParentObject())
 			{
@@ -323,8 +330,15 @@ void SceneBase::RemoveDeadUIObjects()
 	{
 		UIObjectBase* pUIObject = it->get();
 		// 死亡状態かどうか
-		if (pUIObjectStateMap.at(pUIObject) == UIObjectBase::E_State::STATE_DEAD)
+		if (pUIObjectStateMap.at(pUIObject) == UI_DEAD)
 		{
+			// 子UIオブジェクトがある場合はスキップ
+			// ※削除の順番を子→親にするため
+			if (pUIObject->GetChildUIs().size() > 0)
+			{
+				++it;	// 次の要素へ
+				continue;
+			}
 #ifdef _DEBUG
 			// 削除対象UIオブジェクトが一覧で選択中の場合
 			if (m_nUISelectNo == WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].GetListNo(pUIObject->GetListName().c_str()))
@@ -334,15 +348,7 @@ void SceneBase::RemoveDeadUIObjects()
 				m_nUISelectNo = -1;								// 選択番号をリセット
 				WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].SetListNo(-1);	// 選択番号をリセット
 			}
-#endif
-			// 子UIオブジェクトがある場合
-			if (pUIObject->GetChildUIs().size() > 0)
-			{
-				for (auto& pChild : pUIObject->GetChildUIs())
-				{
-					this->RemoveSceneUI(pChild);	// 子UIオブジェクトを削除
-				}
-			}
+#endif // _DEBUG
 			// 親UIオブジェクトがある場合
 			if (pUIObject->GetParentUI())
 			{
@@ -452,53 +458,7 @@ UIObjectBase* SceneBase::FindSceneUI(std::string sName)
 	return nullptr;
 }
 
-/* ========================================
-	オブジェクト削除関数
-	-------------------------------------
-	内容：シーンに所属するオブジェクトを削除
-		　※死亡状態のオブジェクトを削除する場合に使用(子オブジェクトの削除時)
-	-------------------------------------
-	引数：pObject	削除するオブジェクトポインタ
-=========================================== */
-void SceneBase::RemoveSceneObject(ObjectBase* pObject)
-{
-	// 子オブジェクトがある場合
-	if (pObject->GetChildObjects().size() > 0)
-	{
-		for (auto& pChild : pObject->GetChildObjects())
-		{
-			this->RemoveSceneObject(pChild);	// 子オブジェクトを削除
-		}
-	}
 
-	pObject->RemoveParentObject();	// 親オブジェクトから削除
-	pObject->Destroy();				// 破棄
-
-}
-
-/* ========================================
-	UIオブジェクト削除関数
-	-------------------------------------
-	内容：シーンに所属するUIオブジェクトを削除
-		　※死亡状態のUIオブジェクトを削除する場合に使用(子UIオブジェクトの削除時)
-	-------------------------------------
-	引数：pUIObject	削除するUIオブジェクトポインタ
-=========================================== */
-void SceneBase::RemoveSceneUI(UIObjectBase* pUIObject)
-{
-	// 子オブジェクトがある場合
-	if (pUIObject->GetChildUIs().size() > 0)
-	{
-		for (auto& pChild : pUIObject->GetChildUIs())
-		{
-			this->RemoveSceneUI(pChild);	// 子UIオブジェクトを削除
-		}
-	}
-		
-	pUIObject->RemoveParentUI();							// 親UIオブジェクトから削除
-	pUIObject->SetState(UIObjectBase::E_State::STATE_DEAD);	// 死亡状態に設定
-
-}
 
 
 /* ========================================
@@ -922,7 +882,6 @@ void SceneBase::InitObjectInfo(std::string sName)
 =========================================== */
 void SceneBase::InitUIList()
 {
-
 	using namespace DebugUI;
 
 	// UI削除ボタン
@@ -930,7 +889,13 @@ void SceneBase::InitUIList()
 	{
 		if (m_nUISelectNo == -1) return;					// 選択されていない場合は処理しない
 
-		m_pSelectUI->SetState(UIObjectBase::E_State::STATE_DEAD);	// 死亡状態に設定
+		m_pSelectUI->Destroy();	// UIオブジェクト削除
+
+		// UIの選択を解除
+		m_nUISelectNo = -1;										// 選択番号をリセット
+		m_pSelectUI = nullptr;									// 選択中のオブジェクトをクリア
+		WIN_UI_LIST[ITEM_UI_LIST_NAME.c_str()].SetListNo(-1);	// 選択番号をリセット
+		WIN_UI_INFO.Clear();									// 表示リセット
 
 	}));
 

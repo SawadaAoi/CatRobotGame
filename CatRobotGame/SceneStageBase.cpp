@@ -65,7 +65,7 @@ void SceneStageBase::UpdateLocal()
 		if (m_bPause)
 		{
 			Resume();
-			m_pPauseUI->SetState(UIObjectBase::STATE_DEAD);
+			m_pPauseUI->Destroy();
 		}
 		else
 		{

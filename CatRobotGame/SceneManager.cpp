@@ -139,7 +139,7 @@ void SceneManager::InitFadeOut()
 {
 	if (!m_pFade) return;
 
-	m_pFade->SetState(UIObjectBase::STATE_DEAD);	// 現在のフェードを削除
+	m_pFade->Destroy();	// フェードオブジェクトを破棄
 
 	// フェードアウト種類によって生成するフェードを変更
 	switch (m_eFadeOutKind)

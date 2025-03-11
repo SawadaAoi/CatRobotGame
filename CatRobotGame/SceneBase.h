@@ -25,6 +25,11 @@ class ComponentCollisionBase;
 #define OBJ_DEAD	ObjectBase::E_State::STATE_DEAD
 #define OBJ_PAUSE	ObjectBase::E_State::STATE_PAUSE
 
+// E_Stateの呼び出しを省略(UIオブジェクト用)
+#define UI_ACTIVE	UIObjectBase::E_State::STATE_ACTIVE
+#define UI_DEAD		UIObjectBase::E_State::STATE_DEAD
+#define UI_PAUSE	UIObjectBase::E_State::STATE_PAUSE
+
 // シーン名取得関数の定義を省略するためのマクロ
 #define DEFINE_SCENE_TYPE(name)				\
 	std::string GetSceneName() override {	\
@@ -70,8 +75,6 @@ public:
 	void AddSceneObjectBase(ObjectBase* pObject);	// オブジェクト追加
 	ObjectBase* FindSceneObject(std::string sName);	// オブジェクト検索
 
-	void RemoveSceneObject(ObjectBase* pObject);	// オブジェクト削除
-
 	// UIオブジェクト関連
 	template<typename T>
 	T* AddSceneUI(std::string sName);	// UIオブジェクト追加
@@ -84,8 +87,6 @@ public:
 
 	void AddSceneUI(UIObjectBase* pUIObject);		// UIオブジェクト追加
 	UIObjectBase* FindSceneUI(std::string sName);	// UIオブジェクト検索
-
-	void RemoveSceneUI(UIObjectBase* pUIObject);	// UIオブジェクト削除
 
 
 	// 衝突判定関連
