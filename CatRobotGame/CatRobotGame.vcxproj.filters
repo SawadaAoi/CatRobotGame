@@ -270,6 +270,12 @@
     <Filter Include="ソース ファイル\System\Sound">
       <UniqueIdentifier>{a401e145-76fa-436f-a7ae-cefe19cccc66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\App\Scene\Stage\0_Super">
+      <UniqueIdentifier>{534f239a-8418-4104-bbd4-b59058d1aff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\App\UI\Object\Menu">
+      <UniqueIdentifier>{510bee11-57b6-49a5-9d3c-d3cce11061e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppController.cpp">
@@ -682,6 +688,18 @@
     </ClCompile>
     <ClCompile Include="SceneStage4.cpp">
       <Filter>ソース ファイル\App\Scene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneStageBase.cpp">
+      <Filter>ソース ファイル\App\Scene\Stage\0_Super</Filter>
+    </ClCompile>
+    <ClCompile Include="UIComponentEffectScale.cpp">
+      <Filter>ソース ファイル\App\UI\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObjectSelectMenu.cpp">
+      <Filter>ソース ファイル\App\UI\Object\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObjectPause.cpp">
+      <Filter>ソース ファイル\App\UI\Object\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1110,6 +1128,18 @@
     </ClInclude>
     <ClInclude Include="SceneStage4.h">
       <Filter>ソース ファイル\App\Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneStageBase.h">
+      <Filter>ソース ファイル\App\Scene\Stage\0_Super</Filter>
+    </ClInclude>
+    <ClInclude Include="UIComponentEffectScale.h">
+      <Filter>ソース ファイル\App\UI\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObjectSelectMenu.h">
+      <Filter>ソース ファイル\App\UI\Object\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObjectPause.h">
+      <Filter>ソース ファイル\App\UI\Object\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

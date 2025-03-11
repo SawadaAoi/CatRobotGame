@@ -12,7 +12,8 @@
 // ===列挙定義===========
 enum E_UIUpdateOrder
 {
-	UIOrderTransform,		// トランスフォーム
-	UIOrderSprite,			// スプライト
-	UIOrderText,					// テキスト
+	UIOrderTransform,	// トランスフォーム
+	UIOrderSprite,		// スプライト
+	UIOrderText,		// テキスト
+	UIOrderSelectionScaler,	// 選択スケーラー
 };

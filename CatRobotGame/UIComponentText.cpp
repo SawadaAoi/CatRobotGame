@@ -14,7 +14,6 @@
 #include <codecvt>
 #include <locale>
 #include <windows.h>
-#include "ObjectBase.h"
 
 /* ========================================
 	コンストラクタ関数
@@ -25,7 +24,6 @@
 =========================================== */
 UIComponentText::UIComponentText(UIObjectBase* pOwner)
 	: UIComponentBase(pOwner, UIOrderText)
-	, m_pCompTransform(nullptr)
 	, m_sText("")
 	, m_eFontType(FontType::IPAexMin)
 	, m_nFontSize(50)
@@ -43,7 +41,6 @@ UIComponentText::UIComponentText(UIObjectBase* pOwner)
 =========================================== */
 void UIComponentText::Init()
 {
-	m_pCompTransform = m_pOwnerObj->GetComponent<UIComponentTransform>();
 }
 
 /* ========================================
@@ -76,7 +73,7 @@ void UIComponentText::Draw()
 	TEXT_WRITE.SetFontColor(m_Color);
 	TEXT_WRITE.SetFontWeight(m_Weight);
 
-	TEXT_WRITE.DrawWriteText(m_sText, m_pCompTransform->GetPosition(), m_ePivot, m_bScreenOutCheck);
+	TEXT_WRITE.DrawWriteText(m_sText, m_pOwnerObj->GetTransform()->GetPosition(), m_ePivot, m_bScreenOutCheck);
 }
 
 

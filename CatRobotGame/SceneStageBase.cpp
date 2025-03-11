@@ -14,6 +14,8 @@
 #include "ObjectCameraPlayer.h"
 #include "ObjectGameStateManager.h"
 
+#include "UIObjectPause.h"
+
 #include "FileManager.h"
 
 /* ========================================
@@ -23,6 +25,7 @@
 ========================================== */
 SceneStageBase::SceneStageBase()
 	: m_bPause(false)
+	, m_pPauseUI(nullptr)
 {
 }
 
@@ -43,7 +46,7 @@ void SceneStageBase::InitLocal()
 	FileManager::UIInput("Assets/Save/UI/GameScene.ui");
 
 	// ゲームステートマネージャを追加
-	AddSceneObject<ObjectGameStateManager>("GameStateManager");
+	m_pGameStateManager = AddSceneObject<ObjectGameStateManager>("GameStateManager");
 }
 
 /* ========================================
@@ -53,16 +56,21 @@ void SceneStageBase::InitLocal()
 ========================================== */
 void SceneStageBase::UpdateLocal()
 {
+	// 通常状態でない場合はポーズ処理を行わない
+	if (m_pGameStateManager->GetGameState() != ObjectGameStateManager::GS_NORMAL) return;
+
 	// ポーズ処理
 	if (Input::IsKeyTrigger('P'))
 	{
 		if (m_bPause)
 		{
 			Resume();
+			m_pPauseUI->SetState(UIObjectBase::STATE_DEAD);
 		}
 		else
 		{
 			Pause();
+			m_pPauseUI = AddSceneUI<UIObjectPause>("PauseUI");
 		}
 
 		m_bPause = !m_bPause;

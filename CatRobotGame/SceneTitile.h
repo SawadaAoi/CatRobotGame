@@ -11,6 +11,7 @@
 
 // =============== インクルード ===================
 #include "SceneBase.h"
+#include <functional>
 
 // =============== 前方宣言 ===================
 class ObjectCamera;
@@ -18,13 +19,12 @@ class UIObjectText;
 class ObjectGround;
 class ComponentGeometry;
 class ComponentSmokeEffect;
+class UIObjectSelectMenu;
 
 // =============== クラス定義 ===================
 class SceneTitile :
     public SceneBase
 {
-public:
-	using Function = void(SceneTitile::*)();
 public:
 	SceneTitile();
 	void InitLocal() override;
@@ -33,8 +33,6 @@ public:
 private:
 	void InitUI();
 	void Init3dOjbect();
-	void UpdateSelect();
-	void SelectMenuAnim();
 
 	// メニュー関数
 	void FuncStart();
@@ -44,7 +42,6 @@ private:
 private:
 	// UI
 	UIObjectBase*				m_pTitleLogo;
-	std::vector<UIObjectText*>	m_pSelectMenu;
 
 	// 3Dオブジェクト
 	ObjectBase*				m_pCatRoboModel;
@@ -60,9 +57,6 @@ private:
 	int		m_nCameraSwitchNum;		// 0～3
 	float	m_fCameraSwitchTime;
 
-	int m_nSelectNum;		// 選択番号
-	float m_fTextAnimeCnt;	// テキストアニメーションカウント
-
-	std::vector<Function> m_MenuFunctions;
+	UIObjectSelectMenu* m_pSelectMenuUI;
 };
 

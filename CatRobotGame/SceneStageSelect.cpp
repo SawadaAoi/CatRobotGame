@@ -182,7 +182,7 @@ void SceneStageSelect::StageChangeInput()
 		PLAY_SE(SE_KEY::SE_MENU_CURSOR);
 	}
 
-	if (Input::IsKeyTrigger('K'))
+	if (Input::IsKeyTrigger(VK_RETURN))
 	{
 		SceneManager::SetFadeOutKind(FADE_KIND_NORMAL);
 		SCENE_CALL[m_nSelectStageNum]();

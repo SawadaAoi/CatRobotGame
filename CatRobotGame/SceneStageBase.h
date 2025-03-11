@@ -12,6 +12,9 @@
 // =============== インクルード ===================
 #include "SceneBase.h"
 
+// =============== 前方宣言 =======================
+class UIObjectPause;
+class ObjectGameStateManager;
 
 // =============== クラス定義 ===================
 class SceneStageBase :
@@ -28,5 +31,8 @@ private:
 	void Resume();	// ポーズ解除処理
 private:
 	bool m_bPause;	// ポーズフラグ(true:ポーズ中)
+	UIObjectPause* m_pPauseUI;	// ポーズUI
+
+	ObjectGameStateManager* m_pGameStateManager;	// ゲームステートマネージャ
 };
 

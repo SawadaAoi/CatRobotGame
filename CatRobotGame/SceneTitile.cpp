@@ -20,9 +20,9 @@
 #include "ComponentSmokeEffect.h"
 
 #include "UIObjectBase.h"
-#include "UIObjectText.h"
+#include "UIObjectSelectMenu.h"
+
 #include "UIComponentSprite.h"
-#include "UIComponentText.h"
 #include "UIComponentTransform.h"
 
 #include "CameraManager.h"
@@ -32,31 +32,23 @@
 #include "SoundManager.h"
 
 #include <vector>
-#include "Input.h"
 
-// =============== 定数 ===================
+// =============== 定数定義 =======================
 // タイトルロゴ
 const Vector2<float>	TITLE_LOGO_POS		= Vector2<float>(-150.0f, 100.0f);
 const Vector2<float>	TITLE_LOGO_SCALE	= Vector2<float>(780.0f, 600.0f);
 
 // 選択メニューテキスト
-const int 				SELECT_MENU_NUM = 2;					// 選択メニュー数
-const float				TEXT_SIZE		= 60.0f;				// テキストサイズ
-const FontType			TEXT_FONT		= FontType::Letrogo;	// フォント
-const float				TEXT_ANIME_SPEED = 5.0f;				// テキストアニメーション速度
-const float				TEXT_ANIME_RANGE = 0.2f;				// テキストアニメーション範囲(0.8～1.2)
-// 座標
-const Vector2<float> SELECT_MENU_POS[SELECT_MENU_NUM] = {
-	Vector2<float>(0.0f, -150.0f),
-	Vector2<float>(0.0f, -250.0f),
-};
-// テキスト
-const std::string SELECT_MENU_TEXT[SELECT_MENU_NUM] = {
+const float				TEXT_SIZE	= 60.0f;				// テキストサイズ
+const float				TEXT_SPACE	= 100.0f;				// テキスト間隔
+const FontType			TEXT_FONT	= FontType::Letrogo;	// フォント
+
+const Vector2<float> SELECT_MENU_POS = Vector2<float>(0.0f, -200.0f);	// 座標
+const std::string SELECT_MENU_TEXT[] =									// テキスト
+{
 	"スタート",
 	"やめる",
 };
-
-
 
 // 猫ロボモデル
 const Vector3<float>	CAT_ROBO_POS = Vector3<float>(0.0f, -1.0f, 0.0f);
@@ -102,8 +94,7 @@ SceneTitile::SceneTitile()
 	, m_pSkyBox(nullptr)
 	, m_nCameraSwitchNum(0)
 	, m_fCameraSwitchTime(0.0f)
-	, m_nSelectNum(0)
-	, m_fTextAnimeCnt(0.0f)
+	, m_pSelectMenuUI(nullptr)
 {
 }
 
@@ -128,14 +119,21 @@ void SceneTitile::InitLocal()
 
 	AddSceneObject<ObjectLightDirectional>("Light");
 
-	m_MenuFunctions.push_back(&SceneTitile::FuncStart);
-	m_MenuFunctions.push_back(&SceneTitile::FuncEnd);
-
-
 	m_pSmokeEffect->SetMoveDir(Vector3<float>(0.0f, 0.0f, -1.0f));
 	m_pSmokeEffect->SetCreatePosDist({ 2.0f, 0.5f, 2.0f });
 	m_pSmokeEffect->SetScale(0.5f, 1.0f);
 	m_pSmokeEffect->SetPosAdjust(-0.5f, 0.5f);
+
+	// メニューUI
+	m_pSelectMenuUI = AddSceneUI<UIObjectSelectMenu>("SelectMenus");
+
+	m_pSelectMenuUI->AddMenu(SELECT_MENU_TEXT[0], [this]() {FuncStart(); });
+	m_pSelectMenuUI->AddMenu(SELECT_MENU_TEXT[1], [this]() {FuncEnd(); });
+
+	m_pSelectMenuUI->GetTransform()->SetPosition(SELECT_MENU_POS);
+	m_pSelectMenuUI->SetTextSpace(TEXT_SPACE);
+	m_pSelectMenuUI->SetTextSize(TEXT_SIZE);
+	m_pSelectMenuUI->SetTextFont(TEXT_FONT);
 
 	PLAY_BGM(BGM_KEY::BGM_TITLE);
 }
@@ -160,10 +158,6 @@ void SceneTitile::UpdateLocal()
 		m_nCameraSwitchNum	= (m_nCameraSwitchNum + 1) % CAMERA_NUM;	// 最大値を超えたら0に戻す
 		CAMERA_MNG_INST.SwitchCamera(m_pCameras[m_nCameraSwitchNum]);	// カメラ切り替え
 	}
-
-	// 選択更新
-	UpdateSelect();
-
 }
 
 
@@ -178,17 +172,6 @@ void SceneTitile::InitUI()
 	m_pTitleLogo->GetComponent<UIComponentSprite>()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_TITLE_LOGO));
 	m_pTitleLogo->GetTransform()->SetLocalPosition(TITLE_LOGO_POS);
 	m_pTitleLogo->GetTransform()->SetLocalScale(TITLE_LOGO_SCALE);
-
-	for (int i = 0; i < SELECT_MENU_NUM; i++)
-	{
-		UIObjectText* pText = AddSceneUI<UIObjectText>("SelectMenu_" + std::to_string(i));
-		pText->GetTransform()->SetLocalPosition(SELECT_MENU_POS[i]);
-		pText->SetText(SELECT_MENU_TEXT[i]);
-		pText->GetCompText()->SetFontSize(TEXT_SIZE);
-		pText->GetCompText()->SetFontType(TEXT_FONT);
-
-		m_pSelectMenu.push_back(pText);
-	}
 }
 
 /* ========================================
@@ -226,54 +209,6 @@ void SceneTitile::Init3dOjbect()
 	m_pCompGeometry->SetUvScale({ 100.0f, 100.0f });
 }
 
-/* ========================================
-	選択更新関数
-	-------------------------------------
-	内容：選択処理
-========================================== */
-void SceneTitile::UpdateSelect()
-{
-	int nOldSelectNum = m_nSelectNum;
-
-	if (Input::IsKeyTrigger(VK_UP))
-	{
-		m_nSelectNum = (m_nSelectNum + SELECT_MENU_NUM - 1) % SELECT_MENU_NUM;
-	}
-	else if (Input::IsKeyTrigger(VK_DOWN))
-	{
-		m_nSelectNum = (m_nSelectNum + 1) % SELECT_MENU_NUM;
-	}
-
-	if (nOldSelectNum != m_nSelectNum)
-	{
-		m_fTextAnimeCnt = 0.0f;
-		m_pSelectMenu[nOldSelectNum]->GetCompText()->SetFontSize(TEXT_SIZE);
-		PLAY_SE(SE_KEY::SE_MENU_CURSOR);
-	}
-
-	SelectMenuAnim();	// 選択メニューアニメ
-
-	// スペースキーで選択
-	if (Input::IsKeyTrigger('K'))
-	{
-		(this->*m_MenuFunctions[m_nSelectNum])();
-		PLAY_SE(SE_KEY::SE_MENU_DECIDE);
-	}
-}
-
-/* ========================================
-	選択メニューアニメ関数
-	-------------------------------------
-	内容：選択中のメニューのアニメーション処理(拡縮)
-========================================== */
-void SceneTitile::SelectMenuAnim()
-{
-	// 選択中のメニューのテキストを拡縮させる
-	m_fTextAnimeCnt += DELTA_TIME;
-	float fScale = 1.0f + sinf(m_fTextAnimeCnt * TEXT_ANIME_SPEED) * TEXT_ANIME_RANGE;
-
-	m_pSelectMenu[m_nSelectNum]->GetCompText()->SetFontSize(TEXT_SIZE * fScale);
-}
 
 /* ========================================
 	メニュー選択(スタート)関数

@@ -52,8 +52,6 @@ public:
 		void Debug(DebugUI::Window& window) override;
 #endif // _DEBUG
 private:
-	UIComponentTransform* m_pCompTransform;
-
 	std::string			m_sText;			// 表示する文字列
 	int					m_nFontSize;		// フォントサイズ
 	FontType			m_eFontType;		// フォントタイプ

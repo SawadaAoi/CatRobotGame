@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -268,6 +268,7 @@
     <ClCompile Include="SceneStage2.cpp" />
     <ClCompile Include="SceneStage3.cpp" />
     <ClCompile Include="SceneStage4.cpp" />
+    <ClCompile Include="SceneStageBase.cpp" />
     <ClCompile Include="SceneStageSelect.cpp" />
     <ClCompile Include="SceneTitile.cpp" />
     <ClCompile Include="ShadowManager.cpp" />
@@ -296,14 +297,17 @@
     <ClCompile Include="TextWrite.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="UIComponentBase.cpp" />
+    <ClCompile Include="UIComponentEffectScale.cpp" />
     <ClCompile Include="UIComponentSprite.cpp" />
     <ClCompile Include="UIComponentText.cpp" />
     <ClCompile Include="UIComponentTransform.cpp" />
     <ClCompile Include="UIObjectBase.cpp" />
     <ClCompile Include="UIObjectFade.cpp" />
     <ClCompile Include="UIObjectFadeIrisOut.cpp" />
+    <ClCompile Include="UIObjectPause.cpp" />
     <ClCompile Include="UIObjectPlayerCoin.cpp" />
     <ClCompile Include="UIObjectPlayerHP.cpp" />
+    <ClCompile Include="UIObjectSelectMenu.cpp" />
     <ClCompile Include="UIObjectText.cpp" />
     <ClCompile Include="UITypeRegistry.cpp" />
     <ClCompile Include="VertexShader.cpp" />
@@ -410,6 +414,7 @@
     <ClInclude Include="SceneStage2.h" />
     <ClInclude Include="SceneStage3.h" />
     <ClInclude Include="SceneStage4.h" />
+    <ClInclude Include="SceneStageBase.h" />
     <ClInclude Include="SceneStageSelect.h" />
     <ClInclude Include="SceneTitile.h" />
     <ClInclude Include="ShadowManager.h" />
@@ -439,14 +444,17 @@
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="UIComponentBase.h" />
     <ClInclude Include="UIComponentOrder.h" />
+    <ClInclude Include="UIComponentEffectScale.h" />
     <ClInclude Include="UIComponentSprite.h" />
     <ClInclude Include="UIComponentText.h" />
     <ClInclude Include="UIComponentTransform.h" />
     <ClInclude Include="UIObjectBase.h" />
     <ClInclude Include="UIObjectFade.h" />
     <ClInclude Include="UIObjectFadeIrisOut.h" />
+    <ClInclude Include="UIObjectPause.h" />
     <ClInclude Include="UIObjectPlayerCoin.h" />
     <ClInclude Include="UIObjectPlayerHP.h" />
+    <ClInclude Include="UIObjectSelectMenu.h" />
     <ClInclude Include="UIObjectText.h" />
     <ClInclude Include="UITypeRegistry.h" />
     <ClInclude Include="Vector2.h" />
