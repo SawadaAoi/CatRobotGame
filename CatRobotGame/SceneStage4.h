@@ -10,11 +10,11 @@
 #pragma once
 
 // =============== インクルード ===================
-#include "SceneBase.h"
+#include "SceneStageBase.h"
 
 // =============== クラス定義 ===================
 class SceneStage4 :
-    public SceneBase
+    public SceneStageBase
 {
 public:
 	void InitLocal() override;

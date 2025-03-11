@@ -1,23 +1,32 @@
 /* ========================================
 	CatRobotGame/
 	------------------------------------
-	シーン(ステージ3)用ヘッダ
+	シーン(ステージ基底)用ヘッダ
 	------------------------------------
-	説明：ステージ3のシーンクラス
+	説明：ステージシーンの基底クラス
 	------------------------------------
-	SceneStage3.h
+	SceneStageBase.h
 ========================================== */
 #pragma once
 
 // =============== インクルード ===================
-#include "SceneStageBase.h"
+#include "SceneBase.h"
+
 
 // =============== クラス定義 ===================
-class SceneStage3 :
-    public SceneStageBase
+class SceneStageBase :
+    public SceneBase
 {
 public:
+	SceneStageBase();
 	void InitLocal() override;
-	DEFINE_SCENE_TYPE(SceneStage3)
+	void UpdateLocal() override;
+
+	DEFINE_SCENE_TYPE(SceneStageBase)
+private:
+	void Pause();	// ポーズ処理
+	void Resume();	// ポーズ解除処理
+private:
+	bool m_bPause;	// ポーズフラグ(true:ポーズ中)
 };
 
