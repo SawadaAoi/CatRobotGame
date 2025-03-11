@@ -111,9 +111,10 @@ void SceneStageSelect::InitLocal()
 	FileManager::StageObjectInput(MODEL_DATA_PATH + MODEL_DATA_NAME[m_nSelectStageNum]);
 
 	SceneManager::SetFadeInKind(FADE_KIND_NORMAL);
-	SceneManager::SetFadeTime(1.0f);
+	SceneManager::SetFadeTime(2.0f);
 
 	PLAY_BGM(BGM_KEY::BGM_SELECT);
+
 }
 
 

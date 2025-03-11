@@ -167,6 +167,9 @@ void SceneManager::InitFadeOut()
 void SceneManager::InitFadeIn()
 {
 	if (!m_pFade) return;
+
+	m_pFade->Destroy();	// フェードオブジェクトを破棄
+
 	// フェードイン種類によって生成するフェードを変更
 	switch (m_eFadeInKind)
 	{

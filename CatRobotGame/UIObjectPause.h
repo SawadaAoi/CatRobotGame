@@ -15,6 +15,7 @@
 
 // =============== 前方宣言 =======================
 class UIObjectSelectMenu;
+class UIObjectText;
 
 // =============== クラス定義 =====================
 class UIObjectPause :
@@ -30,6 +31,8 @@ private:
 	void FuncBackToStageSelect();	// ステージ選択に戻る
 	void FuncDispOperation();		// 操作説明表示
 private:
+	UIObjectText* m_pTitleText;				// タイトルテキスト
 	UIObjectSelectMenu* m_pSelectMenuUI;	// セレクトメニューUI
+	UIObjectBase* m_pBG;
 };
 
