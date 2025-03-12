@@ -18,9 +18,19 @@
 #include "SceneBase.h"
 #include "SceneManager.h"
 #include "TextureManager.h"
+#include "SoundManager.h"
 #include "ColorVec3.h"
 
 #include "WindowAPI.h"
+
+
+// =============== 定数定義 =======================
+const Vector2<float> TITLE_POS = Vector2<float>(0.0f, 150.0f);	// タイトル座標
+const Vector2<float> BG_SCALE = Vector2<float>(600.0f, 400.0f);	// 背景スケール
+
+// メニューUI
+const float MENU_TEXT_SIZE = 40.0f;	// テキストサイズ
+const float MENU_TEXT_SPACE = 80.0f;	// テキスト間隔
 
 /* ========================================
 	コンストラクタ関数
@@ -31,6 +41,7 @@
 =========================================== */
 UIObjectPause::UIObjectPause(SceneBase* pScene)
 	: UIObjectBase(pScene)
+	, m_pTitleText(nullptr)
 	, m_pBG(nullptr)
 	, m_pSelectMenuUI(nullptr)
 {
@@ -56,25 +67,42 @@ void UIObjectPause::InitLocal()
 	m_pTitleText = m_pOwnerScene->AddSceneUI<UIObjectText>("PauseTitleText");
 	m_pTitleText->GetCompText()->SetFontType(FontType::Letrogo);
 	m_pTitleText->GetCompText()->SetText("ポーズ");
-	m_pTitleText->GetTransform()->SetPosition({ 0.0f, 150.0f });
+	m_pTitleText->GetTransform()->SetPosition(TITLE_POS);
 	AddChildUI(m_pTitleText);
 
 	// ポーズメニューUIの初期化
 	m_pBG = m_pOwnerScene->AddSceneUI<UIObjectBase>("PauseBG");
 	m_pBG->GetSprite()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_FRAME_3));
-	m_pBG->GetTransform()->SetScale({ 600.0f, 400.0f });
+	m_pBG->GetTransform()->SetScale(BG_SCALE);
 	m_pBG->SetDrawPriority(-1);
 	AddChildUI(m_pBG);
 
 	// メニューUIの初期化
 	m_pSelectMenuUI = m_pOwnerScene->AddSceneUI<UIObjectSelectMenu>("SelectMenuUI");
-	m_pSelectMenuUI->AddMenu("ステージセレクトにもどる", [this]() {FuncBackToStageSelect(); });
-	m_pSelectMenuUI->AddMenu("そうさせつめい", [this]() {FuncDispOperation(); });
-	m_pSelectMenuUI->SetTextSpace(80.0f);
-	m_pSelectMenuUI->SetTextSize(40.0f);
+	m_pSelectMenuUI->SetTextSpace(MENU_TEXT_SPACE);
+	m_pSelectMenuUI->SetTextSize(MENU_TEXT_SIZE);
 	m_pSelectMenuUI->SetTextColor(D2D1::ColorF::Black);
 
+	m_pSelectMenuUI->AddMenu("ステージセレクトにもどる",	[this]() {FuncBackToStageSelect(); });
+	m_pSelectMenuUI->AddMenu("そうさせつめい",				[this]() {FuncDispOperation(); });
+
 	AddChildUI(m_pSelectMenuUI);
+
+	// BGM停止
+	STOP_BGM();
+	STOP_SE();
+}
+
+/* ========================================
+	終了関数
+	-------------------------------------
+	内容：終了処理
+========================================== */
+void UIObjectPause::UninitLocal()
+{
+	// BGM再開
+	RESTART_BGM();
+	RESTART_SE();
 }
 
 

@@ -44,14 +44,14 @@ HRESULT AppController::Init()
 		return hr;
 	}
 
-	InitSound();	// サウンド初期化
+	Sound::Init();	// サウンド初期化
 	TimeManager::Init();	// 時間管理初期化
 
 	SHADER_INST.Init();				// シェーダー読み込み
 	MODEL_STATIC_MNG_INST.Init();	// 静的モデル管理初期化
 	MODEL_ANIME_MNG_INST.Init();	// アニメーションモデル管理初期化
 	TEXTURE_MNG_INST.Init();		// テクスチャ管理初期化
-	SoundManager::GetInstance().Init();			// サウンド管理初期化
+	SOUND_MNG_INST.Init();			// サウンド管理初期化
 
 	SceneManager::RegisterAllScene();	// シーン登録
 	ObjectTypeRegistry::RegisterAllObjectTypes();	// オブジェクトタイプ登録
@@ -80,8 +80,8 @@ void AppController::Uninit()
 #ifdef _DEBUG
 	DebugUI::Menu::Uninit();
 #endif
-	SoundManager::GetInstance().Uninit();	// サウンド管理削除
-	UninitSound();	// サウンド終了
+	SOUND_MNG_INST.Uninit();	// サウンド管理削除
+	Sound::Uninit();	// サウンド終了
 
 	DirectXManager::UninitDirectX();	// DirectX終了
 }

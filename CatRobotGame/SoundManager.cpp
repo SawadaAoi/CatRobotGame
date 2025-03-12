@@ -38,8 +38,6 @@ const std::unordered_map < BGM_KEY, string > SOUND_BGM_PATH
 	コンストラクタ関数
 	-------------------------------------
 	内容：初期化
-	-------------------------------------
-	引数1：無し
 =========================================== */
 SoundManager::SoundManager()
 	: m_pSpeakerBGM(nullptr)
@@ -53,10 +51,6 @@ SoundManager::SoundManager()
 	削除処理関数
 	-------------------------------------
 	内容：データを削除する
-	-------------------------------------
-	引数1：無し
-	-------------------------------------
-	戻値：無し
 =========================================== */
 void SoundManager::Uninit()
 {
@@ -74,15 +68,12 @@ void SoundManager::Uninit()
 		m_pSpeakerSE->DestroyVoice();	// 完全に破棄
 	}
 
-
 }
 
 /* ========================================
 	インスタンス(シングルトン)取得関数
 	-------------------------------------
 	内容：CSoundDataManagerクラスのインスタンスを取得
-	-------------------------------------
-	引数1：無し
 	-------------------------------------
 	戻値：CSoundDataManagerクラスのインスタンス
 =========================================== */
@@ -96,10 +87,6 @@ SoundManager& SoundManager::GetInstance()
 	音声初期化関数
 	-------------------------------------
 	内容：音声データの読み込み
-	-------------------------------------
-	引数1：無し
-	-------------------------------------
-	戻値：無し
 =========================================== */
 void SoundManager::Init()
 {
@@ -110,7 +97,7 @@ void SoundManager::Init()
 		std::string sNowPath = PathMap.second;	// 現在の保存位置パス
 
 		XAUDIO2_BUFFER* pSoundData = new XAUDIO2_BUFFER();				// 画像データ作成
-		pSoundData = LoadSound(sNowPath.c_str());
+		pSoundData = Sound::Load(sNowPath.c_str());
 		if (pSoundData == nullptr)	// 画像データ読み込み
 		{
 			MessageBox(NULL, sNowPath.c_str(), "Error", MB_OK);	//エラーメッセージの表示
@@ -126,7 +113,7 @@ void SoundManager::Init()
 		std::string sNowPath = PathMap.second;	// 現在の保存位置パス
 
 		XAUDIO2_BUFFER* pSoundData = new XAUDIO2_BUFFER();				// 画像データ作成
-		pSoundData = LoadSound(sNowPath.c_str());
+		pSoundData = Sound::Load(sNowPath.c_str());
 		if (pSoundData == nullptr)	// 画像データ読み込み
 		{
 			MessageBox(NULL, sNowPath.c_str(), "Error", MB_OK);	//エラーメッセージの表示
@@ -144,13 +131,11 @@ void SoundManager::Init()
 	引数1：SEキー
 	引数2：音量
 	引数3：ループ再生フラグ(trueでループ再生)
-	-------------------------------------
-	戻値：無し
 =========================================== */
 void SoundManager::PlaySE(E_SE_KEY e_GetKey, float vol, bool loopFlg)
 {
 	// SEの再生
-	m_pSpeakerSE = PlaySound(m_apSoundDatas_SE[e_GetKey], loopFlg);
+	m_pSpeakerSE = Sound::Play(m_apSoundDatas_SE[e_GetKey], loopFlg);
 	m_pSpeakerSE->SetVolume(vol);
 }
 
@@ -161,8 +146,6 @@ void SoundManager::PlaySE(E_SE_KEY e_GetKey, float vol, bool loopFlg)
 	-------------------------------------
 	引数1：BGMキー
 	引数2：音量
-	-------------------------------------
-	戻値：無し
 =========================================== */
 void SoundManager::PlayBGM(E_BGM_KEY e_GetKey, float vol)
 {
@@ -174,7 +157,7 @@ void SoundManager::PlayBGM(E_BGM_KEY e_GetKey, float vol)
 	
 	}
 
-	m_pSpeakerBGM = PlaySound(m_apSoundDatas_BGM[e_GetKey], true);
+	m_pSpeakerBGM = Sound::Play(m_apSoundDatas_BGM[e_GetKey], true);
 	m_pSpeakerBGM->SetVolume(vol);
 }
 
@@ -182,10 +165,6 @@ void SoundManager::PlayBGM(E_BGM_KEY e_GetKey, float vol)
 	BGM停止関数
 	-------------------------------------
 	内容：再生中のBGMを停止
-	-------------------------------------
-	引数1：無し
-	-------------------------------------
-	戻値：無し
 =========================================== */
 void SoundManager::StopBGM()
 {
@@ -200,10 +179,6 @@ void SoundManager::StopBGM()
 	効果音停止関数
 	-------------------------------------
 	内容：再生中のSEを停止
-	-------------------------------------
-	引数1：無し
-	-------------------------------------
-	戻値：無し
 =========================================== */
 void SoundManager::StopSE()
 {
@@ -214,4 +189,28 @@ void SoundManager::StopSE()
 	}
 }
 
+/* ========================================
+	BGM再開関数
+	-------------------------------------
+	内容：停止中のBGMを再開
+=========================================== */
+void SoundManager::ReStartBGM()
+{
+	if (m_pSpeakerBGM)
+	{
+		m_pSpeakerBGM->Start();
+	}
+}
 
+/* ========================================
+	SE再開関数
+	-------------------------------------
+	内容：停止中のSEを再開
+=========================================== */
+void SoundManager::ReStartSE()
+{
+	if (m_pSpeakerSE)
+	{
+		m_pSpeakerSE->Start();
+	}
+}

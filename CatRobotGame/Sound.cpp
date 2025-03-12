@@ -1,3 +1,12 @@
+/* ========================================
+	CatRobotGame/
+	------------------------------------
+	音声用cpp
+	------------------------------------
+	Sound.cpp
+========================================== */
+
+// =============== インクルード ===================
 #include "Sound.h"
 
 #include <mmsystem.h>
@@ -5,67 +14,21 @@
 #include <MSAcm.h>
 #include <Shlwapi.h>
 #include <vector>
-#include <map>
-#include <string>
-
 
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "msacm32.lib")
 #pragma comment(lib, "shlwapi.lib")
 
-//----------
-// 構造体
-//----------
-struct SoundData
-{
-	WAVEFORMATEX		format;		// WAVフォーマット
-	BYTE				*pBuffer;	// サウンドデータ
-	DWORD				bufSize;	// データサイズ
-	XAUDIO2_BUFFER		sound;		// サウンドバッファ
-};
-struct MP3FormatInfo
-{
-	DWORD offset;
-	DWORD dataSize;
-};
-struct MP3FrameInfo
-{
-	BYTE channel;
-	BYTE padding;
-	DWORD sampleRate;
-	DWORD bitRate;
-	DWORD frameSize;
-};
-
-//----------
-// プロトタイプ宣言
-//----------
-HRESULT LoadWav(const char *file, SoundData *pData);
-HRESULT LoadMP3(const char *file, SoundData *pData);
-DWORD ReadMP3Format(HANDLE hFile, MP3FormatInfo *pFormat);
-DWORD ReadMP3FrameHeader(HANDLE hFile, DWORD seek, MP3FrameInfo *pFrame);
-DWORD ReadMP3Data(HANDLE hFile, DWORD seek, DWORD size, MP3FrameInfo *pFrame, SoundData *pData);
-
-//----------
-// 定数定義
-//----------
+// =============== 定数定義 =======================
 const BYTE CMP_MATCH = 0;
 
-//----------
-// グローバル変数
-//----------
-typedef std::pair<std::string, SoundData> SoundKey;
-typedef std::map<std::string, SoundData> SoundList;
 
-IXAudio2 *g_pXAudio;
-IXAudio2MasteringVoice *g_pMasterVoice;
-SoundList g_soundList;
-
-/**
- * @brief 初期化
- * @return 処理結果
- */
-HRESULT InitSound(void)
+/* ========================================
+	初期化関数
+	-------------------------------------
+	内容：初期化
+========================================== */
+HRESULT Sound::Init()
 {
 	HRESULT hr = E_FAIL;
 
@@ -77,54 +40,60 @@ HRESULT InitSound(void)
 	}
 
 	// XAUDIO2初期化
-	hr = XAudio2Create(&g_pXAudio);
+	hr = XAudio2Create(&m_pXAudio);
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
 	// マスターボイス(ソース)作成
-	hr = g_pXAudio->CreateMasteringVoice(&g_pMasterVoice);
+	hr = m_pXAudio->CreateMasteringVoice(&m_pMasterVoice);
 
 	return hr;
 }
 
-/**
- * @brief 終了処理
- */
-void UninitSound(void)
+/* ========================================
+	終了関数
+	-------------------------------------
+	内容：終了処理
+========================================== */
+void Sound::Uninit()
 {
-	SoundList::iterator soundIt = g_soundList.begin();
-	while (soundIt != g_soundList.end())
+	SoundList::iterator soundIt = m_SoundList.begin();
+	while (soundIt != m_SoundList.end())
 	{
 		delete[] soundIt->second.pBuffer;
 		++soundIt;
 	}
 
-	if (g_pMasterVoice != NULL)
+	if (m_pMasterVoice != NULL)
 	{
-		g_pMasterVoice->DestroyVoice();
-		g_pMasterVoice = NULL;
+		m_pMasterVoice->DestroyVoice();
+		m_pMasterVoice = NULL;
 	}
-	if (g_pXAudio != NULL)
+	if (m_pXAudio != NULL)
 	{
-		g_pXAudio->Release();
-		g_pXAudio = NULL;
+		m_pXAudio->Release();
+		m_pXAudio = NULL;
 	}
 }
 
-/**
- * @brief サウンド作成
- * @param[in] file 読み込むファイル
- * @param[in] loop 繰り返し再生
- * @return サウンドバッファ
- */
-XAUDIO2_BUFFER* LoadSound(const char *file, bool loop)
+/* ========================================
+	サウンドデータ読込関数
+	-------------------------------------
+	内容：サウンドデータを読み込む
+	-------------------------------------
+	引数1：file		ファイル名
+	引数2：loop		ループ再生フラグ
+	-------------------------------------
+	戻値：サウンドデータ
+========================================== */
+XAUDIO2_BUFFER* Sound::Load(const char* file, bool loop)
 {
 	SoundData data;
 
-	SoundList::iterator it = g_soundList.find(file);
-	if (it != g_soundList.end())
+	SoundList::iterator it = m_SoundList.find(file);
+	if (it != m_SoundList.end())
 	{
 		// すでに読み込んだサウンドファイルがある
 		return &it->second.sound;
@@ -160,25 +129,30 @@ XAUDIO2_BUFFER* LoadSound(const char *file, bool loop)
 	data.sound.Flags = XAUDIO2_END_OF_STREAM;
 
 	// 登録
-	g_soundList.insert(SoundKey(file, data));
-	it = g_soundList.find(file);
+	m_SoundList.insert(SoundKey(file, data));
+	it = m_SoundList.find(file);
 
 	return &it->second.sound;
 }
 
-/**
- * @brief サウンド再生
- * @param[in] pSound サウンドバッファ
- * @param[in] loopFlg ループ再生
- */
-IXAudio2SourceVoice* PlaySound(XAUDIO2_BUFFER* pSound, bool loopFlg)
+/* ========================================
+	サウンド再生関数
+	-------------------------------------
+	内容：サウンドを再生する
+	-------------------------------------
+	引数1：pSound		サウンドデータ
+	引数2：loopFlg		ループ再生フラグ
+	-------------------------------------
+	戻値：再生ソース
+========================================== */
+IXAudio2SourceVoice* Sound::Play(XAUDIO2_BUFFER* pSound, bool loopFlg)
 {
 	HRESULT hr;
 	IXAudio2SourceVoice* pSource;
 
 	// 再生するデータを探索
-	SoundList::iterator soundIt = g_soundList.begin();
-	while (soundIt != g_soundList.end())
+	SoundList::iterator soundIt = m_SoundList.begin();
+	while (soundIt != m_SoundList.end())
 	{
 		// バッファーが一致するデータを探す
 		if (&soundIt->second.sound == pSound)
@@ -187,7 +161,7 @@ IXAudio2SourceVoice* PlaySound(XAUDIO2_BUFFER* pSound, bool loopFlg)
 		}
 		++soundIt;
 	}
-	if (soundIt == g_soundList.end())
+	if (soundIt == m_SoundList.end())
 	{
 		// 該当のデータなし
 		return NULL;
@@ -202,7 +176,7 @@ IXAudio2SourceVoice* PlaySound(XAUDIO2_BUFFER* pSound, bool loopFlg)
 	{
 		soundIt->second.sound.LoopCount = XAUDIO2_NO_LOOP_REGION;
 	}
-	
+
 
 	// フォーマットを指定してソースを作成
 	/*----------
@@ -222,7 +196,7 @@ IXAudio2SourceVoice* PlaySound(XAUDIO2_BUFFER* pSound, bool loopFlg)
 	*  (1秒あたりのサンプル数
 	*  単位はHz(ヘルツ
 	*----------*/
-	hr = g_pXAudio->CreateSourceVoice(&pSource, &soundIt->second.format);
+	hr = m_pXAudio->CreateSourceVoice(&pSource, &soundIt->second.format);
 	if (FAILED(hr)) {
 		return NULL;
 	}
@@ -235,13 +209,18 @@ IXAudio2SourceVoice* PlaySound(XAUDIO2_BUFFER* pSound, bool loopFlg)
 	return pSource;
 }
 
-/**
- * @brief wavファイル読み込み
- * @param[in] file 読み込むファイル
- * @param[out] pData サウンドデータ
- * @return 処理結果
- */
-HRESULT LoadWav(const char *file, SoundData *pData)
+
+/* ========================================
+	WAVファイル読込関数
+	-------------------------------------
+	内容：WAVファイルを読み込む
+	-------------------------------------
+	引数1：file		ファイル名
+	引数2：pData	サウンドデータ
+	-------------------------------------
+	戻値：処理結果
+=========================================== */
+HRESULT Sound::LoadWav(const char* file, SoundData* pData)
 {
 	HMMIO hMmio = NULL;
 	MMIOINFO mmioInfo;
@@ -279,7 +258,7 @@ HRESULT LoadWav(const char *file, SoundData *pData)
 		mmioClose(hMmio, 0);
 		return E_FAIL;
 	}
-	
+
 	// RIFFチャンクに移動
 	mmioAscend(hMmio, &formatChunk, 0);
 
@@ -311,13 +290,17 @@ HRESULT LoadWav(const char *file, SoundData *pData)
 	return S_OK;
 }
 
-/**
- * @brief mp3ファイル読み込み
- * @param[in] file 読み込むファイル
- * @param[out] pData サウンドデータ
- * @return 処理結果
- */
-HRESULT LoadMP3(const char *file, SoundData *pData)
+/* ========================================
+	MP3ファイル読込関数
+	-------------------------------------
+	内容：MP3ファイルを読み込む
+	-------------------------------------
+	引数1：file		ファイル名
+	引数2：pData	サウンドデータ
+	-------------------------------------
+	戻値：処理結果
+=========================================== */
+HRESULT Sound::LoadMP3(const char* file, SoundData* pData)
 {
 	HANDLE hFile; // ファイルポインタ
 	DWORD readSize; // 読み込みサイズ
@@ -334,14 +317,14 @@ HRESULT LoadMP3(const char *file, SoundData *pData)
 	// ファイルフォーマット読み込み
 	MP3FormatInfo format;
 	readSize = ReadMP3Format(hFile, &format);
-	if(readSize == 0) {
+	if (readSize == 0) {
 		return E_FAIL;
 	}
 
 	// サウンドフレームヘッダ読み込み
 	MP3FrameInfo frame;
 	readSize = ReadMP3FrameHeader(hFile, format.offset, &frame);
-	if(readSize == 0) {
+	if (readSize == 0) {
 		return E_FAIL;
 	}
 
@@ -353,13 +336,18 @@ HRESULT LoadMP3(const char *file, SoundData *pData)
 
 	return S_OK;
 }
-/**
- * @brief MP3フォーマットチェック
- * @param[in] hFile ファイルポインタ
- * @param[out] pFormat ファイルフォーマット
- * @return データサイズ
- */
-DWORD ReadMP3Format(HANDLE hFile, MP3FormatInfo *pFormat)
+
+ /* ========================================
+	 MP3フォーマットチェック関数
+	 -------------------------------------
+	 内容：MP3フォーマットをチェックする
+	 -------------------------------------
+	 引数1：hFile	ファイルポインタ
+	 引数2：pFormat	ファイルフォーマット
+	 -------------------------------------
+	 戻値：読み込みサイズ
+ =========================================== */
+DWORD Sound::ReadMP3Format(HANDLE hFile, MP3FormatInfo* pFormat)
 {
 	DWORD readSize;
 
@@ -382,8 +370,8 @@ DWORD ReadMP3Format(HANDLE hFile, MP3FormatInfo *pFormat)
 	ReadFile(hFile, header, sizeof(header), &readSize, NULL);
 
 	// タグをチェックし、MP3データの位置、サイズを計算
-	const char *ID3V1_TAG = "TAG";
-	const char *ID3V2_TAG = "ID3";
+	const char* ID3V1_TAG = "TAG";
+	const char* ID3V2_TAG = "ID3";
 	const BYTE MP3_TAG_SIZE = 3;
 	if (memcmp(header, ID3V2_TAG, MP3_TAG_SIZE) == CMP_MATCH)
 	{
@@ -427,14 +415,17 @@ DWORD ReadMP3Format(HANDLE hFile, MP3FormatInfo *pFormat)
 }
 
 
-/** 
- * @brief MP3サウンドフレームヘッダ読み込み
- * @param[in] hFile ファイルポインタ
- * @param[in] seek フレーム読み込み位置
- * @param[out] pFrame フレーム情報
- * @return 読み込みサイズ
- */ 
-DWORD ReadMP3FrameHeader(HANDLE hFile, DWORD seek, MP3FrameInfo *pFrame)
+/* ========================================
+	MP3サウンドフレームヘッダ読込関数
+	-------------------------------------
+	内容：MP3サウンドフレームヘッダを読み込む
+	-------------------------------------
+	引数1：hFile	ファイルポインタ
+	引数2：seek		フレーム読み込み位置
+	-------------------------------------
+	戻値：読み込みサイズ
+=========================================== */
+DWORD Sound::ReadMP3FrameHeader(HANDLE hFile, DWORD seek, MP3FrameInfo* pFrame)
 {
 	DWORD readSize;
 
@@ -446,7 +437,7 @@ DWORD ReadMP3FrameHeader(HANDLE hFile, DWORD seek, MP3FrameInfo *pFrame)
 	 *	[フレームヘッダ(4byte)][データ]
 	 *	...(繰り返し
 	 *----------*/
-	// MP3データ位置へ移動
+	 // MP3データ位置へ移動
 	SetFilePointer(hFile, seek, NULL, FILE_BEGIN);
 
 	/*----------
@@ -575,10 +566,10 @@ DWORD ReadMP3FrameHeader(HANDLE hFile, DWORD seek, MP3FrameInfo *pFrame)
 	 *	nCodecDelay				- 1393(0x571)を指定
 	 *----------*/
 
-	// channel
-	// sample
-	// bitRate
-	// padding
+	 // channel
+	 // sample
+	 // bitRate
+	 // padding
 	pFrame->channel = channel == 0x11 ? 1 : 2;
 	pFrame->sampleRate = sampleRate;
 	pFrame->bitRate = bitRate;
@@ -588,16 +579,20 @@ DWORD ReadMP3FrameHeader(HANDLE hFile, DWORD seek, MP3FrameInfo *pFrame)
 	return pFrame->frameSize;
 }
 
-/**
- * @brief MP3サウンドデータ読み込み
- * @param[in] hFile ファイルポインタ
- * @param[in] seek フレーム読み込み位置
- * @param[in] size 読み込みデータ量
- * @param[in] pFrame フレーム情報
- * @param[out] pData サウンドデータ
- * @return 読み込みサイズ
- */
-DWORD ReadMP3Data(HANDLE hFile, DWORD seek, DWORD size, MP3FrameInfo *pFrame, SoundData *pData)
+/* ========================================
+	MP3サウンドデータ読込関数
+	-------------------------------------
+	内容：MP3サウンドデータを読み込む
+	-------------------------------------
+	引数1：hFile	ファイルポインタ
+	引数2：seek		フレーム読み込み位置
+	引数3：size		読み込みデータ量
+	引数4：pFrame	フレーム情報
+	引数5：pData	サウンドデータ
+	-------------------------------------
+	戻値：読み込みサイズ
+=========================================== */
+DWORD Sound::ReadMP3Data(HANDLE hFile, DWORD seek, DWORD size, MP3FrameInfo* pFrame, SoundData* pData)
 {
 	// 変換フォーマット作成
 	MPEGLAYER3WAVEFORMAT mp3WavFormat;
@@ -667,7 +662,3 @@ DWORD ReadMP3Data(HANDLE hFile, DWORD seek, DWORD size, MP3FrameInfo *pFrame, So
 
 	return ash.cbSrcLengthUsed;
 }
-
-
-
-// EOF

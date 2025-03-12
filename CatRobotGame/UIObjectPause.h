@@ -24,7 +24,7 @@ class UIObjectPause :
 public:
 	UIObjectPause(SceneBase* pScene);
 	void InitLocal() override;
-
+	void UninitLocal() override;
 
 	DEFINE_UI_OBJECT_TYPE(UIObjectPause)
 private:

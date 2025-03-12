@@ -8,8 +8,8 @@
 	------------------------------------
 	SoundManager.h
 ========================================== */
-#ifndef _SOUND_MANAGER_H__
-#define _SOUND_MANAGER_H__
+#pragma once
+
 
 // =============== インクルード ===================
 #include "Sound.h"
@@ -18,15 +18,19 @@
 
 
 // =============== 定数定義 =======================
-#define BGM_KEY SoundManager::E_BGM_KEY	// キー省略
-#define SE_KEY SoundManager::E_SE_KEY	// キー省略
-#define PLAY_SE(x) SoundManager::GetInstance().PlaySE(x)	// 効果音再生
-#define PLAY_BGM(x) SoundManager::GetInstance().PlayBGM(x)	// BGM再生
-#define STOP_BGM() SoundManager::GetInstance().StopBGM()	// BGM停止
-#define STOP_SE() SoundManager::GetInstance().StopSE()	// SE停止
+#define SOUND_MNG_INST SoundManager::GetInstance()	// インスタンス取得
+
+#define BGM_KEY			SoundManager::E_BGM_KEY		// キー省略
+#define SE_KEY			SoundManager::E_SE_KEY		// キー省略
+#define PLAY_SE(x)		SOUND_MNG_INST.PlaySE(x)	// 効果音再生
+#define PLAY_BGM(x)		SOUND_MNG_INST.PlayBGM(x)	// BGM再生
+#define STOP_BGM()		SOUND_MNG_INST.StopBGM()	// BGM停止
+#define STOP_SE()		SOUND_MNG_INST.StopSE()		// SE停止
+#define RESTART_BGM()	SOUND_MNG_INST.ReStartBGM()	// BGM再開
+#define RESTART_SE()	SOUND_MNG_INST.ReStartSE()	// SE再開
 
 
-
+// =============== クラス定義 =====================
 class SoundManager
 {
 public:
@@ -66,6 +70,8 @@ public:
 	void PlayBGM(E_BGM_KEY e_GetKey, float vol = 1.0f);
 	void StopBGM();
 	void StopSE();
+	void ReStartBGM();
+	void ReStartSE();
 private:
 	SoundManager();
 	std::unordered_map <E_BGM_KEY, XAUDIO2_BUFFER*> m_apSoundDatas_BGM;	// モデルデータを格納しておく
@@ -74,6 +80,3 @@ private:
 	IXAudio2SourceVoice* m_pSpeakerBGM;	// BGMスピーカー
 	IXAudio2SourceVoice* m_pSpeakerSE;	// SEスピーカー
 };
-
-
-#endif // !_SOUND_MANAGER_H__

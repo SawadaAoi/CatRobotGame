@@ -668,9 +668,6 @@
     <ClCompile Include="ShadowManager.cpp">
       <Filter>ソース ファイル\System\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>ソース ファイル\System\Sound</Filter>
-    </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>ソース ファイル\System\Sound</Filter>
     </ClCompile>
@@ -700,6 +697,9 @@
     </ClCompile>
     <ClCompile Include="UIObjectPause.cpp">
       <Filter>ソース ファイル\App\UI\Object\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>ソース ファイル\System\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1108,9 +1108,6 @@
     <ClInclude Include="ShadowManager.h">
       <Filter>ソース ファイル\System\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Sound.h">
-      <Filter>ソース ファイル\System\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>ソース ファイル\System\Sound</Filter>
     </ClInclude>
@@ -1140,6 +1137,9 @@
     </ClInclude>
     <ClInclude Include="UIObjectPause.h">
       <Filter>ソース ファイル\App\UI\Object\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>ソース ファイル\System\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
