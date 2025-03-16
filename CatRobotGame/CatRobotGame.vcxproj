@@ -541,6 +541,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="ImGui\imgui.ini" />
     <None Include="ObjectBase.inl" />
     <None Include="PS_Header.hlsli" />

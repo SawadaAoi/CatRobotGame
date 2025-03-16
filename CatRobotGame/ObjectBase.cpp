@@ -107,6 +107,7 @@ void ObjectBase::Update()
 	for (auto& pChild : m_pChildObjs)
 	{
 		if (pChild->GetState() == OBJ_DEAD) continue;	// Ž€–Só‘Ô‚Ìê‡‚ÍXV‚µ‚È‚¢
+		if (pChild->GetState() == OBJ_PAUSE) continue;	// ˆêŽž’âŽ~ó‘Ô‚Ìê‡‚ÍXV‚µ‚È‚¢
 		pChild->Update();
 	}
 

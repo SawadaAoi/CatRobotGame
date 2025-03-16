@@ -53,6 +53,7 @@ public:
 		UI_FRAME_1,			// フレーム1
 		UI_FRAME_2,			// フレーム2
 		UI_FRAME_3,			// フレーム3
+		UI_GAME_OPERATION,	// ゲーム操作説明
 		MAX,
 	};
 
@@ -85,6 +86,7 @@ public:
 		{TEX_KEY::UI_FRAME_1,			"Assets/Texture/UI/UI_Frame_1.png"				},
 		{TEX_KEY::UI_FRAME_2,			"Assets/Texture/UI/UI_Frame_2.png"				},
 		{TEX_KEY::UI_FRAME_3,			"Assets/Texture/UI/UI_Frame_3.png"				},
+		{TEX_KEY::UI_GAME_OPERATION,	"Assets/Texture/UI/UI_GameOperation.png"		},
 
 	};
 

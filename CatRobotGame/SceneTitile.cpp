@@ -21,6 +21,7 @@
 
 #include "UIObjectBase.h"
 #include "UIObjectSelectMenu.h"
+#include "UIObjectText.h"
 
 #include "UIComponentSprite.h"
 #include "UIComponentTransform.h"
@@ -30,6 +31,7 @@
 #include "TextureManager.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
+#include "FileManager.h"
 
 #include <vector>
 
@@ -172,6 +174,10 @@ void SceneTitile::InitUI()
 	m_pTitleLogo->GetComponent<UIComponentSprite>()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_TITLE_LOGO));
 	m_pTitleLogo->GetTransform()->SetLocalPosition(TITLE_LOGO_POS);
 	m_pTitleLogo->GetTransform()->SetLocalScale(TITLE_LOGO_SCALE);
+
+	// UI“Ç‚İ‚İ
+	FileManager::UIInput("Assets/Save/UI/TitileMenuOperation.ui");
+	GetSceneUI<UIObjectText>("MenuOperationText")->SetText("‘I‘ğ(ª «) Œˆ’è(Enter)");
 }
 
 /* ========================================

@@ -1,0 +1,4 @@
+// ヒント ファイルは、Visual Studio IDE が Visual C++ 識別子を解釈するのに役立ちます
+// 関数およびマクロの名前などです。
+// 詳細については次を参照してください https://go.microsoft.com/fwlink/?linkid=865984
+#define DEFINE_UI_OBJECT_TYPE(name) static size_t GetStaticTypeID() { static const size_t typeID = reinterpret_cast<size_t>(&typeID); return typeID; } size_t GetTypeID() const override { return GetStaticTypeID(); } std::string GetUIClassName() const override { return #name; }

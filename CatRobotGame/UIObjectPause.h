@@ -25,6 +25,7 @@ public:
 	UIObjectPause(SceneBase* pScene);
 	void InitLocal() override;
 	void UninitLocal() override;
+	void UpdateLocal() override;
 
 	DEFINE_UI_OBJECT_TYPE(UIObjectPause)
 private:
@@ -34,5 +35,8 @@ private:
 	UIObjectText* m_pTitleText;				// タイトルテキスト
 	UIObjectSelectMenu* m_pSelectMenuUI;	// セレクトメニューUI
 	UIObjectBase* m_pBG;
+	UIObjectBase* m_pOperationUI;
+
+	bool m_bOperationDisp;	// 操作説明表示フラグ
 };
 

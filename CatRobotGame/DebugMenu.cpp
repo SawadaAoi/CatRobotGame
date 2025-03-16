@@ -175,8 +175,7 @@ void Menu::Update()
 	auto& mainWindow = m_WindowList[0];	// メインウィンドウ
 
 	// デバッグメニューの表示切り替え
-	if (Input::IsKeyPress(VK_SHIFT) && Input::IsKeyPress(VK_SPACE)) {
-		if (Input::IsKeyTrigger(VK_RETURN))
+	if (Input::IsKeyTrigger(VK_F1)) {
 			mainWindow.enable ^= true;
 	}
 

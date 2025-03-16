@@ -22,6 +22,7 @@
 #include "ColorVec3.h"
 
 #include "WindowAPI.h"
+#include "Input.h"
 
 
 // =============== 定数定義 =======================
@@ -44,6 +45,8 @@ UIObjectPause::UIObjectPause(SceneBase* pScene)
 	, m_pTitleText(nullptr)
 	, m_pBG(nullptr)
 	, m_pSelectMenuUI(nullptr)
+	, m_pOperationUI(nullptr)
+	, m_bOperationDisp(false)
 {
 }
 
@@ -83,10 +86,19 @@ void UIObjectPause::InitLocal()
 	m_pSelectMenuUI->SetTextSize(MENU_TEXT_SIZE);
 	m_pSelectMenuUI->SetTextColor(D2D1::ColorF::Black);
 
+	m_pSelectMenuUI->AddMenu("そうさせつめい", [this]() {FuncDispOperation(); });
 	m_pSelectMenuUI->AddMenu("ステージセレクトにもどる",	[this]() {FuncBackToStageSelect(); });
-	m_pSelectMenuUI->AddMenu("そうさせつめい",				[this]() {FuncDispOperation(); });
 
 	AddChildUI(m_pSelectMenuUI);
+
+
+	// 操作説明UIを表示
+	m_pOperationUI = m_pOwnerScene->AddSceneUI<UIObjectBase>("OperationUI");
+	m_pOperationUI->GetSprite()->SetTexture(GET_TEXTURE_DATA(TEX_KEY::UI_GAME_OPERATION));
+	m_pOperationUI->GetTransform()->SetScale(Vector2<float>(1200.0f, 800.0f));
+	m_pOperationUI->GetSprite()->SetIsVisible(false);	// 非表示
+
+	AddChildUI(m_pOperationUI);
 
 	// BGM停止
 	STOP_BGM();
@@ -103,6 +115,20 @@ void UIObjectPause::UninitLocal()
 	// BGM再開
 	RESTART_BGM();
 	RESTART_SE();
+}
+
+/* ========================================
+	更新関数
+	-------------------------------------
+	内容：更新処理
+========================================== */
+void UIObjectPause::UpdateLocal()
+{
+	// 操作説明表示中にエンターキーを押したらメニューを有効化
+	if (m_bOperationDisp && Input::IsKeyTrigger(VK_RETURN))
+	{
+		m_pSelectMenuUI->SetState(UI_ACTIVE);	// 有効化した瞬間FuncDispOperationが呼ばれる
+	}
 }
 
 
@@ -123,4 +149,15 @@ void UIObjectPause::FuncBackToStageSelect()
 ========================================== */
 void UIObjectPause::FuncDispOperation()
 {
+	if (m_bOperationDisp)
+	{
+		m_pOperationUI->GetSprite()->SetIsVisible(false);	// 操作説明UIを非表示
+	}
+	else
+	{
+		m_pOperationUI->GetSprite()->SetIsVisible(true);	// 操作説明UIを表示
+		m_pSelectMenuUI->SetState(UI_PAUSE);				// メニューを無効化
+	}
+
+	m_bOperationDisp = !m_bOperationDisp;
 }

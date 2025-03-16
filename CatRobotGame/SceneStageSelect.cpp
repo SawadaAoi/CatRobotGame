@@ -102,6 +102,12 @@ void SceneStageSelect::InitLocal()
 	m_pStageName = GetSceneUI<UIObjectText>("StageNameText");			
 	m_pStageName->GetCompText()->SetFontType(FontType::Letrogo);
 	m_pScreenName = GetSceneUI<UIObjectText>("ScreenNameText");
+	m_pScreenName->GetCompText()->SetFontType(FontType::Letrogo);
+	m_pScreenName->SetText("ステージセレクト");
+	m_pScreenName->GetCompText()->SetFontSize(45);
+
+	GetSceneUI<UIObjectText>("BackKeyText")->SetText("タイトルに戻る(Q)");
+	GetSceneUI<UIObjectText>("MenuKeyText")->SetText("選択(← →) 決定(Enter)");
 
 	// 背景画像取得
 	m_pBG_Image = GetSceneUI<UIObjectBase>("BG_Image");
@@ -171,6 +177,7 @@ void SceneStageSelect::UpdateLocal()
 ========================================== */
 void SceneStageSelect::StageChangeInput()
 {
+	// ステージ変更
 	if (Input::IsKeyTrigger(VK_LEFT))
 	{
 		m_nSelectStageNum = (m_nSelectStageNum + STAGE_NUM_MAX - 1) % STAGE_NUM_MAX;
@@ -183,10 +190,20 @@ void SceneStageSelect::StageChangeInput()
 		PLAY_SE(SE_KEY::SE_MENU_CURSOR);
 	}
 
+	// ステージ決定
 	if (Input::IsKeyTrigger(VK_RETURN))
 	{
 		SceneManager::SetFadeOutKind(FADE_KIND_NORMAL);
 		SCENE_CALL[m_nSelectStageNum]();
+
+		PLAY_SE(SE_KEY::SE_MENU_DECIDE);
+	}
+
+	// タイトルに戻る
+	if (Input::IsKeyTrigger('Q'))
+	{
+		SceneManager::SetFadeOutKind(FADE_KIND_NORMAL);
+		SceneManager::ChangeScene("SceneTitile");
 
 		PLAY_SE(SE_KEY::SE_MENU_DECIDE);
 	}

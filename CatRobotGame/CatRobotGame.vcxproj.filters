@@ -1217,5 +1217,6 @@
     <None Include="PS_Header.hlsli">
       <Filter>リソース ファイル\PixelShader</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

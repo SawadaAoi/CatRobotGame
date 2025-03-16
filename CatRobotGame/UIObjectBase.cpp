@@ -103,7 +103,8 @@ void UIObjectBase::Update()
 	// 子オブジェクトの更新
 	for (auto& pChild : m_pChildUIs)
 	{
-		if (pChild->GetState() != UI_DEAD)	// 死亡状態でない場合のみ更新
+		if (pChild->GetState() == UI_DEAD)	continue;	// 死亡状態でない場合は更新しない
+		if (pChild->GetState() == UI_PAUSE) continue;	// 一時停止状態の場合は更新しない
 		pChild->Update();
 	}
 

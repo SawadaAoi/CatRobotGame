@@ -14,6 +14,7 @@
 #include "ObjectCameraPlayer.h"
 #include "ObjectGameStateManager.h"
 
+#include "UIObjectText.h"
 #include "UIObjectPause.h"
 
 #include "FileManager.h"
@@ -26,6 +27,7 @@
 SceneStageBase::SceneStageBase()
 	: m_bPause(false)
 	, m_pPauseUI(nullptr)
+	, m_pGameStateManager(nullptr)
 {
 }
 
@@ -47,6 +49,9 @@ void SceneStageBase::InitLocal()
 
 	// ゲームステートマネージャを追加
 	m_pGameStateManager = AddSceneObject<ObjectGameStateManager>("GameStateManager");
+
+
+	GetSceneUI<UIObjectText>("MenuOperationText")->SetText("ポーズ(P)");
 }
 
 /* ========================================
