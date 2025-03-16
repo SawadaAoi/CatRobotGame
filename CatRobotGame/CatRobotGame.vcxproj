@@ -246,6 +246,8 @@
     <ClCompile Include="ObjectGameStateManager.cpp" />
     <ClCompile Include="ObjectGoal.cpp" />
     <ClCompile Include="ObjectGround.cpp" />
+    <ClCompile Include="ObjectJumpPad.cpp" />
+    <ClCompile Include="ObjectJumpSwitch.cpp" />
     <ClCompile Include="ObjectLight.cpp" />
     <ClCompile Include="ObjectLightDirectional.cpp" />
     <ClCompile Include="ObjectLightPoint.cpp" />
@@ -392,6 +394,8 @@
     <ClInclude Include="ObjectGameStateManager.h" />
     <ClInclude Include="ObjectGoal.h" />
     <ClInclude Include="ObjectGround.h" />
+    <ClInclude Include="ObjectJumpPad.h" />
+    <ClInclude Include="ObjectJumpSwitch.h" />
     <ClInclude Include="ObjectLight.h" />
     <ClInclude Include="ObjectLightDirectional.h" />
     <ClInclude Include="ObjectLightPoint.h" />
