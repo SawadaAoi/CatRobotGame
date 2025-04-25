@@ -22,5 +22,6 @@ void SceneStage4::InitLocal()
 {
 	FileManager::StageObjectInput("Assets/Save/Stage/Stage4.stg");
 
+	PLAY_BGM(BGM_KEY::BGM_GAME_1);
 	__super::InitLocal();
 }
